@@ -48,11 +48,6 @@ public class PlayerControllerTouch : MonoBehaviour
 
         AnalyzeMovement();
 
-        //transform.position = Vector3.Lerp(transform.position, new Vector3(0, 0, 3 * 1), 0.1f);
-
-        // move forward
-        //transform.Translate(0, 0, speed * Time.deltaTime);
-
         if (Input.touches.Length > 0)
         {
             Touch t = Input.GetTouch(0);
@@ -113,7 +108,6 @@ public class PlayerControllerTouch : MonoBehaviour
 
     private void HandleLaneMovement(MoveDirection requestedMoveDirection)
     {
-        Debug.Log(currentLane);
         switch (requestedMoveDirection)
         {
             case MoveDirection.Left:
