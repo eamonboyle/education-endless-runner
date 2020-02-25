@@ -20,8 +20,8 @@ public class PlayerControllerTouch : MonoBehaviour
     }
 
     public const float MAX_SWIPE_TIME = 0.5f;
-
     public const float MIN_SWIPE_DISTANCE = 0.17f;
+    public float speed = 30.0f;
 
     public static bool swipedRight = false;
     public static bool swipedLeft = false;
@@ -34,6 +34,8 @@ public class PlayerControllerTouch : MonoBehaviour
     private float startTime;
     private Lane currentLane = Lane.Center;
 
+    int direction;
+
     // Update is called once per frame
     void Update()
     {
@@ -43,6 +45,13 @@ public class PlayerControllerTouch : MonoBehaviour
         swipedDown = false;
         MoveDirection requestedMoveDirection = MoveDirection.None;
         HandleLaneMovement(requestedMoveDirection);
+
+        AnalyzeMovement();
+
+        //transform.position = Vector3.Lerp(transform.position, new Vector3(0, 0, 3 * 1), 0.1f);
+
+        // move forward
+        //transform.Translate(0, 0, speed * Time.deltaTime);
 
         if (Input.touches.Length > 0)
         {
@@ -146,12 +155,18 @@ public class PlayerControllerTouch : MonoBehaviour
 
     private void MoveRight()
     {
-        Debug.Log("Move Right");
-        Debug.Log(currentLane);
+        //transform.Translate(3.1f, 0, 0);
+        direction++;
     }
 
     private void MoveLeft()
     {
-        Debug.Log("Move left");
+        //transform.Translate(-3.1f, 0, 0);
+        direction--;
+    }
+
+    private void AnalyzeMovement()
+    {
+        transform.position = Vector3.Lerp(transform.position, new Vector3(3 * direction, 0, transform.position.z + speed * Time.deltaTime), 0.1f);
     }
 }
