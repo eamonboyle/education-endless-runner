@@ -52,8 +52,14 @@ namespace Assets.Scripts.GameManagement
         public void GenerateQuestion()
         {
             // TODO: increase these ranges as time passes
-            number1 = Random.Range(0, 50);
-            number2 = Random.Range(0, 50);
+            number1 = Random.Range(0, 30);
+            number2 = Random.Range(0, 30);
+
+            if (number1 == number2)
+            {
+                number2 = Random.Range(0, 30);
+            }
+
             answer = number1 + number2;
 
             // debug
@@ -74,8 +80,16 @@ namespace Assets.Scripts.GameManagement
             numberList.Add(number2);
             numberList.Add(answer);
 
-            // randomly sort the list
-            numberList = numberList.OrderBy(a => System.Guid.NewGuid()).ToList();
+            // test randomMizer
+            numberList = RandomizeBoxPlacement(numberList);
+
+            //foreach (int testNUmber in numberList)
+            //{
+            //    Debug.Log("TEST NUMBER: " + testNUmber);
+            //}
+
+            //// randomly sort the list
+            //numberList = numberList.OrderBy(a => System.Guid.NewGuid()).ToList();
 
             // right box
             GameObject rightBox = Instantiate(questionBox, new Vector3(1.586f, 1.3f, spawnZ), Quaternion.identity, null);
@@ -100,6 +114,28 @@ namespace Assets.Scripts.GameManagement
             questionBoxes.Add(rightBox);
             questionBoxes.Add(leftBox);
             questionBoxes.Add(centerBox);
+        }
+
+        private List<int> RandomizeBoxPlacement(List<int> numbers)
+        {
+            System.Random rnd = new System.Random();
+
+            for (int i = numbers.Count; i > 0; i--)
+            {
+                numbers = Swap(numbers, 0, rnd.Next(0, i));
+            }
+
+            return numbers;
+        }
+
+        private List<int> Swap(List<int> list, int i, int j)
+        {
+            List<int> returnList = list;
+            var temp = returnList[i];
+            returnList[i] = returnList[j];
+            returnList[j] = temp;
+
+            return returnList;
         }
     }
 }
