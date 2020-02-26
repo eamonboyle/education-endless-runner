@@ -17,6 +17,8 @@ namespace Assets.Scripts.GameManagement
             Division
         }
 
+        public bool enabled = true;
+
         public GameObject player;
         public GameObject questionBox;
         public GameObject questionText;
@@ -39,9 +41,14 @@ namespace Assets.Scripts.GameManagement
         // Update is called once per frame
         void Update()
         {
+            if (!enabled)
+            {
+                return;
+            }
+
             if (!questionExists)
             {
-                Debug.Log("GENERATE A QUESTION");
+                //Debug.Log("GENERATE A QUESTION");
 
                 GenerateQuestion();
 
@@ -52,8 +59,8 @@ namespace Assets.Scripts.GameManagement
         public void GenerateQuestion()
         {
             // TODO: increase these ranges as time passes
-            number1 = Random.Range(0, 30);
-            number2 = Random.Range(0, 30);
+            number1 = Random.Range(0, 70);
+            number2 = Random.Range(0, 70);
 
             if (number1 == number2)
             {
