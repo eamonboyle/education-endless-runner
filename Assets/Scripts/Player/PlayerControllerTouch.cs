@@ -22,6 +22,7 @@ public class PlayerControllerTouch : MonoBehaviour
     public const float MAX_SWIPE_TIME = 0.5f;
     public const float MIN_SWIPE_DISTANCE = 0.17f;
     public float speed = 30.0f;
+    public float directionSpeed = 1.5f;
 
     public static bool swipedRight = false;
     public static bool swipedLeft = false;
@@ -161,6 +162,6 @@ public class PlayerControllerTouch : MonoBehaviour
 
     private void AnalyzeMovement()
     {
-        transform.position = Vector3.Lerp(transform.position, new Vector3(3 * direction, 0, transform.position.z + speed * Time.deltaTime), 0.1f);
+        transform.position = Vector3.Lerp(transform.position, new Vector3(directionSpeed * direction, 0, transform.position.z + speed * Time.deltaTime), 0.1f);
     }
 }
