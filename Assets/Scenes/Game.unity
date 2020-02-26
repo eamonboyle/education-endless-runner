@@ -355,6 +355,7 @@ MonoBehaviour:
   questionBox: {fileID: 2694907628137712924, guid: 154c824974f2f9c418025bcac7d206d7,
     type: 3}
   questionText: {fileID: 1782689450}
+  questionBoxes: []
   questionExists: 0
 --- !u!4 &394016463
 Transform:
@@ -1081,7 +1082,6 @@ GameObject:
   - component: {fileID: 1312491215}
   - component: {fileID: 1312491214}
   - component: {fileID: 1312491213}
-  - component: {fileID: 1312491216}
   m_Layer: 0
   m_Name: RightQuestionBox
   m_TagString: Untagged
@@ -1163,18 +1163,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1312491211}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &1312491216
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1312491211}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ce530533c1248e4289567ef75265985, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &1527330922 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2694907628137712927, guid: 154c824974f2f9c418025bcac7d206d7,
