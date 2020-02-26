@@ -9,7 +9,7 @@ public class LevelGenerator : MonoBehaviour
     public GameObject levelContainer;
     public List<GameObject> floorPieces = new List<GameObject>();
     public float floorWidth = 36.0f;
-    public float currentPlace = 48.0f;
+    public float currentPlace = 36.0f;
 
     // Start is called before the first frame update
     void Start()
