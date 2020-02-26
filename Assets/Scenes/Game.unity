@@ -334,7 +334,7 @@ GameObject:
   - component: {fileID: 394016462}
   m_Layer: 0
   m_Name: GameManager
-  m_TagString: Untagged
+  m_TagString: GameManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -351,9 +351,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d5305bc95030034487e30f05be629b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 1297940615}
   questionBox: {fileID: 2694907628137712924, guid: 154c824974f2f9c418025bcac7d206d7,
     type: 3}
   questionText: {fileID: 1782689450}
+  questionExists: 0
 --- !u!4 &394016463
 Transform:
   m_ObjectHideFlags: 0
