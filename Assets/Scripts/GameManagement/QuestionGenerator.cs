@@ -18,7 +18,7 @@ namespace Assets.Scripts.GameManagement
             Division
         }
 
-        public bool enabled = true;
+        public new bool enabled = true;
 
         public GameObject player;
         public GameObject questionBox;
@@ -36,9 +36,13 @@ namespace Assets.Scripts.GameManagement
         private int wrongNumber2;
         private int answer;
 
+        private Score scoreScript;
+
         // Start is called before the first frame update
         void Start()
         {
+            scoreScript = gameObject.GetComponent<Score>();
+
             // get player prefs for now on which question type
             string mode = PlayerPrefs.GetString("mode");
 
@@ -149,35 +153,225 @@ namespace Assets.Scripts.GameManagement
         private void CalculateNumbers()
         {
             /*
-             *  NEED TO WORK ON THIS BADLY
-             *  
+             * Question Equation Generator
             */
+
+            // if score < 150 (ex.)
+                // generate two random numbers (low range)
+                    // if division, make sure number1 > number2
+                // generate answer from two random numbers
+                // generate two wrong answers with random range
+            // if score > 151 && score < 450
+                // generate two random numbers (higher range)
+                    // if division, number1 > number2
+                // generate answer from two random numbers
+                // generate two wrong answers 
+                    // calculate range based on % from answer
+                        // use the score multiplier to help calculate this
+
+            int score = scoreScript.score;
+            int firstRange = 5;
+            int secondRange = 25;
+            int firstDivisionRange = 1;
+            int secondDivisionRange = 10;
+
+            if (score < 60)
+            {
+                number1 = UnityEngine.Random.Range(firstRange, secondRange);
+                number2 = UnityEngine.Random.Range(firstRange, secondRange);
+
+                while (number1 == number2)
+                {
+                    number2 = UnityEngine.Random.Range(firstRange, secondRange);
+                }
+
+                if (questionType == QuestionType.Division)
+                {
+                    number1 = UnityEngine.Random.Range(firstDivisionRange, secondDivisionRange);
+                    number2 = UnityEngine.Random.Range(firstDivisionRange, secondDivisionRange);
+
+                    if (number1 == number2)
+                    {
+                        number2 = UnityEngine.Random.Range(firstDivisionRange, secondDivisionRange);
+                    }
+
+                    while (number1 < number2)
+                    {
+                        number2 = UnityEngine.Random.Range(firstDivisionRange, secondDivisionRange);
+                    }
+                }
+
+                if (questionType == QuestionType.Multiplication)
+                {
+                    number1 = UnityEngine.Random.Range(firstDivisionRange, secondDivisionRange);
+                    number2 = UnityEngine.Random.Range(firstDivisionRange, secondDivisionRange);
+                }
+
+                answer = number1 + number2;
+
+                if (questionType == QuestionType.Subtraction)
+                {
+                    answer = number1 - number2;
+                }
+                else if (questionType == QuestionType.Multiplication)
+                {
+                    answer = number1 * number2;
+                }
+                else if (questionType == QuestionType.Division)
+                {
+                    answer = number1 / number2;
+                }
+
+                wrongNumber1 = UnityEngine.Random.Range(firstRange, secondRange);
+                wrongNumber2 = UnityEngine.Random.Range(firstRange, secondRange);
+
+                while (wrongNumber1 == wrongNumber2)
+                {
+                    wrongNumber2 = UnityEngine.Random.Range(firstRange, secondRange);
+                }
+
+                return;
+            }
+            else
+            {
+                firstRange = 25;
+                secondRange = 50;
+                firstDivisionRange = 5;
+                secondDivisionRange = 13;
+
+                number1 = UnityEngine.Random.Range(firstRange, secondRange);
+                number2 = UnityEngine.Random.Range(firstRange, secondRange);
+
+                while (number1 == number2)
+                {
+                    number2 = UnityEngine.Random.Range(firstRange, secondRange);
+                }
+
+                if (questionType == QuestionType.Division)
+                {
+                    number2 = UnityEngine.Random.Range(firstDivisionRange, secondDivisionRange);
+
+                    while (number1 < number2)
+                    {
+                        number2 = UnityEngine.Random.Range(firstDivisionRange, secondDivisionRange);
+                    }
+                }
+
+                if (questionType == QuestionType.Multiplication)
+                {
+                    number1 = UnityEngine.Random.Range(firstDivisionRange, secondDivisionRange);
+                    number2 = UnityEngine.Random.Range(firstDivisionRange, secondDivisionRange);
+                }
+
+                answer = number1 + number2;
+
+                if (questionType == QuestionType.Subtraction)
+                {
+                    answer = number1 - number2;
+                }
+                else if (questionType == QuestionType.Multiplication)
+                {
+                    answer = number1 * number2;
+                }
+                else if (questionType == QuestionType.Division)
+                {
+                    answer = number1 / number2;
+                }
+
+                // calculate wrong answers
+
+                int eachWay = 15;
+
+                if (score > 100)
+                {
+                    eachWay = 12;
+                }
+                else if (score > 120)
+                {
+                    eachWay = 11;
+                }
+                else if (score > 140)
+                {
+                    eachWay = 10;
+                }
+                else if (score > 160)
+                {
+                    eachWay = 9;
+                }
+                else if (score > 180)
+                {
+                    eachWay = 8;
+                }
+                else if (score > 200)
+                {
+                    eachWay = 7;
+                }
+                else if (score > 220)
+                {
+                    eachWay = 6;
+                }
+                else if (score > 240)
+                {
+                    eachWay = 5;
+                }
+                else if (score > 260)
+                {
+                    eachWay = 4;
+                }
+                else if (score > 280)
+                {
+                    eachWay = 3;
+                }
+                else if (score > 300)
+                {
+                    eachWay = 2;
+                }
+                else if (score > 320)
+                {
+                    eachWay = 1;
+                }
+
+                //int eachwayRand = UnityEngine.Random.Range(1, eachWay)
+
+                int randomRangeMin = answer - eachWay;
+                int randomRangeMax = answer + eachWay;
+
+                wrongNumber1 = UnityEngine.Random.Range(randomRangeMin, randomRangeMax);
+                wrongNumber2 = UnityEngine.Random.Range(randomRangeMin, randomRangeMax);
+
+                while (wrongNumber1 == wrongNumber2)
+                {
+                    wrongNumber2 = UnityEngine.Random.Range(randomRangeMin, randomRangeMax);
+                }
+            }
+
+
 
 
             // TODO: increase these ranges as time passes
-            number1 = UnityEngine.Random.Range(0, 70);
-            number2 = UnityEngine.Random.Range(0, 70);
+            //number1 = UnityEngine.Random.Range(0, 70);
+            //number2 = UnityEngine.Random.Range(0, 70);
 
-            if (number1 == number2)
-            {
-                number2 = UnityEngine.Random.Range(0, 70);
-            }
+            //if (number1 == number2)
+            //{
+            //    number2 = UnityEngine.Random.Range(0, 70);
+            //}
 
-            answer = number1 + number2;
+            //answer = number1 + number2;
 
-            // as time goes on calculate this on a % range from the answer
+            //// as time goes on calculate this on a % range from the answer
+            ////wrongNumber1 = UnityEngine.Random.Range(0, 70);
+            ////wrongNumber2 = UnityEngine.Random.Range(0, 70);
             //wrongNumber1 = UnityEngine.Random.Range(0, 70);
             //wrongNumber2 = UnityEngine.Random.Range(0, 70);
-            wrongNumber1 = UnityEngine.Random.Range(0, 70);
-            wrongNumber2 = UnityEngine.Random.Range(0, 70);
 
-            if (wrongNumber1 == wrongNumber2)
-            {
-                wrongNumber1 = UnityEngine.Random.Range(0, 70);
-            }
+            //if (wrongNumber1 == wrongNumber2)
+            //{
+            //    wrongNumber1 = UnityEngine.Random.Range(0, 70);
+            //}
 
-            // debug
-            Debug.Log(number1 + " " + questionSymbol + " " + number2 + " = " + answer);
+            //// debug
+            //Debug.Log(number1 + " " + questionSymbol + " " + number2 + " = " + answer);
         }
 
         private List<int> RandomizeBoxPlacement(List<int> numbers)
