@@ -31,4 +31,9 @@ public class SceneSwitcher : MonoBehaviour
     {
         SceneManager.LoadScene(3);
     }
+
+    public void GoToModeSelect()
+    {
+        SceneManager.LoadScene(4);
+    }
 }

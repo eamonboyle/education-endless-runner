@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using TMPro;
+using UnityEngine.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -12,13 +12,7 @@ public class GameOver : MonoBehaviour
     void Start()
     {
         int score = PlayerPrefs.GetInt("score");
-        scoreObject.GetComponent<TextMeshProUGUI>().text = "You scored: " + score;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        scoreObject.GetComponent<Text>().text = "Score: " + score;
     }
 
     public void RestartGame()

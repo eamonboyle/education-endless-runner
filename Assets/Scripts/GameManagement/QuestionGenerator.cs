@@ -29,6 +29,7 @@ namespace Assets.Scripts.GameManagement
         public bool questionExists = false;
 
         private QuestionType questionType;
+        private char questionSymbol;
         private int number1;
         private int number2;
         private int wrongNumber1;
@@ -38,7 +39,33 @@ namespace Assets.Scripts.GameManagement
         // Start is called before the first frame update
         void Start()
         {
-            questionType = QuestionType.Addition;
+            // get player prefs for now on which question type
+            string mode = PlayerPrefs.GetString("mode");
+
+            switch (mode)
+            {
+                case "addition":
+                    questionType = QuestionType.Addition;
+                    questionSymbol = '+';
+                    break;
+                case "subtraction":
+                    questionType = QuestionType.Subtraction;
+                    questionSymbol = '-';
+                    break;
+                case "multiply":
+                    questionType = QuestionType.Multiplication;
+                    questionSymbol = 'x';
+                    break;
+                case "division":
+                    questionType = QuestionType.Division;
+                    questionSymbol = '÷';
+                    break;
+
+                default:
+                    questionType = QuestionType.Addition;
+                    questionSymbol = '+';
+                    break;
+            }
         }
 
         // Update is called once per frame
@@ -62,8 +89,8 @@ namespace Assets.Scripts.GameManagement
         public void GenerateQuestion()
         {
             CalculateNumbers();
+            WriteQuestionText();
 
-            questionText.GetComponent<Text>().text = number1.ToString() + " + " + number2.ToString();
 
             // work out the zindex to spawn the boxes at
             // make this shorter when the difficulty increases
@@ -114,8 +141,19 @@ namespace Assets.Scripts.GameManagement
             questionBoxes.Add(centerBox);
         }
 
+        private void WriteQuestionText()
+        {
+            questionText.GetComponent<Text>().text = number1.ToString() + " " + questionSymbol + " " + number2.ToString();
+        }
+
         private void CalculateNumbers()
         {
+            /*
+             *  NEED TO WORK ON THIS BADLY
+             *  
+            */
+
+
             // TODO: increase these ranges as time passes
             number1 = UnityEngine.Random.Range(0, 70);
             number2 = UnityEngine.Random.Range(0, 70);
@@ -139,7 +177,7 @@ namespace Assets.Scripts.GameManagement
             }
 
             // debug
-            Debug.Log(number1 + " + " + number2 + " = " + answer);
+            Debug.Log(number1 + " " + questionSymbol + " " + number2 + " = " + answer);
         }
 
         private List<int> RandomizeBoxPlacement(List<int> numbers)

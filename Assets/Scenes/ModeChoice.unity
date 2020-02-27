@@ -275,8 +275,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: GoToGame
+      - m_Target: {fileID: 1022389387}
+        m_MethodName: Multiply
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -576,8 +576,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: GoToGame
+      - m_Target: {fileID: 1022389387}
+        m_MethodName: Subtraction
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -712,6 +712,7 @@ GameObject:
   - component: {fileID: 1022389384}
   - component: {fileID: 1022389383}
   - component: {fileID: 1022389386}
+  - component: {fileID: 1022389387}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -794,6 +795,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9e0456bff29dcd34b93aee8b41762f33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1022389387
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1022389382}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4c2124829492634bbba004b82047a8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1257279710
@@ -1109,8 +1122,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: GoToGame
+      - m_Target: {fileID: 1022389387}
+        m_MethodName: Division
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1238,8 +1251,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: GoToGame
+      - m_Target: {fileID: 1022389387}
+        m_MethodName: Addition
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
