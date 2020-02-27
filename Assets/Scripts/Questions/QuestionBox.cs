@@ -35,8 +35,6 @@ public class QuestionBox : MonoBehaviour
             return;
         }
 
-        Debug.Log("COLLIDED WITH: " + other.gameObject.name);
-
         // work out if right or wrong
         if (number != correctNumber)
         {
@@ -57,5 +55,8 @@ public class QuestionBox : MonoBehaviour
         // set the bool question to false
         // to generate a new question
         questionGenerator.questionExists = false;
+
+        // play sound
+        GameObject.FindWithTag("MainCamera").GetComponent<AudioSource>().Play();
     }
 }
