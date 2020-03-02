@@ -98,7 +98,8 @@ namespace Assets.Scripts.GameManagement
 
             // work out the zindex to spawn the boxes at
             // make this shorter when the difficulty increases
-            float spawnZ = UnityEngine.Random.Range(player.transform.position.z + 15.0f, player.transform.position.z + 25.0f);
+            //float spawnZ = UnityEngine.Random.Range(player.transform.position.z + 15.0f, player.transform.position.z + 25.0f);
+            float spawnZ = player.transform.position.z + 35.0f;
 
 
             // MAKE THE NUMBER SPAWN IN RANDOM LANES
