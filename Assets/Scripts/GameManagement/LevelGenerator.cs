@@ -27,9 +27,9 @@ public class LevelGenerator : MonoBehaviour
     {
         if (player.transform.position.z > (currentPlace + 4.0f))
         {
-            Debug.Log("GENERATE NEW FLOOR TILE");
+            //Debug.Log("GENERATE NEW FLOOR TILE");
 
-            GameObject nextFloor = Instantiate(floorPrefab, new Vector3(0.0f, 0.0f, (currentPlace + floorWidth + 18.44f)), Quaternion.identity, levelContainer.transform);
+            GameObject nextFloor = Instantiate(floorPrefab, new Vector3(0.0f, 0.0f, (currentPlace + (floorWidth * 2) + 18.44f)), Quaternion.identity, levelContainer.transform);
 
             floorPieces.Add(nextFloor);
 

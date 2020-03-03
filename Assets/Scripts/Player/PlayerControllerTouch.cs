@@ -164,7 +164,7 @@ public class PlayerControllerTouch : MonoBehaviour
     {
         Vector3 newPosition = transform.position;
         newPosition.z = Mathf.Lerp(transform.position.z, transform.position.z + speed * Time.deltaTime, 0.1f);
-        newPosition.x = Mathf.Lerp(transform.position.x, directionSpeed * direction, 0.7f);
+        newPosition.x = Mathf.Lerp(transform.position.x, directionSpeed * direction, 0.9f);
         transform.position = newPosition;
 
         //transform.position = Vector3.Lerp(transform.position, new Vector3(directionSpeed * direction, 0, transform.position.z + speed * Time.deltaTime), 0.1f);
