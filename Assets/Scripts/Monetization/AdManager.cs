@@ -22,11 +22,13 @@ public class AdManager : MonoBehaviour, IUnityAdsListener
         {
             // Reward the user for watching the ad to completion.
             Debug.Log("FINISHED AD");
+            Advertisement.RemoveListener(this);
         }
         else if (showResult == ShowResult.Skipped)
         {
             // Do not reward the user for skipping the ad.
             Debug.Log("SKIPPED ADD");
+            Advertisement.RemoveListener(this);
         }
         else if (showResult == ShowResult.Failed)
         {
@@ -55,6 +57,8 @@ public class AdManager : MonoBehaviour, IUnityAdsListener
         {
             gameId = "3492333";
         }
+
+        Debug.Log("AD MANAGER LOADED");
 
         Advertisement.AddListener(this);
         Advertisement.Initialize(gameId, testMode);
