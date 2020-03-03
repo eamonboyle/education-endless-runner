@@ -27,9 +27,12 @@ public class LevelGenerator : MonoBehaviour
     {
         if (player.transform.position.z > (currentPlace + 4.0f))
         {
-            //Debug.Log("GENERATE NEW FLOOR TILE");
+            int floorDegreeRandom = Random.Range(0, 2);
 
-            GameObject nextFloor = Instantiate(floorPrefab, new Vector3(0.0f, 0.0f, (currentPlace + (floorWidth * 2) + 18.44f)), Quaternion.identity, levelContainer.transform);
+            Vector3 floorPlacement = new Vector3(0.0f, 0.0f, currentPlace + (floorWidth * 2) + 18.44f);
+            Quaternion floorRotation = Quaternion.Euler(0.0f, floorDegreeRandom == 1 ? 180.0f : 0.0f, 0.0f);
+
+            GameObject nextFloor = Instantiate(floorPrefab, floorPlacement, floorRotation, levelContainer.transform);
 
             floorPieces.Add(nextFloor);
 
