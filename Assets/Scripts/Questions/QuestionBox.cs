@@ -35,8 +35,6 @@ public class QuestionBox : MonoBehaviour
             return;
         }
 
-        Debug.Log("COLLIDED: " + number + " - " + correctNumber);
-
         // find the game manager gameobject
         QuestionGenerator questionGenerator = GameObject.FindWithTag("GameManager").GetComponent<QuestionGenerator>();
 
@@ -50,6 +48,7 @@ public class QuestionBox : MonoBehaviour
         if (number != correctNumber)
         {
             Debug.LogError("Wrong");
+            SceneManager.LoadScene("GameOver");
             return;
         }
         else
@@ -61,36 +60,5 @@ public class QuestionBox : MonoBehaviour
             // play sound
             GameObject.FindWithTag("MainCamera").GetComponent<AudioSource>().Play();
         }
-
-        return;
-
-        if (other.tag != "Player")
-        {
-            return;
-        }
-
-        // work out if right or wrong
-        if (number != correctNumber)
-        {
-            // wrong
-            SceneManager.LoadScene("GameOver");
-            return;
-        }
-
-        // find the game manager gameobject
-        //QuestionGenerator questionGenerator = GameObject.FindWithTag("GameManager").GetComponent<QuestionGenerator>();
-
-        // delete these question boxes
-        Destroy(questionGenerator.questionBoxes[0].gameObject);
-        Destroy(questionGenerator.questionBoxes[1].gameObject);
-        Destroy(questionGenerator.questionBoxes[2].gameObject);
-        questionGenerator.questionBoxes.RemoveRange(0, 3);
-
-        // set the bool question to false
-        // to generate a new question
-        questionGenerator.questionExists = false;
-
-        // play sound
-        GameObject.FindWithTag("MainCamera").GetComponent<AudioSource>().Play();
     }
 }
