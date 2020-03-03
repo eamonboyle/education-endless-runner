@@ -36,4 +36,21 @@ public class SceneSwitcher : MonoBehaviour
     {
         SceneManager.LoadScene("ModeChoice");
     }
+
+    public void GoToCharacterSelection()
+    {
+        SceneManager.LoadScene("CharacterSelection");
+    }
+
+    public void ChooseCharacterBoy()
+    {
+        PlayerPrefs.SetString("character", "boy");
+        GoToMainMenu();
+    }
+
+    public void ChooseCharacterGirl()
+    {
+        PlayerPrefs.SetString("character", "girl");
+        GoToMainMenu();
+    }
 }

@@ -9,12 +9,35 @@ public class LoadCharacter : MonoBehaviour
     public GameObject boyPrefab;
     public GameObject playerSpawn;
 
+    private string character;
+
     // Start is called before the first frame update
     void Start()
     {
         // select from player prefs and choose the right prefab
+        character = PlayerPrefs.GetString("character");
 
-        InstantiatePlayer(boyPrefab);
+        if (character == "" || character == null)
+        {
+            character = "boy";
+        }
+
+        ChooseCharacter();
+    }
+
+    private void ChooseCharacter()
+    {
+        switch (character)
+        {
+            case "boy":
+                InstantiatePlayer(boyPrefab);
+                break;
+            case "girl":
+                InstantiatePlayer(girlPrefab);
+                break;
+            default:
+                break;
+        }
     }
 
     private void InstantiatePlayer(GameObject playerPrefab)
