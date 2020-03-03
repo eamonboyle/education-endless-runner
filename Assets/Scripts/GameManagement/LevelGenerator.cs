@@ -14,6 +14,8 @@ public class LevelGenerator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        player = GameObject.FindWithTag("Player");
+
         GameObject[] floors = GameObject.FindGameObjectsWithTag("Floor");
 
         foreach (GameObject piece in floors)

@@ -47,6 +47,6 @@ public class ModeSelect : MonoBehaviour
 
     void GoToGame()
     {
-        SceneManager.LoadScene(2);
+        SceneManager.LoadScene("Game");
     }
 }

@@ -42,7 +42,7 @@ public class Preloader : MonoBehaviour
 
             if (canvasGroup.alpha >= 1)
             {
-                SceneManager.LoadScene(1);
+                SceneManager.LoadScene("MainMenu");
             }
         }
     }

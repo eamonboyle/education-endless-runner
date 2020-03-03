@@ -19,21 +19,21 @@ public class SceneSwitcher : MonoBehaviour
 
     public void GoToGame()
     {
-        SceneManager.LoadScene(2);
+        SceneManager.LoadScene("Game");
     }
 
     public void GoToMainMenu()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene("MainMenu");
     }
 
     public void GoToGameOver()
     {
-        SceneManager.LoadScene(3);
+        SceneManager.LoadScene("GameOver");
     }
 
     public void GoToModeSelect()
     {
-        SceneManager.LoadScene(4);
+        SceneManager.LoadScene("ModeChoice");
     }
 }

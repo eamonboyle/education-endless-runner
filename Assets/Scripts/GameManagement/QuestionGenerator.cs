@@ -41,6 +41,8 @@ namespace Assets.Scripts.GameManagement
         // Start is called before the first frame update
         void Start()
         {
+            player = GameObject.FindWithTag("Player");
+
             scoreScript = gameObject.GetComponent<Score>();
 
             // get player prefs for now on which question type
