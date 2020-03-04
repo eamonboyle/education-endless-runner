@@ -8,9 +8,12 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Preloader.unity
     guid: 648b18cd23856bd448372f40a4822fa8
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/CharacterSelection.unity
     guid: b8e2280a063332f428a35a0a8721724b
+  - enabled: 1
+    path: Assets/Scenes/CharacterSelect.unity
+    guid: 762e6d50ee3f2b24eb000c716dae16b4
   - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: 593f76e8d320ca24f9e4913ded39e63f
