@@ -14,6 +14,8 @@ public class LoadCharacter : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
+
         // select from player prefs and choose the right prefab
         character = PlayerPrefs.GetString("character");
 
