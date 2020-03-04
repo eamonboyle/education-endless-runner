@@ -39,7 +39,7 @@ public class SceneSwitcher : MonoBehaviour
 
     public void GoToCharacterSelection()
     {
-        SceneManager.LoadScene("CharacterSelection");
+        SceneManager.LoadScene("CharacterSelect");
     }
 
     public void ChooseCharacterBoy()
