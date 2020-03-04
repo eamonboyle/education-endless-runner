@@ -49,7 +49,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void CalculateLane(MoveDirection requestedDirection)
     {
-        Debug.Log("CURRENT LANE: " + currentLane);
+        //Debug.Log("CURRENT LANE: " + currentLane);
         switch (requestedDirection)
         {
             case MoveDirection.Left:

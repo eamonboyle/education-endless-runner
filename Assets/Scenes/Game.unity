@@ -1149,6 +1149,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 712d050cafe1e8544a74d853c34423c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tap: 0
+  swipeLeft: 0
+  swipeRight: 0
+  swipeUp: 0
+  swipeDown: 0
 --- !u!114 &877902527
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1903,6 +1908,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Floor (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 9046933360126158250, guid: b2f69f15a2aea314d922e451ec21305e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b2f69f15a2aea314d922e451ec21305e, type: 3}

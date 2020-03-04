@@ -71,12 +71,12 @@ public class PlayerController : MonoBehaviour
                 // left or right
                 if (x < 0)
                 {
-                    Debug.Log("SWIPE LEFT");
+                    //Debug.Log("SWIPE LEFT");
                     swipeLeft = true;
                 }
                 else
                 {
-                    Debug.Log("SWIPE RIGHT");
+                    //Debug.Log("SWIPE RIGHT");
                     swipeRight = true;
                 }
             }
@@ -85,12 +85,12 @@ public class PlayerController : MonoBehaviour
                 // up or down
                 if (y < 0)
                 {
-                    Debug.Log("SWIPE DOWN");
+                    //Debug.Log("SWIPE DOWN");
                     swipeDown = true;
                 }
                 else
                 {
-                    Debug.Log("SWIPE UP");
+                    //Debug.Log("SWIPE UP");
                     swipeUp = true;
                 }
             }
