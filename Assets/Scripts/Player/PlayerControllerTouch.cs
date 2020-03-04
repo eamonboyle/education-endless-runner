@@ -80,12 +80,14 @@ public class PlayerControllerTouch : MonoBehaviour
                 {
                     if (swipe.x > 0)
                     {
+                        Debug.Log("SWIPE RIGHT");
                         swipedRight = true;
                         requestedMoveDirection = MoveDirection.Right;
                         HandleLaneMovement(requestedMoveDirection);
                     }
                     else
                     {
+                        Debug.Log("SWIPE LEFT");
                         swipedLeft = true;
                         requestedMoveDirection = MoveDirection.Left;
                         HandleLaneMovement(requestedMoveDirection);
@@ -150,13 +152,11 @@ public class PlayerControllerTouch : MonoBehaviour
 
     private void MoveRight()
     {
-        //transform.Translate(3.1f, 0, 0);
         direction++;
     }
 
     private void MoveLeft()
     {
-        //transform.Translate(-3.1f, 0, 0);
         direction--;
     }
 

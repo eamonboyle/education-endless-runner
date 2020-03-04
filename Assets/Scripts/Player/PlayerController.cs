@@ -5,148 +5,103 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public enum Lane
+    public bool tap, swipeLeft, swipeRight, swipeUp, swipeDown;
+    private bool isDragging = false;
+    private Vector2 startTouch, swipeDelta;
+
+    private void Update()
     {
-        Left,
-        Center,
-        Right
-    }
+        tap = swipeLeft = swipeRight = swipeUp = swipeDown = false;
 
-    public enum MoveDirection
-    {
-        Left,
-        Right,
-        None
-    }
-
-    public float speed = 5.0f;
-
-    public bool jumping = false;
-    public bool sliding = false;
-
-    public Animator anim;
-
-    private Lane currentLane = Lane.Center;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        anim = GetComponent<Animator>();   
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        // move forwards
-        transform.Translate(0, 0, speed * Time.deltaTime);
-
-        if (Input.GetKeyDown(KeyCode.Space))
+        #region Standalone Input
+        if (Input.GetMouseButtonDown(0))
         {
-            jumping = true;
+            tap = true;
+            isDragging = true;
+            startTouch = Input.mousePosition;
         }
-        else
+        else if (Input.GetMouseButtonUp(0))
         {
-            jumping = false;
+            isDragging = false;
+            this.Reset();
         }
+        #endregion
 
-        if (jumping)
+        #region Mobile Input
+        if (Input.touches.Length != 0)
         {
-            anim.SetBool("isJumping", true);
-
-            transform.Translate(0, 0.1f, 0.1f);
+            if (Input.touches[0].phase == TouchPhase.Began)
+            {
+                tap = true;
+                isDragging = true;
+                startTouch = Input.touches[0].position;
+            }
+            else if (Input.touches[0].phase == TouchPhase.Ended || Input.touches[0].phase == TouchPhase.Canceled)
+            {
+                isDragging = false;
+                this.Reset();
+            }
         }
-        else
+        #endregion
+
+        // calculate the distance
+        swipeDelta = Vector2.zero;
+
+        if (isDragging)
         {
-            anim.SetBool("isJumping", false);
+            if (Input.touches.Length != 0)
+            {
+                swipeDelta = Input.touches[0].position - startTouch;
+            }
+            else if (Input.GetMouseButton(0))
+            {
+                swipeDelta = (Vector2)Input.mousePosition - startTouch;
+            }
         }
 
-        if (Input.GetKeyDown(KeyCode.S))
+        // did we cross the deadzone?
+        if (swipeDelta.magnitude > 50)
         {
-            sliding = true;
-        }
-        else
-        {
-            sliding = false;
-        }
+            // which direction?
+            float x = swipeDelta.x;
+            float y = swipeDelta.y;
 
-        if (sliding)
-        {
-            anim.SetBool("isSliding", true);
-        }
-        else
-        {
-            anim.SetBool("isSliding", false);
-        }
-
-        //if (Input.GetKeyDown(KeyCode.A))
-        //{
-        //    transform.Translate(-4.1f, 0, 0);
-        //}
-
-
-        // HANDLE LANE MOVEMENT
-        MoveDirection requestedMoveDirection = MoveDirection.None;
-
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            requestedMoveDirection = MoveDirection.Left;
-        } 
-        else if (Input.GetKeyDown(KeyCode.D))
-        {
-            requestedMoveDirection = MoveDirection.Right;
-        }
-
-        HandleLaneMovement(requestedMoveDirection);
-    }
-
-    private void HandleLaneMovement(MoveDirection requestedMoveDirection)
-    {
-        switch (requestedMoveDirection)
-        {
-            case MoveDirection.Left:
-                if (currentLane == Lane.Left)
+            if (Mathf.Abs(x) > Mathf.Abs(y))
+            {
+                // left or right
+                if (x < 0)
                 {
-                    break;
+                    Debug.Log("SWIPE LEFT");
+                    swipeLeft = true;
                 }
-                else if (currentLane == Lane.Center)
+                else
                 {
-                    MoveLeft();
-                    currentLane = Lane.Left;
+                    Debug.Log("SWIPE RIGHT");
+                    swipeRight = true;
                 }
-                else if (currentLane == Lane.Right)
+            }
+            else
+            {
+                // up or down
+                if (y < 0)
                 {
-                    MoveLeft();
-                    currentLane = Lane.Center;
+                    Debug.Log("SWIPE DOWN");
+                    swipeDown = true;
                 }
-                break;
-            case MoveDirection.Right:
-                if (currentLane == Lane.Right)
+                else
                 {
-                    break;
+                    Debug.Log("SWIPE UP");
+                    swipeUp = true;
                 }
-                else if (currentLane == Lane.Center)
-                {
-                    MoveRight();
-                    currentLane = Lane.Right;
-                }
-                else if (currentLane == Lane.Left)
-                {
-                    MoveRight();
-                    currentLane = Lane.Center;
-                }
-                break;
-            default:
-                break;
+            }
+
+            this.Reset();
         }
     }
 
-    private void MoveRight()
+    private void Reset()
     {
-        Debug.Log("Move Right");
-    }
-
-    private void MoveLeft()
-    {
-        Debug.Log("Move Left");
+        startTouch = swipeDelta = Vector2.zero;
+        isDragging = false;
     }
 }
