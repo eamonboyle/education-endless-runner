@@ -549,3 +549,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 735aafad3bc179d459c664e1fc725a43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canvasGroup: {fileID: 0}
+  loadTime: 0
+  minimumSplashTime: 3
