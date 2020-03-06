@@ -588,6 +588,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   questionText: {fileID: 1782689450}
   countdownText: {fileID: 475259276}
+  mainCamera: {fileID: 0}
 --- !u!1 &468196583
 GameObject:
   m_ObjectHideFlags: 0
@@ -1305,7 +1306,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   forwardSpeed: 40
-  directionSpeed: 2
+  directionSpeed: 1.7
 --- !u!1001 &911788125
 PrefabInstance:
   m_ObjectHideFlags: 0
