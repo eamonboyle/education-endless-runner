@@ -13,6 +13,9 @@ public class GameOver : MonoBehaviour
     {
         int score = PlayerPrefs.GetInt("score");
         scoreObject.GetComponent<Text>().text = "Score: " + score;
+
+        GameObject adManager = GameObject.Find("AdManager");
+        adManager.GetComponent<AdManager>().enabled = true;
     }
 
     public void RestartGame()
