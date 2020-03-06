@@ -7,7 +7,7 @@ public class AdManager : MonoBehaviour
 {
     private string gameId = "3492332";
     private bool testMode = true;
-    private string placementIdReward = "rewardedVideo";
+    //private string placementIdReward = "rewardedVideo";
     private string placementIdVideo = "video";
 
     //public void OnUnityAdsDidError(string message)
@@ -58,8 +58,6 @@ public class AdManager : MonoBehaviour
         // check wether to show an add
         int gamesPlayed = PlayerPrefs.GetInt("gamesPlayed");
 
-        Debug.Log("GAMES PLAYED: " + gamesPlayed);
-
         if (gamesPlayed % 5 == 0)
         {
             if (Application.platform == RuntimePlatform.IPhonePlayer)
@@ -70,21 +68,32 @@ public class AdManager : MonoBehaviour
 
             //Advertisement.AddListener(this);
             Advertisement.Initialize(gameId, testMode);
-            StartCoroutine(ShowBannerWhenReady());
+            StartCoroutine(Countdown(2));
         }
 
         PlayerPrefs.SetInt("gamesPlayed", ++gamesPlayed);
     }
 
-    IEnumerator ShowBannerWhenReady()
+    private IEnumerator ShowBannerWhenReady()
     {
         while (!Advertisement.IsReady(placementIdVideo))
         {
             yield return new WaitForSeconds(0.5f);
         }
         Advertisement.Show(placementIdVideo);
+    }
 
-        // add to the player refs
+    private IEnumerator Countdown(int seconds)
+    {
+        int count = seconds;
 
+        while (count > 0)
+        {
+            yield return new WaitForSeconds(1);
+
+            count--;
+        }
+
+        StartCoroutine(ShowBannerWhenReady());
     }
 }
