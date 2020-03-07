@@ -26,8 +26,6 @@ namespace Assets.Scripts.GameManagement
 
         public List<GameObject> questionBoxes;
 
-        public bool questionExists = false;
-
         private QuestionType questionType;
         private char questionSymbol;
         private int number1;
@@ -78,11 +76,11 @@ namespace Assets.Scripts.GameManagement
                 return;
             }
 
-            if (!questionExists && GameState.IsRunning())
+            if (!GameState.GetQuestionExists() && GameState.IsRunning())
             {
                 GenerateQuestion();
 
-                questionExists = true;
+                GameState.SetQuestionExists(true);
             }
         }
 

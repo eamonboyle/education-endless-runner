@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Assets.Scripts.GameManagement;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,6 +7,7 @@ public static class GameState
 {
     private static bool gameRunning = false;
     private static bool gameOver = false;
+    private static bool questionExists = false;
     private static int score = 0;
     private static float characterSpeed = 40.0f;
 
@@ -116,6 +118,16 @@ public static class GameState
         return PlayerPrefs.GetString("mode");
     }
 
+    public static void SetQuestionExists(bool exists)
+    {
+        questionExists = exists;
+    }
+
+    public static bool GetQuestionExists()
+    {
+        return questionExists;
+    }
+
     public static void ShowGameUI()
     {
         GameObject.Find("InGameUI").GetComponent<Canvas>().enabled = true;
@@ -125,6 +137,7 @@ public static class GameState
     public static void ShowGameOverUI()
     {
         SetRunning(false);
+        SetQuestionExists(false);
         GameObject.Find("InGameUI").GetComponent<Canvas>().enabled = false;
         GameObject.Find("GameOverUI").GetComponent<Canvas>().enabled = true;
     }

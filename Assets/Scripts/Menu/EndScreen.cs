@@ -27,6 +27,9 @@ public class EndScreen : MonoBehaviour
                 GameObject.Find("PlayerObject").GetComponent<Animator>().SetBool("isRunning", true);
                 GameState.SetRunning(true);
                 break;
+            case "quit":
+                SceneManager.LoadScene("MainMenu");
+                break;
 
             default:
                 break;

@@ -56,7 +56,7 @@ public class QuestionBox : MonoBehaviour
         {
             // set the bool question to false
             // to generate a new question
-            questionGenerator.questionExists = false;
+            GameState.SetQuestionExists(false);
 
             // play sound
             GameObject.FindWithTag("MainCamera").GetComponent<AudioSource>().Play();
