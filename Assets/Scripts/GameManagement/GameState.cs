@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public static class GameState
 {
@@ -138,6 +139,7 @@ public static class GameState
     {
         SetRunning(false);
         SetQuestionExists(false);
+        GameObject.Find("GameOverScoreText").GetComponent<Text>().text = "Score: " + GetScore();
         GameObject.Find("InGameUI").GetComponent<Canvas>().enabled = false;
         GameObject.Find("GameOverUI").GetComponent<Canvas>().enabled = true;
     }
