@@ -4,10 +4,10 @@ using UnityEngine;
 
 public static class GameState
 {
-    private static bool gameRunning;
-    private static bool gameOver;
-    private static int score;
-    private static float characterSpeed;
+    private static bool gameRunning = false;
+    private static bool gameOver = false;
+    private static int score = 0;
+    private static float characterSpeed = 40.0f;
 
     public static void Init()
     {
@@ -30,6 +30,16 @@ public static class GameState
         gameOver = true;
     }
 
+    public static void SetScore(int s)
+    {
+        score = s;
+    }
+
+    public static int GetScore()
+    {
+        return score;
+    }
+
     public static void SaveScore()
     {
         PlayerPrefs.SetInt("score", score);
@@ -40,11 +50,6 @@ public static class GameState
         return PlayerPrefs.GetInt("score");
     }
 
-    public static int GetScore()
-    {
-        return score;
-    }
-
     public static bool IsRunning()
     {
         return gameRunning;
@@ -53,6 +58,11 @@ public static class GameState
     public static bool IsGameOver()
     {
         return gameOver;
+    }
+    
+    public static void SetCharacterSpeed(float speed)
+    {
+        characterSpeed = speed;
     }
 
     public static float GetCharacterSpeed()
@@ -78,6 +88,22 @@ public static class GameState
     public static void SetPlayCount(int playCount)
     {
         PlayerPrefs.SetInt("gamesPlayed", playCount);
+    }
+
+    public static void IncrementPlayCount()
+    {
+        int count = PlayerPrefs.GetInt("gamesPlayed");
+        PlayerPrefs.SetInt("gamesPlayed", ++count);
+    }
+
+    public static void SetQuestionType(string questionType)
+    {
+        PlayerPrefs.SetString("mode", questionType);
+    }
+
+    public static string GetQuestionType()
+    {
+        return PlayerPrefs.GetString("mode");
     }
 
     // add methods for settings in here, audio etc

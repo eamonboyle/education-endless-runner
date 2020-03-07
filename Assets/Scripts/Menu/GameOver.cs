@@ -11,7 +11,7 @@ public class GameOver : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        int score = PlayerPrefs.GetInt("score");
+        int score = GameState.GetScore();
         scoreObject.GetComponent<Text>().text = "Score: " + score;
 
         GameObject adManager = GameObject.Find("AdManager");

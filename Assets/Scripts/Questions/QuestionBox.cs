@@ -39,6 +39,7 @@ public class QuestionBox : MonoBehaviour
         QuestionGenerator questionGenerator = GameObject.FindWithTag("GameManager").GetComponent<QuestionGenerator>();
 
         // delete these question boxes
+        // TODO: Do this another way, where when it's offscreen it deletes?
         Destroy(questionGenerator.questionBoxes[0].gameObject);
         Destroy(questionGenerator.questionBoxes[1].gameObject);
         Destroy(questionGenerator.questionBoxes[2].gameObject);
@@ -47,7 +48,9 @@ public class QuestionBox : MonoBehaviour
         // work out if they were correct
         if (number != correctNumber)
         {
-            Debug.LogError("Wrong");
+            // TODO: POPUP GAME OVER UI
+
+            Debug.LogWarning("Wrong");
             SceneManager.LoadScene("GameOver");
             return;
         }

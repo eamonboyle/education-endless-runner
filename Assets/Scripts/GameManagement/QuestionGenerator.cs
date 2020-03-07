@@ -36,17 +36,13 @@ namespace Assets.Scripts.GameManagement
         private int wrongNumber2;
         private int answer;
 
-        private Score scoreScript;
-
         // Start is called before the first frame update
         void Start()
         {
             player = GameObject.FindWithTag("Player");
 
-            scoreScript = gameObject.GetComponent<Score>();
-
             // get player prefs for now on which question type
-            string mode = PlayerPrefs.GetString("mode");
+            string mode = GameState.GetQuestionType();
 
             switch (mode)
             {
@@ -172,7 +168,7 @@ namespace Assets.Scripts.GameManagement
                     // calculate range based on % from answer
                         // use the score multiplier to help calculate this
 
-            int score = scoreScript.score;
+            int score = GameState.GetScore();
             int firstRange = 5;
             int secondRange = 25;
             int firstDivisionRange = 1;

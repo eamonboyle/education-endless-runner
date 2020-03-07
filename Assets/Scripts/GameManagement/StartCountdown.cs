@@ -48,6 +48,8 @@ public class StartCountdown : MonoBehaviour
 
     private void StartGame()
     {
+        // TODO: SET RUNNING HERE ON GAMESTATE
+
         gameObject.GetComponent<LoadCharacter>().enabled = true;
         gameObject.GetComponent<QuestionGenerator>().enabled = true;
         gameObject.GetComponent<DifficultyManager>().enabled = true;

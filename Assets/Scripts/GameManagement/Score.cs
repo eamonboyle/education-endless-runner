@@ -6,12 +6,15 @@ using UnityEngine;
 public class Score : MonoBehaviour
 {
     public GameObject scoreObject;
+
     private float timePassed = 0.0f;
-    public int score = 1;
+    private int score;
 
     // Start is called before the first frame update
     void Start()
     {
+        score = GameState.GetScore();
+
         scoreObject.GetComponent<TextMeshProUGUI>().text = "Score: " + score;
     }
 
@@ -26,6 +29,6 @@ public class Score : MonoBehaviour
         }
 
         scoreObject.GetComponent<TextMeshProUGUI>().text = "Score: " + score;
-        PlayerPrefs.SetInt("score", score);
+        GameState.SetScore(score);
     }
 }

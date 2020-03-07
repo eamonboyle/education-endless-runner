@@ -19,8 +19,9 @@ public class PlayerMovement : MonoBehaviour
         None
     }
 
-    public float forwardSpeed = 40.0f;
-    public float directionSpeed = 2.0f;
+    public float forwardSpeed;
+    public float directionAmount = 2.0f;
+    public float directionSpeed = 1.4f;
 
     private Lane currentLane = Lane.Center;
     private PlayerController playerController;
@@ -34,6 +35,9 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        // get the currentSpeed
+        forwardSpeed = GameState.GetCharacterSpeed();
+
         if (playerController.swipeRight)
         {
             CalculateLane(MoveDirection.Right);
@@ -93,7 +97,7 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector3 newPosition = transform.position;
         newPosition.z = Mathf.Lerp(transform.position.z, transform.position.z + forwardSpeed * Time.deltaTime, 0.1f);
-        newPosition.x = Mathf.Lerp(transform.position.x, directionSpeed * direction, 0.9f);
+        newPosition.x = Mathf.Lerp(transform.position.x, directionAmount * direction, directionSpeed);
         transform.position = newPosition;
     }
 }

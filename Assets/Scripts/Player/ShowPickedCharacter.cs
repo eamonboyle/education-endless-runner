@@ -10,7 +10,7 @@ public class ShowPickedCharacter : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        string player = PlayerPrefs.GetString("character");
+        string player = GameState.GetCharacter();
 
         if (player == "girl")
         {
@@ -22,11 +22,5 @@ public class ShowPickedCharacter : MonoBehaviour
             girl.SetActive(false);
             boy.SetActive(true);
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
