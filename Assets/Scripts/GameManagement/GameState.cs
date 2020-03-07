@@ -50,9 +50,19 @@ public static class GameState
         return PlayerPrefs.GetInt("score");
     }
 
+    public static void SetRunning(bool running)
+    {
+        gameRunning = running;
+    }
+
     public static bool IsRunning()
     {
         return gameRunning;
+    }
+
+    public static void SetGameOver(bool over)
+    {
+        gameOver = true;
     }
 
     public static bool IsGameOver()

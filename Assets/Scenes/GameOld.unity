@@ -367,7 +367,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d5305bc95030034487e30f05be629b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enabled: 0
+  generateQuestions: 1
   player: {fileID: 0}
   questionBox: {fileID: 2694907628137712924, guid: 154c824974f2f9c418025bcac7d206d7,
     type: 3}
@@ -1290,7 +1290,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   forwardSpeed: 40
   directionAmount: 2
-  directionSpeed: 0.9
+  directionSpeed: 1.7
 --- !u!1001 &911788125
 PrefabInstance:
   m_ObjectHideFlags: 0

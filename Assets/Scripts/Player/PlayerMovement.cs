@@ -35,6 +35,11 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        if (!GameState.IsRunning())
+        {
+            return;
+        }
+
         // get the currentSpeed
         forwardSpeed = GameState.GetCharacterSpeed();
 

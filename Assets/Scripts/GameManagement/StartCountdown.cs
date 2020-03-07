@@ -48,17 +48,16 @@ public class StartCountdown : MonoBehaviour
 
     private void StartGame()
     {
-        // TODO: SET RUNNING HERE ON GAMESTATE
+        GameState.SetRunning(true);
 
-        gameObject.GetComponent<LoadCharacter>().enabled = true;
-        gameObject.GetComponent<QuestionGenerator>().enabled = true;
-        gameObject.GetComponent<DifficultyManager>().enabled = true;
-        gameObject.GetComponent<LevelGenerator>().enabled = true;
-        gameObject.GetComponent<Score>().enabled = true;
+        //gameObject.GetComponent<QuestionGenerator>().enabled = true;
+        //gameObject.GetComponent<DifficultyManager>().enabled = true;
+        //gameObject.GetComponent<LevelGenerator>().enabled = true;
+        //gameObject.GetComponent<Score>().enabled = true;
 
-        GameObject player = GameObject.FindWithTag("Player");
+        //GameObject player = GameObject.FindWithTag("Player");
 
-        player.GetComponent<PlayerMovement>().enabled = true;
+        //player.GetComponent<PlayerMovement>().enabled = true;
 
         questionText.SetActive(true);
         countdownText.SetActive(false);

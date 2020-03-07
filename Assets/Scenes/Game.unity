@@ -367,7 +367,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d5305bc95030034487e30f05be629b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enabled: 0
+  generateQuestions: 1
   player: {fileID: 0}
   questionBox: {fileID: 2694907628137712924, guid: 154c824974f2f9c418025bcac7d206d7,
     type: 3}
@@ -407,7 +407,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 394016461}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 73fe2e98b9bb26949b4c384cee546fd7, type: 3}
   m_Name: 
@@ -420,7 +420,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 394016461}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d75c9a44702276244b3ea83a4da519f6, type: 3}
   m_Name: 
@@ -439,13 +439,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 394016461}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a064c36512294a94986cbf2180e616a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   scoreObject: {fileID: 1779705166}
-  score: 1
 --- !u!114 &394016468
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -564,7 +563,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 394016461}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cff791756eeffb046b4b03d98f1c1a38, type: 3}
   m_Name: 
@@ -1207,7 +1206,6 @@ GameObject:
   - component: {fileID: 877902525}
   - component: {fileID: 877902529}
   - component: {fileID: 877902528}
-  - component: {fileID: 877902527}
   - component: {fileID: 877902526}
   - component: {fileID: 877902530}
   m_Layer: 0
@@ -1248,21 +1246,6 @@ MonoBehaviour:
   swipeRight: 0
   swipeUp: 0
   swipeDown: 0
---- !u!114 &877902527
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 877902524}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e95a94629ce5e4478eaef2c9aa58d8f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 40
-  directionSpeed: 2
-  debugWithArrowKeys: 1
 --- !u!136 &877902528
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1300,13 +1283,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 877902524}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8c9d5ebd58435e54c82b92ebd7ff6bf4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   forwardSpeed: 40
-  directionSpeed: 1.7
+  directionAmount: 2
+  directionSpeed: 0.9
 --- !u!1001 &911788125
 PrefabInstance:
   m_ObjectHideFlags: 0

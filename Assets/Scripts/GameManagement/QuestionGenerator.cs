@@ -18,7 +18,7 @@ namespace Assets.Scripts.GameManagement
             Division
         }
 
-        public new bool enabled = true;
+        public new bool generateQuestions = true;
 
         public GameObject player;
         public GameObject questionBox;
@@ -73,15 +73,13 @@ namespace Assets.Scripts.GameManagement
         // Update is called once per frame
         void Update()
         {
-            if (!enabled)
+            if (!generateQuestions)
             {
                 return;
             }
 
-            if (!questionExists)
+            if (!questionExists && GameState.IsRunning())
             {
-                //Debug.Log("GENERATE A QUESTION");
-
                 GenerateQuestion();
 
                 questionExists = true;

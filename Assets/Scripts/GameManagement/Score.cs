@@ -14,13 +14,17 @@ public class Score : MonoBehaviour
     void Start()
     {
         score = GameState.GetScore();
-
         scoreObject.GetComponent<TextMeshProUGUI>().text = "Score: " + score;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!GameState.IsRunning())
+        {
+            return;
+        }
+
         timePassed += Time.deltaTime;
         if (timePassed >= 1)
         {

@@ -15,7 +15,10 @@ public class DifficultyManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        currentSpeed += (Time.deltaTime / 1.7f);
-        GameState.SetCharacterSpeed(currentSpeed);
+        if (GameState.IsRunning())
+        {
+            currentSpeed += (Time.deltaTime / 1.7f);
+            GameState.SetCharacterSpeed(currentSpeed);
+        }
     }
 }
