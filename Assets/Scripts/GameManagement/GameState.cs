@@ -161,6 +161,7 @@ public static class GameState
         GameObject.Find("CurrentScoreAmount").GetComponent<Text>().text = GetScore().ToString();
         GameObject.Find("InGameUI").GetComponent<Canvas>().enabled = false;
         GameObject.Find("GameOverUI").GetComponent<Canvas>().enabled = true;
+        GameObject.Find("QuestionText").SetActive(false);
     }
 
     // add methods for settings in here, audio etc

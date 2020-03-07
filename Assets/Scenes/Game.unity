@@ -1840,6 +1840,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44207a6f618c17d4990b220aa1386831, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  continueButton: {fileID: 1973652349}
+  countdownText: {fileID: 475259276}
+  questionText: {fileID: 1782689450}
+  mainCamera: {fileID: 1549752332}
+  gameId: 3492332
+  testMode: 1
+  myPlacementId: rewardedVideo
 --- !u!1 &1455358767
 GameObject:
   m_ObjectHideFlags: 0
@@ -2239,7 +2246,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.034780182, y: 0.92958933}
   m_AnchorMax: {x: 0.33, y: 0.9885434}
-  m_AnchoredPosition: {x: 9.77, y: 5.75}
+  m_AnchoredPosition: {x: 9.77002, y: 5.750001}
   m_SizeDelta: {x: -19.54, y: 11.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1573920957
