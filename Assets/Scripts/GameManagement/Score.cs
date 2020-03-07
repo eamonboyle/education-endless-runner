@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using TMPro;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class Score : MonoBehaviour
 {
@@ -10,14 +8,12 @@ public class Score : MonoBehaviour
     private float timePassed = 0.0f;
     private int score;
 
-    // Start is called before the first frame update
     void Start()
     {
         score = GameState.GetScore();
-        scoreObject.GetComponent<TextMeshProUGUI>().text = "Score: " + score;
+        scoreObject.GetComponent<Text>().text = score.ToString();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (!GameState.IsRunning())
@@ -32,7 +28,7 @@ public class Score : MonoBehaviour
             timePassed -= (int)timePassed;
         }
 
-        scoreObject.GetComponent<TextMeshProUGUI>().text = "Score: " + score;
+        scoreObject.GetComponent<Text>().text = score.ToString();
         GameState.SetScore(score);
     }
 }

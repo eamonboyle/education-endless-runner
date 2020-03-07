@@ -69,11 +69,6 @@ public class QuestionBox : MonoBehaviour
 
         // play a little fall animation?
         PlayFallAnimation();
-
-
-
-
-        //SceneManager.LoadScene("GameOver");
     }
 
     private void PlayFallAnimation()
