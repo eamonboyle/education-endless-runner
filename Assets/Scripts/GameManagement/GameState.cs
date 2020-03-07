@@ -59,4 +59,26 @@ public static class GameState
     {
         return characterSpeed;
     }
+
+    public static void SetCharacter(string character)
+    {
+        PlayerPrefs.SetString("character", character);
+    }
+
+    public static string GetCharacter()
+    {
+        return PlayerPrefs.GetString("character");
+    }
+
+    public static int GetPlayCount()
+    {
+        return PlayerPrefs.GetInt("gamesPlayed");
+    }
+
+    public static void SetPlayCount(int playCount)
+    {
+        PlayerPrefs.SetInt("gamesPlayed", playCount);
+    }
+
+    // add methods for settings in here, audio etc
 }
