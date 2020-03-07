@@ -15,6 +15,8 @@ public class StartCountdown : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        GameState.ShowGameUI();
+
         mainCamera = GameObject.FindWithTag("MainCamera");
 
         StartCoroutine(Countdown(4));
@@ -49,17 +51,8 @@ public class StartCountdown : MonoBehaviour
     private void StartGame()
     {
         GameState.SetRunning(true);
-
-        //gameObject.GetComponent<QuestionGenerator>().enabled = true;
-        //gameObject.GetComponent<DifficultyManager>().enabled = true;
-        //gameObject.GetComponent<LevelGenerator>().enabled = true;
-        //gameObject.GetComponent<Score>().enabled = true;
-
-        //GameObject player = GameObject.FindWithTag("Player");
-
-        //player.GetComponent<PlayerMovement>().enabled = true;
-
         questionText.SetActive(true);
         countdownText.SetActive(false);
+        GameObject.Find("PlayerObject").GetComponent<Animator>().SetBool("isRunning", true);
     }
 }

@@ -45,5 +45,6 @@ public class LoadCharacter : MonoBehaviour
     private void InstantiatePlayer(GameObject playerPrefab)
     {
         GameObject player = Instantiate(playerPrefab, new Vector3(0.0f, 0.0f, 6.3f), Quaternion.identity, playerSpawn.transform);
+        player.name = "PlayerObject";
     }
 }

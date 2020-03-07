@@ -116,5 +116,18 @@ public static class GameState
         return PlayerPrefs.GetString("mode");
     }
 
+    public static void ShowGameUI()
+    {
+        GameObject.Find("InGameUI").GetComponent<Canvas>().enabled = true;
+        GameObject.Find("GameOverUI").GetComponent<Canvas>().enabled = false;
+    }
+
+    public static void ShowGameOverUI()
+    {
+        SetRunning(false);
+        GameObject.Find("InGameUI").GetComponent<Canvas>().enabled = false;
+        GameObject.Find("GameOverUI").GetComponent<Canvas>().enabled = true;
+    }
+
     // add methods for settings in here, audio etc
 }

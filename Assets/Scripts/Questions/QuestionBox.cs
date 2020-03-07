@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.GameManagement;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -48,10 +49,7 @@ public class QuestionBox : MonoBehaviour
         // work out if they were correct
         if (number != correctNumber)
         {
-            // TODO: POPUP GAME OVER UI
-
-            Debug.LogWarning("Wrong");
-            SceneManager.LoadScene("GameOver");
+            AnsweredIncorrectly();
             return;
         }
         else
@@ -63,5 +61,25 @@ public class QuestionBox : MonoBehaviour
             // play sound
             GameObject.FindWithTag("MainCamera").GetComponent<AudioSource>().Play();
         }
+    }
+
+    private void AnsweredIncorrectly()
+    {
+        GameState.ShowGameOverUI();
+
+        // play a little fall animation?
+        PlayFallAnimation();
+
+
+
+
+        //SceneManager.LoadScene("GameOver");
+    }
+
+    private void PlayFallAnimation()
+    {
+        GameObject player = GameObject.Find("PlayerObject");
+        player.GetComponent<Animator>().Play("stumbleBackwards");
+        GameObject.Find("PlayerObject").GetComponent<Animator>().SetBool("isRunning", false);
     }
 }
