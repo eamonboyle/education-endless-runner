@@ -35,6 +35,14 @@ public class SceneSwitcher : MonoBehaviour
         SceneManager.LoadScene("Tutorial");
     }
 
+    public void ShowPauseMenu()
+    {
+        if (GameState.IsRunning())
+        {
+            GameState.ShowPauseUI();
+        }
+    }
+
     public void ChooseCharacter(string character)
     {
         GameState.SetCharacter(character);

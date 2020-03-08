@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.GameManagement;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,6 +19,7 @@ public static class GameState
         gameOver = false;
         score = 0;
         characterSpeed = 40.0f;
+        SetQuestionExists(false);
     }
 
     public static void StartGame()
@@ -164,6 +166,38 @@ public static class GameState
     {
         GameObject.Find("InGameUI").GetComponent<Canvas>().enabled = true;
         GameObject.Find("GameOverUI").GetComponent<Canvas>().enabled = false;
+        GameObject.Find("PauseUI").GetComponent<Canvas>().enabled = false;
+    }
+
+    public static void ShowPauseUI()
+    {
+        SetRunning(false);
+        QuestionBoxShow(false);
+        GameObject.Find("PlayerObject").GetComponent<Animator>().SetBool("isRunning", false);
+        GameObject.Find("InGameUI").GetComponent<Canvas>().enabled = false;
+        GameObject.Find("GameOverUI").GetComponent<Canvas>().enabled = false;
+        GameObject.Find("PauseUI").GetComponent<Canvas>().enabled = true;
+        GameObject.Find("QuestionText").SetActive(false);
+    }
+
+    public static void QuestionBoxShow(bool show)
+    {
+        if (!show)
+        {
+            foreach (GameObject box in GameObject.FindGameObjectsWithTag("QuestionBox"))
+            {
+                box.GetComponent<MeshRenderer>().enabled = false;
+                box.transform.GetChild(0).GetComponent<MeshRenderer>().enabled = false;
+            }
+        }
+        else
+        {
+            foreach (GameObject box in GameObject.FindGameObjectsWithTag("QuestionBox"))
+            {
+                box.GetComponent<MeshRenderer>().enabled = true;
+                box.transform.GetChild(0).GetComponent<MeshRenderer>().enabled = true;
+            }
+        }
     }
 
     public static void ShowGameOverUI()
@@ -175,6 +209,7 @@ public static class GameState
         GameObject.Find("HighScoreAmount").GetComponent<Text>().text = GetHighScore().ToString();
         GameObject.Find("CurrentScoreAmount").GetComponent<Text>().text = GetScore().ToString();
         GameObject.Find("InGameUI").GetComponent<Canvas>().enabled = false;
+        GameObject.Find("PauseUI").GetComponent<Canvas>().enabled = false;
         GameObject.Find("GameOverUI").GetComponent<Canvas>().enabled = true;
         GameObject.Find("QuestionText").SetActive(false);
     }
