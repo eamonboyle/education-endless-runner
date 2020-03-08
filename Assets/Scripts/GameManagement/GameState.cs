@@ -158,7 +158,7 @@ public static class GameState
         {
             // enter default settings
             SettingState.SetSound(true);
-            SettingState.SetGraphics("normal");
+            SettingState.SetGraphics("Medium");
 
             return true;
         }
