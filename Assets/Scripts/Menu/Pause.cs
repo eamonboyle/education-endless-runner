@@ -19,7 +19,7 @@ public class Pause : MonoBehaviour
             case "quit":
                 GameState.Init();
                 SceneManager.LoadScene("MainMenu");
-                break;
+                return;
 
             default:
                 break;
@@ -29,10 +29,10 @@ public class Pause : MonoBehaviour
     private void ContinueGame()
     {
         GameState.ShowGameUI();
-        StartCoroutine(Countdown(4));
+        StartCoroutine(CountdownFromPause(4));
     }
 
-    private IEnumerator Countdown(int seconds)
+    private IEnumerator CountdownFromPause(int seconds)
     {
         int count = seconds;
         countdownText.SetActive(true);

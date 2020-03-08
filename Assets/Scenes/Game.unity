@@ -614,6 +614,7 @@ GameObject:
   - component: {fileID: 394016467}
   - component: {fileID: 394016468}
   - component: {fileID: 394016469}
+  - component: {fileID: 394016472}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: GameManager
@@ -853,6 +854,25 @@ MonoBehaviour:
   questionText: {fileID: 1782689450}
   countdownText: {fileID: 475259276}
   mainCamera: {fileID: 0}
+--- !u!114 &394016472
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 394016461}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44207a6f618c17d4990b220aa1386831, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  continueButton: {fileID: 1973652349}
+  countdownText: {fileID: 475259276}
+  questionText: {fileID: 1782689450}
+  mainCamera: {fileID: 1549752332}
+  gameId: 3492332
+  testMode: 1
+  myPlacementId: rewardedVideo
 --- !u!1 &442746781
 GameObject:
   m_ObjectHideFlags: 0
@@ -1187,7 +1207,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &688746942
 RectTransform:
   m_ObjectHideFlags: 0
