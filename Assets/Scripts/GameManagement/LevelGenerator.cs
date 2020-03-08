@@ -31,7 +31,7 @@ public class LevelGenerator : MonoBehaviour
     {
         if (player.transform.position.z > (currentPlace + 4.0f))
         {
-            Debug.Log("GENERATE FLOOR");
+            //Debug.Log("GENERATE FLOOR");
 
             floorCount++;
 

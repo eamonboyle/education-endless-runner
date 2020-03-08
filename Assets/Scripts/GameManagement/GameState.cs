@@ -145,6 +145,21 @@ public static class GameState
         return PlayerPrefs.GetInt("highScore");
     }
 
+    public static void SetFirstLoad()
+    {
+        PlayerPrefs.SetInt("firstLoad", 1);
+    }
+
+    public static bool IsFirstLoad()
+    {
+        if (PlayerPrefs.GetInt("firstLoad") == 0)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     public static void ShowGameUI()
     {
         GameObject.Find("InGameUI").GetComponent<Canvas>().enabled = true;
@@ -162,6 +177,25 @@ public static class GameState
         GameObject.Find("InGameUI").GetComponent<Canvas>().enabled = false;
         GameObject.Find("GameOverUI").GetComponent<Canvas>().enabled = true;
         GameObject.Find("QuestionText").SetActive(false);
+    }
+
+    public static void ShowTutorialGameOver()
+    {
+        SetRunning(false);
+        GameObject.Find("TutorialUI").GetComponent<Canvas>().enabled = false;
+        GameObject.Find("TutorialGameOverUI").GetComponent<Canvas>().enabled = true;
+        GameObject.Find("QuestionText").SetActive(false);
+    }
+
+    public static void ShowTutorialCompleteUI()
+    {
+        SetRunning(false);
+        GameObject.Find("TutorialUI").GetComponent<Canvas>().enabled = false;
+        GameObject.Find("TutorialGameOverUI").GetComponent<Canvas>().enabled = false;
+        GameObject.Find("TutorialCompleteUI").GetComponent<Canvas>().enabled = true;
+        GameObject.Find("QuestionText").SetActive(false);
+        GameObject.Find("PlayerObject").GetComponent<Animator>().SetBool("isRunning", false);
+        SetFirstLoad();
     }
 
     // add methods for settings in here, audio etc

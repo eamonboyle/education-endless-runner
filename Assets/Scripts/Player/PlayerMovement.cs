@@ -23,7 +23,7 @@ public class PlayerMovement : MonoBehaviour
     public float directionAmount = 2.0f;
     public float directionSpeed = 1.4f;
 
-    private Lane currentLane = Lane.Center;
+    public Lane currentLane = Lane.Center;
     private PlayerController playerController;
     private int direction = 0;
 

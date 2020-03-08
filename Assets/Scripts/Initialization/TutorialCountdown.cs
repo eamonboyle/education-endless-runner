@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class StartCountdown : MonoBehaviour
+public class TutorialCountdown : MonoBehaviour
 {
     public GameObject questionText;
     public GameObject countdownText;
@@ -15,10 +15,7 @@ public class StartCountdown : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (!GameState.IsFirstLoad())
-        {
-            GameState.ShowGameUI();
-        }
+        GameState.ShowGameUI();
 
         mainCamera = GameObject.FindWithTag("MainCamera");
 

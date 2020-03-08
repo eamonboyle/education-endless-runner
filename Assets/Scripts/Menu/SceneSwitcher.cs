@@ -30,9 +30,22 @@ public class SceneSwitcher : MonoBehaviour
         SceneManager.LoadScene("CharacterSelect");
     }
 
+    public void GoToTutorial()
+    {
+        SceneManager.LoadScene("Tutorial");
+    }
+
     public void ChooseCharacter(string character)
     {
         GameState.SetCharacter(character);
-        GoToMainMenu();
+
+        if (GameState.IsFirstLoad())
+        {
+            GoToModeSelect();
+        }
+        else
+        {
+            GoToMainMenu();
+        }
     }
 }
