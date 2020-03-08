@@ -11,6 +11,10 @@ public class TutorialQuestions : MonoBehaviour
     public GameObject questionBox;
     public GameObject questionText;
     public GameObject tutorialText;
+    public GameObject swipeImage;
+
+    public Sprite leftImage;
+    public Sprite rightImage;
 
     public List<GameObject> questionBoxes;
     public List<Question> tutorialQuestions;
@@ -58,21 +62,21 @@ public class TutorialQuestions : MonoBehaviour
             {
                 if (tutorialQuestions[currentQuestion].correctLane == PlayerMovement.Lane.Left)
                 {
-                    tutorialText.GetComponent<Text>().text = "Swipe Left";
+                    SetSwipeHint();
                 }
                 else if (tutorialQuestions[currentQuestion].correctLane == PlayerMovement.Lane.Right)
                 {
-                    tutorialText.GetComponent<Text>().text = "Swipe right";
+                    SetSwipeHint(false);
                 }
                 else
                 {
                     if (movement.currentLane == PlayerMovement.Lane.Left)
                     {
-                        tutorialText.GetComponent<Text>().text = "Swipe right";
+                        SetSwipeHint(false);
                     }
                     else
                     {
-                        tutorialText.GetComponent<Text>().text = "Swipe Left";
+                        SetSwipeHint();
                     }
                 }
 
@@ -82,7 +86,24 @@ public class TutorialQuestions : MonoBehaviour
         else
         {
             tutorialText.SetActive(false);
+            swipeImage.SetActive(false);
         }
+    }
+
+    private void SetSwipeHint(bool left = true)
+    {
+        if (left)
+        {
+            tutorialText.GetComponent<Text>().text = "Swipe Left";
+            swipeImage.GetComponent<Image>().sprite = leftImage;
+        }
+        else
+        {
+            tutorialText.GetComponent<Text>().text = "Swipe right";
+            swipeImage.GetComponent<Image>().sprite = rightImage;
+        }
+
+        swipeImage.SetActive(true);
     }
 
     private void InstantiateQuestionBoxes()
@@ -91,8 +112,8 @@ public class TutorialQuestions : MonoBehaviour
 
         foreach (Question question in tutorialQuestions)
         {
-            Debug.Log("Question: " + i);
-            Debug.Log("Correct Lane is: " + question.correctLane);
+            //Debug.Log("Question: " + i);
+            //Debug.Log("Correct Lane is: " + question.correctLane);
 
             // set the position of the question boxes along the z axis
             float spawnZ = player.transform.position.z + (i * questionSpacing);
