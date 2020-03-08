@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class InitCharacter : MonoBehaviour
 {
@@ -9,7 +10,7 @@ public class InitCharacter : MonoBehaviour
     {
         if (!GameState.IsFirstLoad())
         {
-            Debug.Log("NOT FIRST LOAD");
+            //SceneManager.LoadScene("MainMenu");
         }
     }
 }

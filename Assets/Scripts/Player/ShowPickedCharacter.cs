@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ShowPickedCharacter : MonoBehaviour
 {
@@ -10,6 +11,11 @@ public class ShowPickedCharacter : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (GameState.IsFirstLoad())
+        {
+            SceneManager.LoadScene("CharacterSelect");
+        }
+
         string player = GameState.GetCharacter();
 
         if (player == "girl")
