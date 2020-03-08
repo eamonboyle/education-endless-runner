@@ -38,6 +38,11 @@ public class EndScreen : MonoBehaviour, IUnityAdsListener
         myButton.interactable = Advertisement.IsReady(myPlacementId);
     }
 
+    private void OnDestroy()
+    {
+        Advertisement.RemoveListener(this);
+    }
+
     public void GameOverUIButtonClick(string action)
     {
         switch (action)

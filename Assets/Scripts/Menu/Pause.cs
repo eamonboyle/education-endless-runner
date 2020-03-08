@@ -18,6 +18,7 @@ public class Pause : MonoBehaviour
                 break;
             case "quit":
                 GameState.Init();
+                //GameObject.Find("GameOverUI").GetComponent<EndScreen>().
                 SceneManager.LoadScene("MainMenu");
                 return;
 
