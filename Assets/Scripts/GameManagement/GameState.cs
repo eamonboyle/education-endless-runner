@@ -195,6 +195,7 @@ public static class GameState
         GameObject.Find("TutorialCompleteUI").GetComponent<Canvas>().enabled = true;
         GameObject.Find("QuestionText").SetActive(false);
         GameObject.Find("PlayerObject").GetComponent<Animator>().SetBool("isRunning", false);
+        GameObject.Find("PlayerObject").GetComponent<Animator>().SetBool("dancing", true);
         SetFirstLoad();
     }
 
