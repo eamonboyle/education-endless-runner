@@ -36,4 +36,18 @@ public static class SettingState
     {
         return PlayerPrefs.GetString("graphics");
     }
+
+    public static void ResetPlayerPrefs()
+    {
+        int playCount = GameState.GetPlayCount();
+        bool firstPlay = GameState.IsFirstLoad();
+        PlayerPrefs.DeleteAll();
+        GameState.SetCharacter("boy");
+        GameState.SetPlayCount(playCount);
+
+        if (!firstPlay)
+        {
+            GameState.SetFirstLoad();
+        }
+    }
 }

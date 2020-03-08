@@ -5,6 +5,8 @@ using UnityEngine.UI;
 public class Settings : MonoBehaviour
 {
     public GameObject soundImage;
+    public GameObject resetOverlay;
+
     public Sprite soundOnImg;
     public Sprite soundOffImg;
 
@@ -33,5 +35,16 @@ public class Settings : MonoBehaviour
     {
         SettingState.SetSound(!sound);
         DisplaySoundSetting();
+    }
+
+    public void ResetUI(bool show)
+    {
+        resetOverlay.GetComponent<Canvas>().enabled = show;
+    }
+
+    public void ResetPlayerPrefs()
+    {
+        SettingState.ResetPlayerPrefs();
+        ResetUI(false);
     }
 }
