@@ -156,6 +156,10 @@ public static class GameState
     {
         if (PlayerPrefs.GetInt("firstLoad") == 0)
         {
+            // enter default settings
+            SettingState.SetSound(true);
+            SettingState.SetGraphics("normal");
+
             return true;
         }
 
