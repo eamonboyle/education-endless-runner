@@ -27,7 +27,7 @@ public class ModeSelect : MonoBehaviour
         }
         else
         {
-            SceneManager.LoadScene("Game");
+            SceneManager.LoadScene("MainMenu");
         }
     }
 }
