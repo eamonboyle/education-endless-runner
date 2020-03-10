@@ -138,13 +138,13 @@ public static class GameState
         if (score > s)
         {
             // TODO, DO AN EFFECT LIKE CONFETTI HERE?
-            PlayerPrefs.SetInt("highScore", score);
+            PlayerPrefs.SetInt("highScore_" + GetQuestionType(), score);
         }
     }
 
     public static int GetHighScore()
     {
-        return PlayerPrefs.GetInt("highScore");
+        return PlayerPrefs.GetInt("highScore_" + GetQuestionType());
     }
 
     public static void SetFirstLoad()
@@ -208,7 +208,6 @@ public static class GameState
     {
         SetRunning(false);
         SetQuestionExists(false);
-        PlayerPrefs.SetInt("highScore", 0);
         SetHighScore();
         GameObject.Find("HighScoreAmount").GetComponent<Text>().text = GetHighScore().ToString();
         GameObject.Find("CurrentScoreAmount").GetComponent<Text>().text = GetScore().ToString();

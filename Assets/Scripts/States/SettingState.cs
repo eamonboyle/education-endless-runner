@@ -43,6 +43,7 @@ public static class SettingState
         bool firstPlay = GameState.IsFirstLoad();
         PlayerPrefs.DeleteAll();
         GameState.SetCharacter("boy");
+        GameState.SetQuestionType("addition");
         GameState.SetPlayCount(playCount);
 
         if (!firstPlay)
