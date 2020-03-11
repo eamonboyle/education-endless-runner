@@ -10,14 +10,6 @@ public class QuestionBox : MonoBehaviour
     public int number;
     public int correctNumber;
 
-    private new GameObject camera;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        camera = GameObject.FindWithTag("MainCamera");
-    }
-
     // Update is called once per frame
     void Update()
     {
@@ -36,16 +28,18 @@ public class QuestionBox : MonoBehaviour
             return;
         }
 
-        QuestionGenerator questionGenerator = GameObject.FindWithTag("GameManager").GetComponent<QuestionGenerator>();
+        QuestionGeneration questionGeneration = GameObject.Find("QuestionManager").GetComponent<QuestionGeneration>();
 
-        // delete these question boxes
-        // TODO: Do this another way, where when it's offscreen it deletes?
-        Destroy(questionGenerator.questionBoxes[0].gameObject);
-        Destroy(questionGenerator.questionBoxes[1].gameObject);
-        Destroy(questionGenerator.questionBoxes[2].gameObject);
-        questionGenerator.questionBoxes.RemoveRange(0, 3);
+        // play animations on boxes here? or whatever, add a particle effect
+        // can add a particle effect where the box was?
 
-        // work out if they were correct
+        // delete this boxes
+        Destroy(questionGeneration.questionBoxes[0].gameObject);
+        Destroy(questionGeneration.questionBoxes[1].gameObject);
+        Destroy(questionGeneration.questionBoxes[2].gameObject);
+
+        questionGeneration.questionBoxes.RemoveRange(0, 3);
+
         if (number != correctNumber)
         {
             AnsweredIncorrectly();
@@ -53,13 +47,37 @@ public class QuestionBox : MonoBehaviour
         }
         else
         {
-            // set the bool question to false
-            // to generate a new question
-            GameState.SetQuestionExists(false);
-
-            // play sound
+            // correct play sound
             GameObject.FindWithTag("MainCamera").GetComponent<AudioSource>().Play();
+
+            // spawn the next question boxes
+            questionGeneration.AddQuestion(true);
         }
+
+        //QuestionGenerator questionGenerator = GameObject.FindWithTag("GameManager").GetComponent<QuestionGenerator>();
+
+        //// delete these question boxes
+        //// TODO: Do this another way, where when it's offscreen it deletes?
+        //Destroy(questionGenerator.questionBoxes[0].gameObject);
+        //Destroy(questionGenerator.questionBoxes[1].gameObject);
+        //Destroy(questionGenerator.questionBoxes[2].gameObject);
+        //questionGenerator.questionBoxes.RemoveRange(0, 3);
+
+        //// work out if they were correct
+        //if (number != correctNumber)
+        //{
+        //    AnsweredIncorrectly();
+        //    return;
+        //}
+        //else
+        //{
+        //    // set the bool question to false
+        //    // to generate a new question
+        //    GameState.SetQuestionExists(false);
+
+        //    // play sound
+        //    GameObject.FindWithTag("MainCamera").GetComponent<AudioSource>().Play();
+        //}
     }
 
     private void AnsweredIncorrectly()
