@@ -165,8 +165,8 @@ namespace Assets.Scripts.GameManagement
                         // use the score multiplier to help calculate this
 
             int score = GameState.GetScore();
-            int firstRange = 5;
-            int secondRange = 25;
+            int firstRange = 1;
+            int secondRange = 10;
             int firstDivisionRange = 1;
             int secondDivisionRange = 10;
 
@@ -229,8 +229,8 @@ namespace Assets.Scripts.GameManagement
             }
             else
             {
-                firstRange = 25;
-                secondRange = 50;
+                firstRange = 1;
+                secondRange = 20;
                 firstDivisionRange = 5;
                 secondDivisionRange = 13;
 
