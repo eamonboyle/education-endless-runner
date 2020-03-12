@@ -168,6 +168,7 @@ MonoBehaviour:
   questionBox: {fileID: 2694907628137712924, guid: 154c824974f2f9c418025bcac7d206d7,
     type: 3}
   questionText: {fileID: 1782689450}
+  questionBoxParent: {fileID: 2144250772}
   questionBoxes: []
 --- !u!1 &42895922
 GameObject:
@@ -3610,3 +3611,33 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2058576041}
   m_CullTransparentMesh: 0
+--- !u!1 &2144250772
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2144250773}
+  m_Layer: 0
+  m_Name: QuestionBoxes
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2144250773
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2144250772}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 24.24649, y: 26.284637, z: 281.79285}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
