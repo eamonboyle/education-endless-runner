@@ -29,10 +29,6 @@ public class QuestionGeneration : MonoBehaviour
 
     private float questionSpacing = 50.0f;
 
-    private char questionSymbol;
-
-    private QuestionType questionType;
-
     public enum QuestionType
     {
         Addition,

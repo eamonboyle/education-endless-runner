@@ -53,16 +53,35 @@ public class Question
     private void GenerateNumbers()
     {
         // change the range to a number based on scores
-        int number1 = UnityEngine.Random.Range(1, 10);
-        int number2 = UnityEngine.Random.Range(1, 10);
+        int score = GameState.GetScore();
 
-        int wrong1 = UnityEngine.Random.Range(1, 20);
-        int wrong2 = UnityEngine.Random.Range(1, 20);
+        if (score == 0)
+        {
+            score = 10;
+        }
+
+        int number1 = UnityEngine.Random.Range(1, score);
+        int number2 = UnityEngine.Random.Range(1, score);
+        int answer = GetAnswer(number1, number2);
+
+        int wrong1 = UnityEngine.Random.Range(answer - 5, answer + 5);
+
+        do
+        {
+            wrong1 = UnityEngine.Random.Range(answer - 5, answer + 5);
+        } while (wrong1 == answer);
+
+        int wrong2 = UnityEngine.Random.Range(answer - 5, answer + 5);
+
+        do
+        {
+            wrong2 = UnityEngine.Random.Range(answer - 5, answer + 5);
+        } while (wrong2 == answer || wrong2 == wrong1);
 
         Text = number1.ToString() + " " + questionSymbol + " " + number2.ToString();
         Number1 = number1;
         Number2 = number2;
-        Answer = GetAnswer(number1, number2);
+        Answer = answer;
         Wrong1 = wrong1;
         Wrong2 = wrong2;
         ZPosition = 0.0f;

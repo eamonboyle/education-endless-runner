@@ -46,9 +46,10 @@ public static class SettingState
         GameState.SetQuestionType("addition");
         GameState.SetPlayCount(playCount);
 
-        if (!firstPlay)
-        {
-            GameState.SetFirstLoad();
-        }
+        // TODO: REENABLE THIS
+        //if (!firstPlay)
+        //{
+        //    GameState.SetFirstLoad();
+        //}
     }
 }
