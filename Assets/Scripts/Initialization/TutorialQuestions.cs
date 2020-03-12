@@ -17,7 +17,7 @@ public class TutorialQuestions : MonoBehaviour
     public Sprite rightImage;
 
     public List<GameObject> questionBoxes;
-    public List<Question> tutorialQuestions;
+    public List<TutorialQuestion> tutorialQuestions;
 
     public int currentQuestion = 0;
 
@@ -34,11 +34,11 @@ public class TutorialQuestions : MonoBehaviour
 
         movement = player.GetComponent<PlayerMovement>();
 
-        tutorialQuestions = new List<Question>();
+        tutorialQuestions = new List<TutorialQuestion>();
         
-        tutorialQuestions.Add(new Question(1, 2, 3, 5, 6, Vector3.zero));
-        tutorialQuestions.Add(new Question(2, 3, 5, 7, 4, Vector3.zero));
-        tutorialQuestions.Add(new Question(3, 3, 6, 5, 7, Vector3.zero));
+        tutorialQuestions.Add(new TutorialQuestion(1, 2, 3, 5, 6));
+        tutorialQuestions.Add(new TutorialQuestion(2, 3, 5, 7, 4));
+        tutorialQuestions.Add(new TutorialQuestion(3, 3, 6, 5, 7));
 
         InstantiateQuestionBoxes();
     }
@@ -110,7 +110,7 @@ public class TutorialQuestions : MonoBehaviour
     {
         int i = 1;
 
-        foreach (Question question in tutorialQuestions)
+        foreach (TutorialQuestion question in tutorialQuestions)
         {
             //Debug.Log("Question: " + i);
             //Debug.Log("Correct Lane is: " + question.correctLane);

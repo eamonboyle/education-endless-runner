@@ -1,21 +1,91 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Question
 {
-    public Question(int number1, int number2, int answer, int wrong1, int wrong2, Vector3 coords)
+    public int Answer { get; private set; }
+    public int Number1 { get; private set; }
+    public int Number2 { get; private set; }
+    public List<int> Numbers { get; private set; }
+    public string Text { get; private set; }
+    public int Wrong1 { get; private set; }
+    public int Wrong2 { get; private set; }
+    public float ZPosition { get; private set; }
+
+    public PlayerMovement.Lane correctLane;
+
+    private char questionSymbol;
+
+    private QuestionType questionType;
+
+    public Question()
     {
-        Text = number1.ToString() + " + " + number2.ToString();
-        Number1 = number1;
-        Number2 = number2;
-        Answer = answer;
-        Wrong1 = wrong1;
-        Wrong2 = wrong2;
-        zPosition = 0.0f;
-        Coords = coords;
-        Numbers = RandomizeBoxPlacement(new List<int>() { answer, wrong1, wrong2 });
+        GetQuestionType();
+        CreateQuestion();
 
         correctLane = FindCorrectLane();
+    }
+
+    public enum QuestionType
+    {
+        Addition,
+        Subtraction,
+        Multiplication,
+        Division
+    }
+    public void RandomizeList()
+    {
+        this.Numbers = RandomizeBoxPlacement(Numbers);
+    }
+
+    public void SetZ(float z)
+    {
+        ZPosition = z;
+    }
+
+    private void CreateQuestion()
+    {
+        GenerateNumbers();
+        Numbers = RandomizeBoxPlacement(new List<int>() { Answer, Wrong1, Wrong2 });
+    }
+
+    private void GenerateNumbers()
+    {
+        // change the range to a number based on scores
+        int number1 = UnityEngine.Random.Range(1, 10);
+        int number2 = UnityEngine.Random.Range(1, 10);
+
+        int wrong1 = UnityEngine.Random.Range(1, 20);
+        int wrong2 = UnityEngine.Random.Range(1, 20);
+
+        Text = number1.ToString() + " " + questionSymbol + " " + number2.ToString();
+        Number1 = number1;
+        Number2 = number2;
+        Answer = GetAnswer(number1, number2);
+        Wrong1 = wrong1;
+        Wrong2 = wrong2;
+        ZPosition = 0.0f;
+    }
+
+    private int GetAnswer(int number1, int number2)
+    {
+        int answer = number1 + number2;
+
+        if (questionType == QuestionType.Subtraction)
+        {
+            answer = number1 - number2;
+        }
+        else if (questionType == QuestionType.Multiplication)
+        {
+            answer = number1 * number2;
+        }
+        else if (questionType == QuestionType.Division)
+        {
+            answer = number1 / number2;
+        }
+
+        return answer;
     }
 
     private PlayerMovement.Lane FindCorrectLane()
@@ -36,20 +106,38 @@ public class Question
         }
     }
 
-    public void SetZ(float z)
+    private void GetQuestionType()
     {
-        zPosition = z;
-    }
+        // get player prefs for now on which question type
+        string mode = GameState.GetQuestionType();
 
-    public void RandomizeList()
-    {
-        this.Numbers = RandomizeBoxPlacement(Numbers);
-    }
+        switch (mode)
+        {
+            case "addition":
+                questionType = QuestionType.Addition;
+                questionSymbol = '+';
+                break;
+            case "subtraction":
+                questionType = QuestionType.Subtraction;
+                questionSymbol = '-';
+                break;
+            case "multiply":
+                questionType = QuestionType.Multiplication;
+                questionSymbol = 'x';
+                break;
+            case "division":
+                questionType = QuestionType.Division;
+                questionSymbol = '÷';
+                break;
 
+            default:
+                questionType = QuestionType.Addition;
+                questionSymbol = '+';
+                break;
+        }
+    }
     private List<int> RandomizeBoxPlacement(List<int> numbers)
     {
-        return numbers;
-
         for (int i = 0; i < numbers.Count; i++)
         {
             int temp = numbers[i];
@@ -69,15 +157,4 @@ public class Question
 
         return returnList;
     }
-
-    public string Text;
-    public int Number1;
-    public int Number2;
-    public int Answer;
-    public int Wrong1;
-    public int Wrong2;
-    public float zPosition;
-    public Vector3 Coords;
-    public List<int> Numbers;
-    public PlayerMovement.Lane correctLane;
 }
