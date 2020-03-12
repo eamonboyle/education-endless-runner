@@ -48,6 +48,8 @@ public class Question
 
     private List<int> RandomizeBoxPlacement(List<int> numbers)
     {
+        return numbers;
+
         for (int i = 0; i < numbers.Count; i++)
         {
             int temp = numbers[i];

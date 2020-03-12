@@ -142,8 +142,8 @@ public class QuestionGeneration : MonoBehaviour
 
         if (removeLast)
         {
-            DeleteLastQuestion();
             SpawnNewQuestion();
+            DeleteLastQuestion();
         }
     }
 
@@ -152,7 +152,8 @@ public class QuestionGeneration : MonoBehaviour
         Question question = questions[questions.Count - 1];
 
         // set the position of the question boxes along the z axis
-        float spawnZ = player.transform.position.z + (questions[questions.Count - 2].zPosition + questionSpacing);
+        float spawnZ = questions[questions.Count - 2].zPosition + questionSpacing;
+        //float spawnZ = player.transform.position.z + (questions[questions.Count - 2].zPosition + questionSpacing);
         question.SetZ(spawnZ);
 
         // left

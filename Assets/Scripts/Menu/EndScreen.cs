@@ -103,6 +103,7 @@ public class EndScreen : MonoBehaviour, IUnityAdsListener
 
     private void StartGame()
     {
+        GameState.QuestionBoxShow(true);
         countdownText.SetActive(false);
         questionText.SetActive(true);
         gameObject.GetComponent<Canvas>().enabled = false;

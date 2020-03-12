@@ -206,6 +206,7 @@ public static class GameState
 
     public static void ShowGameOverUI()
     {
+        QuestionBoxShow(false);
         SetRunning(false);
         SetQuestionExists(false);
         SetHighScore();

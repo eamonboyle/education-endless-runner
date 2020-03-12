@@ -22,6 +22,8 @@ public class StartCountdown : MonoBehaviour
 
         mainCamera = GameObject.FindWithTag("MainCamera");
 
+        GameState.QuestionBoxShow(false);
+
         StartCoroutine(Countdown(4));
     }
 
@@ -54,6 +56,7 @@ public class StartCountdown : MonoBehaviour
     private void StartGame()
     {
         GameState.SetRunning(true);
+        GameState.QuestionBoxShow(true);
         questionText.SetActive(true);
         countdownText.SetActive(false);
         GameObject.Find("PlayerObject").GetComponent<Animator>().SetBool("isRunning", true);
