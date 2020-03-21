@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class ModeSelect : MonoBehaviour
 {
@@ -23,11 +22,11 @@ public class ModeSelect : MonoBehaviour
 
         if (GameState.IsFirstLoad())
         {
-            SceneManager.LoadScene("Tutorial");
+            GameManager.instance.LoadTutorial();
         }
         else
         {
-            SceneManager.LoadScene("MainMenu");
+            GameManager.instance.LoadMainMenu();
         }
     }
 }

@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.SceneManagement;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class ShowPickedCharacter : MonoBehaviour
@@ -11,11 +8,11 @@ public class ShowPickedCharacter : MonoBehaviour
     public GameObject modeButton;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         if (GameState.IsFirstLoad())
         {
-            SceneManager.LoadScene("CharacterSelect");
+            GameManager.instance.LoadCharacterSelection();
         }
 
         string player = GameState.GetCharacter();
@@ -40,15 +37,19 @@ public class ShowPickedCharacter : MonoBehaviour
             case "addition":
                 modeText += "+";
                 break;
+
             case "subtraction":
                 modeText += "-";
                 break;
+
             case "multiply":
                 modeText += "x";
                 break;
+
             case "division":
                 modeText += "÷";
                 break;
+
             default:
                 modeText += "+";
                 break;

@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Pause : MonoBehaviour
@@ -16,10 +15,11 @@ public class Pause : MonoBehaviour
             case "continue":
                 ContinueGame();
                 break;
+
             case "quit":
                 GameState.Init();
                 //GameObject.Find("GameOverUI").GetComponent<EndScreen>().
-                SceneManager.LoadScene("MainMenu");
+                GameManager.instance.LoadMainMenu();
                 return;
 
             default:

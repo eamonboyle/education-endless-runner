@@ -1,15 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class GameOver : MonoBehaviour
 {
     public GameObject scoreObject;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         int score = GameState.GetScore();
         scoreObject.GetComponent<Text>().text = "Score: " + score;
@@ -20,11 +17,11 @@ public class GameOver : MonoBehaviour
 
     public void RestartGame()
     {
-        SceneManager.LoadScene("Game");
+        GameManager.instance.LoadGame();
     }
 
     public void QuitGame()
     {
-        SceneManager.LoadScene("MainMenu");
+        GameManager.instance.LoadMainMenu();
     }
 }

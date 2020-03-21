@@ -1,10 +1,7 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 using UnityEngine.Advertisements;
-using System;
+using UnityEngine.UI;
 
 public class EndScreen : MonoBehaviour, IUnityAdsListener
 {
@@ -49,13 +46,15 @@ public class EndScreen : MonoBehaviour, IUnityAdsListener
         {
             case "restart":
                 GameState.Init();
-                SceneManager.LoadScene("Game");
+                GameManager.instance.LoadGame();
                 break;
+
             case "continue":
                 ShowContinueAd();
                 break;
+
             case "quit":
-                SceneManager.LoadScene("MainMenu");
+                GameManager.instance.LoadMainMenu();
                 break;
 
             default:

@@ -1,43 +1,35 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.SceneManagement;
+﻿using UnityEngine;
 
 public class SceneSwitcher : MonoBehaviour
 {
     public void GoToGame()
     {
-        SceneManager.LoadScene("Game");
+        GameManager.instance.LoadGame();
     }
 
     public void GoToMainMenu()
     {
-        SceneManager.LoadScene("MainMenu");
-    }
-
-    public void GoToGameOver()
-    {
-        SceneManager.LoadScene("GameOver");
+        GameManager.instance.LoadMainMenu();
     }
 
     public void GoToModeSelect()
     {
-        SceneManager.LoadScene("ModeChoice");
+        GameManager.instance.LoadModeSelect();
     }
 
     public void GoToCharacterSelection()
     {
-        SceneManager.LoadScene("CharacterSelect");
+        GameManager.instance.LoadCharacterSelection();
     }
 
     public void GoToTutorial()
     {
-        SceneManager.LoadScene("Tutorial");
+        GameManager.instance.LoadTutorial();
     }
 
     public void GoToSettings()
     {
-        SceneManager.LoadScene("Settings");
+        GameManager.instance.LoadSettings();
     }
 
     public void ShowPauseMenu()
