@@ -94,10 +94,12 @@ public class Settings : MonoBehaviour
         if (sound)
         {
             soundImage.GetComponent<Image>().sprite = soundOnImg;
+            AudioListener.volume = 1;
         }
         else
         {
             soundImage.GetComponent<Image>().sprite = soundOffImg;
+            AudioListener.volume = 0;
         }
     }
 

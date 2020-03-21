@@ -662,7 +662,6 @@ GameObject:
   - component: {fileID: 394016465}
   - component: {fileID: 394016466}
   - component: {fileID: 394016467}
-  - component: {fileID: 394016468}
   - component: {fileID: 394016469}
   - component: {fileID: 394016472}
   m_Layer: 0
@@ -762,21 +761,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreObject: {fileID: 1573920955}
---- !u!114 &394016468
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 394016461}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e400e7fc05d0c2c48830d2c9adeecbda, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  backgroundMusic: {fileID: 0}
-  questionCorrect: {fileID: 0}
-  gameOver: {fileID: 0}
 --- !u!82 &394016469
 AudioSource:
   m_ObjectHideFlags: 0

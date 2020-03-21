@@ -12,14 +12,19 @@ public static class SettingState
 
     public static bool GetSound()
     {
-        int s = PlayerPrefs.GetInt("sound");
-
-        if (s == 1)
+        if (GameState.IsFirstLoad())
         {
             return true;
         }
 
-        return false;
+        int s = PlayerPrefs.GetInt("sound");
+
+        if (s == 0)
+        {
+            return false;
+        }
+
+        return true;
     }
 
     internal static void ChangeSound()
@@ -47,9 +52,9 @@ public static class SettingState
         GameState.SetPlayCount(playCount);
 
         // TODO: REENABLE THIS
-        //if (!firstPlay)
-        //{
-        //    GameState.SetFirstLoad();
-        //}
+        if (!firstPlay)
+        {
+            GameState.SetFirstLoad();
+        }
     }
 }

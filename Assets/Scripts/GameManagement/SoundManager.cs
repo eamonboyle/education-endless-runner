@@ -4,14 +4,19 @@ using UnityEngine;
 
 public class SoundManager : MonoBehaviour
 {
-    public AudioSource backgroundMusic;
-    public AudioSource questionCorrect;
-    public AudioSource gameOver;
-
     // Start is called before the first frame update
     void Start()
     {
-        
+        bool playSound = SettingState.GetSound();
+
+        if (!playSound)
+        {
+            AudioListener.volume = 0;
+        }
+        else
+        {
+            AudioListener.volume = 1;
+        }
     }
 
     // Update is called once per frame
