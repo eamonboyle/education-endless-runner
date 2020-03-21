@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -19,21 +16,25 @@ public class PlayerMovement : MonoBehaviour
         None
     }
 
+    public AudioClip slideSound;
+    public GameObject dust;
+
     public float forwardSpeed;
     public float directionAmount = 2.0f;
     public float directionSpeed = 1.4f;
 
     public Lane currentLane = Lane.Center;
     private PlayerController playerController;
+    private AudioSource audioSource;
     private int direction = 0;
 
-    void Start()
+    private void Start()
     {
         playerController = gameObject.GetComponent<PlayerController>();
+        audioSource = GetComponent<AudioSource>();
     }
 
-
-    void Update()
+    private void Update()
     {
         if (!GameState.IsRunning())
         {
@@ -58,7 +59,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void CalculateLane(MoveDirection requestedDirection)
     {
-        //Debug.Log("CURRENT LANE: " + currentLane);
         switch (requestedDirection)
         {
             case MoveDirection.Left:
@@ -68,15 +68,18 @@ public class PlayerMovement : MonoBehaviour
                 }
                 else if (currentLane == Lane.Center)
                 {
+                    PlaySlideSound();
                     direction--;
                     currentLane = Lane.Left;
                 }
                 else if (currentLane == Lane.Right)
                 {
+                    PlaySlideSound();
                     direction--;
                     currentLane = Lane.Center;
                 }
                 break;
+
             case MoveDirection.Right:
                 if (currentLane == Lane.Right)
                 {
@@ -84,15 +87,18 @@ public class PlayerMovement : MonoBehaviour
                 }
                 else if (currentLane == Lane.Center)
                 {
+                    PlaySlideSound();
                     direction++;
                     currentLane = Lane.Right;
                 }
                 else if (currentLane == Lane.Left)
                 {
+                    PlaySlideSound();
                     direction++;
                     currentLane = Lane.Center;
                 }
                 break;
+
             default:
                 break;
         }
@@ -104,5 +110,16 @@ public class PlayerMovement : MonoBehaviour
         newPosition.z = Mathf.Lerp(transform.position.z, transform.position.z + forwardSpeed * Time.deltaTime, 0.1f);
         newPosition.x = Mathf.Lerp(transform.position.x, directionAmount * direction, directionSpeed);
         transform.position = newPosition;
+    }
+
+    void PlaySlideSound()
+    {
+        audioSource.clip = slideSound;
+        audioSource.Play();
+
+        // spawn dust particles
+        Vector3 dustSpawn = transform.position;
+        dustSpawn.z -= .5f;
+        Instantiate(dust, dustSpawn, Quaternion.identity, transform);
     }
 }
