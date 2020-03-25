@@ -113,4 +113,29 @@ public class GameManager : MonoBehaviour
     {
         loadingScreen.gameObject.SetActive(false);
     }
+
+    private void OnApplicationPause(bool pause)
+    {
+        print("ApplicationPause: " + pause);
+
+        if (GameState.IsRunning())
+        {
+            GameState.ShowPauseUI();
+        }
+    }
+
+    private void OnApplicationFocus(bool focus)
+    {
+        print("ApplicationFocus: " + focus);
+
+        if (GameState.IsRunning())
+        {
+            GameState.ShowPauseUI();
+        }
+    }
+
+    private void OnApplicationQuit()
+    {
+        print("Application quit");
+    }
 }
