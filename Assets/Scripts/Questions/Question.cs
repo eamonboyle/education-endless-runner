@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections.Generic;
 
 public class Question
 {
@@ -34,6 +32,7 @@ public class Question
         Multiplication,
         Division
     }
+
     public void RandomizeList()
     {
         this.Numbers = RandomizeBoxPlacement(Numbers);
@@ -57,21 +56,21 @@ public class Question
 
         if (score == 0)
         {
-            score = 10;
+            score = 5;
         }
 
         int number1 = UnityEngine.Random.Range(1, score);
         int number2 = UnityEngine.Random.Range(1, score);
         int answer = GetAnswer(number1, number2);
 
-        int wrong1 = UnityEngine.Random.Range(answer - 5, answer + 5);
+        int wrong1;
 
         do
         {
             wrong1 = UnityEngine.Random.Range(answer - 5, answer + 5);
         } while (wrong1 == answer);
 
-        int wrong2 = UnityEngine.Random.Range(answer - 5, answer + 5);
+        int wrong2;
 
         do
         {
@@ -116,10 +115,13 @@ public class Question
         {
             case 0:
                 return PlayerMovement.Lane.Left;
+
             case 1:
                 return PlayerMovement.Lane.Center;
+
             case 2:
                 return PlayerMovement.Lane.Right;
+
             default:
                 return PlayerMovement.Lane.Center;
         }
@@ -136,14 +138,17 @@ public class Question
                 questionType = QuestionType.Addition;
                 questionSymbol = '+';
                 break;
+
             case "subtraction":
                 questionType = QuestionType.Subtraction;
                 questionSymbol = '-';
                 break;
+
             case "multiply":
                 questionType = QuestionType.Multiplication;
                 questionSymbol = 'x';
                 break;
+
             case "division":
                 questionType = QuestionType.Division;
                 questionSymbol = '÷';
@@ -155,6 +160,7 @@ public class Question
                 break;
         }
     }
+
     private List<int> RandomizeBoxPlacement(List<int> numbers)
     {
         for (int i = 0; i < numbers.Count; i++)
@@ -167,6 +173,7 @@ public class Question
 
         return numbers;
     }
+
     private List<int> Swap(List<int> list, int i, int j)
     {
         List<int> returnList = list;

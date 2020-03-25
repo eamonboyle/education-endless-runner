@@ -50,6 +50,7 @@ public static class SettingState
         GameState.SetCharacter("boy");
         GameState.SetQuestionType("addition");
         GameState.SetPlayCount(playCount);
+        GameState.ResetAdCount();
 
         // TODO: REENABLE THIS
         if (!firstPlay)

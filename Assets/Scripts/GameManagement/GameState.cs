@@ -1,8 +1,4 @@
-﻿using Assets.Scripts.GameManagement;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public static class GameState
@@ -27,6 +23,11 @@ public static class GameState
         gameRunning = true;
         gameOver = false;
         score = 0;
+    }
+
+    public static void ResetAdCount()
+    {
+        PlayerPrefs.SetInt("adCount", 2);
     }
 
     public static void GameOver()
@@ -74,7 +75,19 @@ public static class GameState
     {
         return gameOver;
     }
-    
+
+    public static void DecreaseAdCount()
+    {
+        int adCount = GetAdCount();
+
+        PlayerPrefs.SetInt("adCount", --adCount);
+    }
+
+    public static int GetAdCount()
+    {
+        return PlayerPrefs.GetInt("adCount");
+    }
+
     public static void SetCharacterSpeed(float speed)
     {
         characterSpeed = speed;

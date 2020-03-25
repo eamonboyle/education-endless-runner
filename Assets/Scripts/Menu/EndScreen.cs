@@ -32,7 +32,14 @@ public class EndScreen : MonoBehaviour, IUnityAdsListener
 
     private void Update()
     {
-        myButton.interactable = Advertisement.IsReady(myPlacementId);
+        if (GameState.GetAdCount() <= 0)
+        {
+            myButton.interactable = false;
+        }
+        else
+        {
+            myButton.interactable = Advertisement.IsReady(myPlacementId);
+        }
     }
 
     private void OnDestroy()
@@ -65,6 +72,7 @@ public class EndScreen : MonoBehaviour, IUnityAdsListener
     private void ShowContinueAd()
     {
         Advertisement.Show(myPlacementId);
+        GameState.DecreaseAdCount();
     }
 
     private void ContinueGame()

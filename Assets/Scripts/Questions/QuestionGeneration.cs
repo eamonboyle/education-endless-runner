@@ -5,6 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+// the new generation class
 public class QuestionGeneration : MonoBehaviour
 {
     public GameObject player;
@@ -38,7 +39,7 @@ public class QuestionGeneration : MonoBehaviour
     }
     public void AddQuestion(bool removeLast = false)
     {
-        Debug.Log("Add Question");
+        //Debug.Log("Add Question");
 
         Question question = new Question();
         questions.Add(question);

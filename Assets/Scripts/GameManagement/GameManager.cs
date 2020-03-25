@@ -31,6 +31,7 @@ public class GameManager : MonoBehaviour
 
     public void LoadMainMenu()
     {
+        GameState.Init();
         ShowLoadingScreen();
         UnloadScenes();
 

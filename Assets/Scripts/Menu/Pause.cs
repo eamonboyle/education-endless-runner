@@ -17,7 +17,6 @@ public class Pause : MonoBehaviour
                 break;
 
             case "quit":
-                GameState.Init();
                 //GameObject.Find("GameOverUI").GetComponent<EndScreen>().
                 GameManager.instance.LoadMainMenu();
                 return;

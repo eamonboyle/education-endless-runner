@@ -25,6 +25,9 @@ public class LoadCharacter : MonoBehaviour
         }
 
         ChooseCharacter();
+
+        // set the ad count to 2
+        GameState.ResetAdCount();
     }
 
     private void ChooseCharacter()
