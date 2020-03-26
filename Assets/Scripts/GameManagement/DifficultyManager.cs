@@ -5,6 +5,7 @@ using UnityEngine;
 public class DifficultyManager : MonoBehaviour
 {
     public float currentSpeed;
+    public float speedMultiplier = 1.7f;
 
     // Start is called before the first frame update
     void Start()
@@ -17,7 +18,7 @@ public class DifficultyManager : MonoBehaviour
     {
         if (GameState.IsRunning())
         {
-            currentSpeed += (Time.deltaTime / 1.7f);
+            currentSpeed += (Time.deltaTime / speedMultiplier);
             GameState.SetCharacterSpeed(currentSpeed);
         }
     }

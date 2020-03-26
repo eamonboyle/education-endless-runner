@@ -806,6 +806,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentSpeed: 40
+  speedMultiplier: 10
 --- !u!114 &394016466
 MonoBehaviour:
   m_ObjectHideFlags: 0
