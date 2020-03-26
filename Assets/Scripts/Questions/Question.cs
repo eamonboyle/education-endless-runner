@@ -63,28 +63,37 @@ public class Question
 
         int number1 = 0, number2 = 0, answer = 0, wrong1 = 0, wrong2 = 0;
 
+        (int, int) rangeNumbers = GetNumberRanges();
+
         if (questionType == QuestionType.Addition)
         {
-            number1 = UnityEngine.Random.Range(1, GetMaxNumber());
-            number2 = UnityEngine.Random.Range(1, GetMaxNumber());
+            number1 = UnityEngine.Random.Range(1, rangeNumbers.Item1);
+            number2 = UnityEngine.Random.Range(1, rangeNumbers.Item1);
 
             answer = GetAnswer(number1, number2);
 
             do
             {
-                if (answer > 10)
+                if (rangeNumbers.Item2 != 0)
                 {
-                    wrong1 = UnityEngine.Random.Range(answer - 5, answer + 5);
+                    wrong1 = UnityEngine.Random.Range(answer - rangeNumbers.Item2, answer + rangeNumbers.Item2);
                 }
                 else
                 {
-                    wrong1 = UnityEngine.Random.Range(1, score / 2);
+                    wrong1 = UnityEngine.Random.Range(1, answer);
                 }
             } while (wrong1 == answer || wrong1 < 0);
 
             do
             {
-                wrong2 = UnityEngine.Random.Range(answer - 5, answer + 5);
+                if (rangeNumbers.Item2 != 0)
+                {
+                    wrong2 = UnityEngine.Random.Range(answer - rangeNumbers.Item2, answer + rangeNumbers.Item2);
+                }
+                else
+                {
+                    wrong2 = UnityEngine.Random.Range(1, answer);
+                }
             } while (wrong2 == answer || wrong2 == wrong1 || wrong2 < 0);
         }
 
@@ -160,71 +169,86 @@ public class Question
         Wrong1 = wrong1;
         Wrong2 = wrong2;
         ZPosition = 0.0f;
+
+        (int, int) test = GetNumberRanges();
     }
 
-    private int GetMaxNumber()
+    private (int a, int b) GetNumberRanges()
     {
+        (int, int) returnVal = (0, 0);
+
         if (questionType == QuestionType.Addition)
         {
             if (score < 50)
             {
-                return 5;
+                returnVal.Item1 = 5;
+                returnVal.Item2 = 0;
             }
             else if (score < 100)
             {
-                return 10;
+                returnVal.Item1 = 10;
+                returnVal.Item2 = 0;
             }
             else if (score < 200)
             {
-                return 20;
+                returnVal.Item1 = 20;
+                returnVal.Item2 = 10;
             }
             else if (score < 300)
             {
-                return 30;
+                returnVal.Item1 = 30;
+                returnVal.Item2 = 10;
             }
             else if (score < 400)
             {
-                return 40;
+                returnVal.Item1 = 40;
+                returnVal.Item2 = 10;
             }
             else if (score < 500)
             {
-                return 50;
+                returnVal.Item1 = 50;
+                returnVal.Item2 = 10;
             }
             else if (score < 600)
             {
-                return 60;
+                returnVal.Item1 = 60;
+                returnVal.Item2 = 10;
             }
             else if (score < 700)
             {
-                return 70;
+                returnVal.Item1 = 70;
+                returnVal.Item2 = 7;
             }
             else if (score < 800)
             {
-                return 80;
+                returnVal.Item1 = 80;
+                returnVal.Item2 = 6;
             }
             else if (score < 900)
             {
-                return 90;
+                returnVal.Item1 = 90;
+                returnVal.Item2 = 5;
             }
             else
             {
-                return score / 10;
+                returnVal.Item1 = score / 10;
+                returnVal.Item2 = 4;
             }
-        } 
+        }
         else if (questionType == QuestionType.Addition)
         {
 
-        } 
+        }
         else if (questionType == QuestionType.Addition)
         {
 
-        } 
+        }
         else if (questionType == QuestionType.Addition)
         {
 
         }
 
-        return 0;
+        return returnVal;
     }
 
     private int GetAnswer(int number1, int number2)

@@ -5,7 +5,7 @@ using UnityEngine;
 public class DifficultyManager : MonoBehaviour
 {
     public float currentSpeed;
-    public float speedMultiplier = 1.7f;
+    public float speedMultiplier = 10.0f;
 
     // Start is called before the first frame update
     void Start()
