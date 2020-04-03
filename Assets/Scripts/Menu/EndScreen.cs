@@ -10,13 +10,13 @@ public class EndScreen : MonoBehaviour, IUnityAdsListener
     public GameObject questionText;
     public GameObject mainCamera;
 
-    public string gameId = "3492332";
+    public string gameId = "3492402";
 
 #if UNITY_IOS
-    public string gameId = "3492333";
+    public string gameId = "3492403";
 #endif
 
-    public bool testMode = true;
+    public bool testMode = false;
     public string myPlacementId = "rewardedVideo";
 
     private Button myButton;
