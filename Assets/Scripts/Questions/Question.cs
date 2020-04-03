@@ -105,20 +105,11 @@ public class Question
         if (questionType == QuestionType.Multiplication)
         {
             (int, int, int, int, int) numbers = GetNumbers_Multiplication();
-
-            number1 = UnityEngine.Random.Range(1, score);
-            number2 = UnityEngine.Random.Range(1, score);
-            answer = GetAnswer(number1, number2);
-
-            do
-            {
-                wrong1 = UnityEngine.Random.Range(answer - 5, answer + 5);
-            } while (wrong1 == answer);
-
-            do
-            {
-                wrong2 = UnityEngine.Random.Range(answer - 5, answer + 5);
-            } while (wrong2 == answer || wrong2 == wrong1);
+            number1 = numbers.Item1;
+            number2 = numbers.Item2;
+            answer = numbers.Item3;
+            wrong1 = numbers.Item4;
+            wrong2 = numbers.Item5;
         }
 
         if (questionType == QuestionType.Division)
@@ -269,7 +260,74 @@ public class Question
 
     private (int, int, int, int, int) GetNumbers_Multiplication()
     {
-        return (0, 0, 0, 0, 0);
+        int number1 = 0, number2 = 0, wrong1 = 0, wrong2 = 0, answer = 0;
+
+        if (score < 300)
+        {
+            number1 = UnityEngine.Random.Range(1, 10);
+            number2 = UnityEngine.Random.Range(1, 10);
+        }
+        else if (score < 400)
+        {
+            number1 = UnityEngine.Random.Range(1, 15);
+            number2 = UnityEngine.Random.Range(1, 15);
+        }
+        else if (score < 500)
+        {
+            number1 = UnityEngine.Random.Range(1, 30);
+            number2 = UnityEngine.Random.Range(1, 30);
+        }
+        else if (score < 800)
+        {
+            number1 = UnityEngine.Random.Range(1, 40);
+            number2 = UnityEngine.Random.Range(1, 40);
+        }
+        else if (score < 1000)
+        {
+            number1 = UnityEngine.Random.Range(1, 50);
+            number2 = UnityEngine.Random.Range(1, 50);
+        }
+        else if (score < 1500)
+        {
+            number1 = UnityEngine.Random.Range(1, 60);
+            number2 = UnityEngine.Random.Range(1, 60);
+        }
+        else if (score < 2000)
+        {
+            number1 = UnityEngine.Random.Range(60, 70);
+            number2 = UnityEngine.Random.Range(60, 70);
+        }
+        else if (score < 2500)
+        {
+            number1 = UnityEngine.Random.Range(70, 80);
+            number2 = UnityEngine.Random.Range(70, 80);
+        }
+        else if (score < 3000)
+        {
+            number1 = UnityEngine.Random.Range(80, 90);
+            number2 = UnityEngine.Random.Range(80, 90);
+        }
+        else
+        {
+            number1 = UnityEngine.Random.Range(100, 120);
+            number2 = UnityEngine.Random.Range(100, 120);
+        }
+
+        answer = number1 * number2;
+
+        // make sure the wrong ones are divisible by number1
+        do
+        {
+            wrong1 = UnityEngine.Random.Range(1, answer + 10);
+        } while (wrong1 % number1 != 0);
+
+        do
+        {
+            wrong2 = UnityEngine.Random.Range(1, answer + 10);
+        } while (wrong1 == wrong2 || wrong2 % number1 != 0);
+
+
+        return (number1, number2, answer, wrong1, wrong2);
     }
 
     private (int, int, int, int, int) GetNumbers_Subtraction()
