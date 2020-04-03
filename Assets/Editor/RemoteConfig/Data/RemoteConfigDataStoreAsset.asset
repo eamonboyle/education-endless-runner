@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 469c24fdb3bd6431b92cc1465bd9166b, type: 3}
+  m_Name: RemoteConfigDataStoreAsset
+  m_EditorClassIdentifier: 
+  rsKeyList:
+  - metadata:
+      entityId: a5cfa990-0f71-4d93-9a83-9cc165bd7bc5
+    rs:
+      key: speedMultiplier
+      type: float
+      value: 10
+  rsLastCachedKeyList:
+  - metadata:
+      entityId: a5cfa990-0f71-4d93-9a83-9cc165bd7bc5
+    rs:
+      key: speedMultiplier
+      type: float
+      value: 10.000000
+  configId: c2f478df-3823-49da-ac47-d699439c473c
+  currentEnvironmentId: 09775479-8552-48b2-ad8a-caf6c3e6cc72
+  environments:
+  - id: c2a6576f-c9be-48b6-9fdb-8fba7ceb1ed9
+    appId: 
+    name: Release (Default)
+    description: 
+    createdAt: 2020-04-03T14:47:16Z
+    updatedAt: 2020-04-03T14:47:16Z
+  - id: 09775479-8552-48b2-ad8a-caf6c3e6cc72
+    appId: 
+    name: Development
+    description: 
+    createdAt: 2020-04-03T14:47:16Z
+    updatedAt: 2020-04-03T14:47:16Z
+  rulesList: []
+  lastCachedRulesList: []
+  addedRulesIDs: []
+  updatedRulesIDs: []
+  deletedRulesIDs: []
