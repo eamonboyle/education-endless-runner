@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public string ScreenshotName = "screenshot.png";
+    public string ScreenshotName = "math-runner-share-score-screenshot.png";
 
     public static GameManager instance;
     public GameObject loadingScreen;
@@ -261,6 +261,10 @@ public class GameManager : MonoBehaviour
         subject = "Test subject.";
         text = "Test text";
 #endif
+
+
+        text = "I scored " + GameState.GetScore() + " at " + GameState.GetQuestionType() + " on Math Runner, can you beat my score?";
+        subject = "My score on Math Runner app";
 
         // Share
         NativeShare.Share(text, screenShotPath, url, subject, "image/png", true, title);

@@ -60,6 +60,10 @@ public class EndScreen : MonoBehaviour, IUnityAdsListener
                 ShowContinueAd();
                 break;
 
+            case "share":
+                GameManager.instance.Screenshot();
+                break;
+
             case "quit":
                 GameManager.instance.LoadMainMenu();
                 break;
