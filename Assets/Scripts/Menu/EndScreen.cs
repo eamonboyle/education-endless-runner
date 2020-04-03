@@ -10,10 +10,10 @@ public class EndScreen : MonoBehaviour, IUnityAdsListener
     public GameObject questionText;
     public GameObject mainCamera;
 
+    public string gameId = "3492332";
+
 #if UNITY_IOS
     public string gameId = "3492333";
-#elif UNITY_ANDROID
-    public string gameId = "3492332";
 #endif
 
     public bool testMode = true;

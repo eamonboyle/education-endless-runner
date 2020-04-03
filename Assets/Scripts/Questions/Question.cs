@@ -1,23 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 public class Question
 {
-    public int Answer { get; private set; }
-    public int Number1 { get; private set; }
-    public int Number2 { get; private set; }
-    public List<int> Numbers { get; private set; }
-    public string Text { get; private set; }
-    public int Wrong1 { get; private set; }
-    public int Wrong2 { get; private set; }
-    public float ZPosition { get; private set; }
-
-    private int score = 0;
-
     public PlayerMovement.Lane correctLane;
-
     private char questionSymbol;
-
     private QuestionType questionType;
+    private int score = 0;
 
     public Question()
     {
@@ -35,6 +24,15 @@ public class Question
         Division
     }
 
+    public int Answer { get; private set; }
+    public int Number1 { get; private set; }
+    public int Number2 { get; private set; }
+    public List<int> Numbers { get; private set; }
+    public string Text { get; private set; }
+    public int Wrong1 { get; private set; }
+    public int Wrong2 { get; private set; }
+    public float ZPosition { get; private set; }
+
     public void RandomizeList()
     {
         this.Numbers = RandomizeBoxPlacement(Numbers);
@@ -51,6 +49,27 @@ public class Question
         Numbers = RandomizeBoxPlacement(new List<int>() { Answer, Wrong1, Wrong2 });
     }
 
+    private PlayerMovement.Lane FindCorrectLane()
+    {
+        // find index of answer in Numbers
+        int index = Numbers.IndexOf(Answer);
+
+        switch (index)
+        {
+            case 0:
+                return PlayerMovement.Lane.Left;
+
+            case 1:
+                return PlayerMovement.Lane.Center;
+
+            case 2:
+                return PlayerMovement.Lane.Right;
+
+            default:
+                return PlayerMovement.Lane.Center;
+        }
+    }
+
     private void GenerateNumbers()
     {
         // change the range to a number based on scores
@@ -63,46 +82,20 @@ public class Question
 
         int number1 = 0, number2 = 0, answer = 0, wrong1 = 0, wrong2 = 0;
 
-        (int, int) rangeNumbers = GetNumberRanges();
-
         if (questionType == QuestionType.Addition)
         {
-            number1 = UnityEngine.Random.Range(1, rangeNumbers.Item1);
-            number2 = UnityEngine.Random.Range(1, rangeNumbers.Item1);
-
-            answer = GetAnswer(number1, number2);
-
-            do
-            {
-                if (rangeNumbers.Item2 != 0)
-                {
-                    wrong1 = UnityEngine.Random.Range(answer - rangeNumbers.Item2, answer + rangeNumbers.Item2);
-                }
-                else
-                {
-                    wrong1 = UnityEngine.Random.Range(1, answer);
-                }
-            } while (wrong1 == answer || wrong1 < 0);
-
-            do
-            {
-                if (rangeNumbers.Item2 != 0)
-                {
-                    wrong2 = UnityEngine.Random.Range(answer - rangeNumbers.Item2, answer + rangeNumbers.Item2);
-                }
-                else
-                {
-                    wrong2 = UnityEngine.Random.Range(1, answer);
-                }
-            } while (wrong2 == answer || wrong2 == wrong1 || wrong2 < 0);
+            (int, int, int, int, int) numbers = GetNumbers_Addition();
+            number1 = numbers.Item1;
+            number2 = numbers.Item2;
+            answer = numbers.Item3;
+            wrong1 = numbers.Item4;
+            wrong2 = numbers.Item5;
         }
-
-
-
-
 
         if (questionType == QuestionType.Subtraction)
         {
+            (int, int, int, int, int) numbers = GetNumbers_Subtraction();
+
             number1 = UnityEngine.Random.Range(1, score);
             number2 = UnityEngine.Random.Range(1, score);
             answer = GetAnswer(number1, number2);
@@ -117,14 +110,11 @@ public class Question
                 wrong2 = UnityEngine.Random.Range(answer - 5, answer + 5);
             } while (wrong2 == answer || wrong2 == wrong1);
         }
-
-
-
-
-
 
         if (questionType == QuestionType.Multiplication)
         {
+            (int, int, int, int, int) numbers = GetNumbers_Multiplication();
+
             number1 = UnityEngine.Random.Range(1, score);
             number2 = UnityEngine.Random.Range(1, score);
             answer = GetAnswer(number1, number2);
@@ -139,13 +129,11 @@ public class Question
                 wrong2 = UnityEngine.Random.Range(answer - 5, answer + 5);
             } while (wrong2 == answer || wrong2 == wrong1);
         }
-
-
-
-
 
         if (questionType == QuestionType.Division)
         {
+            (int, int, int, int, int) numbers = GetNumbers_Division();
+
             number1 = UnityEngine.Random.Range(1, score);
             number2 = UnityEngine.Random.Range(1, score);
             answer = GetAnswer(number1, number2);
@@ -160,7 +148,6 @@ public class Question
                 wrong2 = UnityEngine.Random.Range(answer - 5, answer + 5);
             } while (wrong2 == answer || wrong2 == wrong1);
         }
-
 
         Text = number1.ToString() + " " + questionSymbol + " " + number2.ToString();
         Number1 = number1;
@@ -169,86 +156,6 @@ public class Question
         Wrong1 = wrong1;
         Wrong2 = wrong2;
         ZPosition = 0.0f;
-
-        (int, int) test = GetNumberRanges();
-    }
-
-    private (int a, int b) GetNumberRanges()
-    {
-        (int, int) returnVal = (0, 0);
-
-        if (questionType == QuestionType.Addition)
-        {
-            if (score < 50)
-            {
-                returnVal.Item1 = 5;
-                returnVal.Item2 = 0;
-            }
-            else if (score < 100)
-            {
-                returnVal.Item1 = 10;
-                returnVal.Item2 = 0;
-            }
-            else if (score < 200)
-            {
-                returnVal.Item1 = 20;
-                returnVal.Item2 = 10;
-            }
-            else if (score < 300)
-            {
-                returnVal.Item1 = 30;
-                returnVal.Item2 = 10;
-            }
-            else if (score < 400)
-            {
-                returnVal.Item1 = 40;
-                returnVal.Item2 = 10;
-            }
-            else if (score < 500)
-            {
-                returnVal.Item1 = 50;
-                returnVal.Item2 = 10;
-            }
-            else if (score < 600)
-            {
-                returnVal.Item1 = 60;
-                returnVal.Item2 = 10;
-            }
-            else if (score < 700)
-            {
-                returnVal.Item1 = 70;
-                returnVal.Item2 = 7;
-            }
-            else if (score < 800)
-            {
-                returnVal.Item1 = 80;
-                returnVal.Item2 = 6;
-            }
-            else if (score < 900)
-            {
-                returnVal.Item1 = 90;
-                returnVal.Item2 = 5;
-            }
-            else
-            {
-                returnVal.Item1 = score / 10;
-                returnVal.Item2 = 4;
-            }
-        }
-        else if (questionType == QuestionType.Addition)
-        {
-
-        }
-        else if (questionType == QuestionType.Addition)
-        {
-
-        }
-        else if (questionType == QuestionType.Addition)
-        {
-
-        }
-
-        return returnVal;
     }
 
     private int GetAnswer(int number1, int number2)
@@ -271,25 +178,161 @@ public class Question
         return answer;
     }
 
-    private PlayerMovement.Lane FindCorrectLane()
+    private (int, int, int, int, int) GetNumbers_Addition()
     {
-        // find index of answer in Numbers
-        int index = Numbers.IndexOf(Answer);
+        int maxNumber = 10;
+        int wrongRange = 0;
+        int number1 = 0;
+        int number2 = 0;
+        int wrong1 = 0;
+        int wrong2 = 0;
+        int answer = 0;
 
-        switch (index)
+        if (score < 100)
         {
-            case 0:
-                return PlayerMovement.Lane.Left;
-
-            case 1:
-                return PlayerMovement.Lane.Center;
-
-            case 2:
-                return PlayerMovement.Lane.Right;
-
-            default:
-                return PlayerMovement.Lane.Center;
+            maxNumber = 10;
+            wrongRange = 0;
         }
+        else if (score < 200)
+        {
+            maxNumber = 20;
+            wrongRange = 10;
+        }
+        else if (score < 300)
+        {
+            maxNumber = 30;
+            wrongRange = 10;
+        }
+        else if (score < 400)
+        {
+            maxNumber = 40;
+            wrongRange = 10;
+        }
+        else if (score < 500)
+        {
+            maxNumber = 50;
+            wrongRange = 10;
+        }
+        else if (score < 600)
+        {
+            maxNumber = 60;
+            wrongRange = 10;
+        }
+        else if (score < 700)
+        {
+            maxNumber = 70;
+            wrongRange = 7;
+        }
+        else if (score < 800)
+        {
+            maxNumber = 80;
+            wrongRange = 6;
+        }
+        else if (score < 900)
+        {
+            maxNumber = 90;
+            wrongRange = 5;
+        }
+        else
+        {
+            maxNumber = score / 10;
+            wrongRange = 4;
+        }
+
+        number1 = UnityEngine.Random.Range(1, maxNumber);
+        number2 = UnityEngine.Random.Range(1, maxNumber);
+
+        answer = GetAnswer(number1, number2);
+
+        do
+        {
+            if (wrongRange != 0)
+            {
+                wrong1 = UnityEngine.Random.Range(answer - wrongRange, answer + wrongRange);
+            }
+            else
+            {
+                wrong1 = UnityEngine.Random.Range(1, answer);
+            }
+        } while (wrong1 == answer || wrong1 < 0);
+
+        do
+        {
+            if (wrongRange != 0)
+            {
+                wrong2 = UnityEngine.Random.Range(answer - wrongRange, answer + wrongRange);
+            }
+            else
+            {
+                wrong2 = UnityEngine.Random.Range(1, answer);
+            }
+        } while (wrong2 == answer || wrong2 == wrong1 || wrong2 < 0);
+
+
+        return (number1, number2, answer, wrong1, wrong2);
+    }
+    private (int, int, int, int, int) GetNumbers_Division()
+    {
+        return (0, 0, 0, 0, 0);
+    }
+
+    private (int, int, int, int, int) GetNumbers_Multiplication()
+    {
+        return (0, 0, 0, 0, 0);
+    }
+
+    private (int, int, int, int, int) GetNumbers_Subtraction()
+    {
+        int minNumberA = 0, maxNumberA = 0, minNumberB = 0, maxNumberB = 0, wrongRange = 0, number1 = 0, number2 = 0, wrong1 = 0, wrong2 = 0, answer = 0;
+
+        if (score < 100)
+        {
+            minNumberA = 10;
+            maxNumberA = 20;
+            minNumberB = 1;
+            maxNumberB = 9;
+            wrongRange = 0;
+        }
+        else if (score < 200)
+        {
+            minNumberA = 15;
+            maxNumberA = 25;
+            minNumberB = 1;
+            maxNumberB = 14;
+            wrongRange = 10;
+        }
+
+        number1 = UnityEngine.Random.Range(minNumberA, maxNumberA);
+        number2 = UnityEngine.Random.Range(minNumberB, maxNumberB);
+
+        answer = GetAnswer(number1, number2);
+
+        do
+        {
+            if (wrongRange != 0)
+            {
+                wrong1 = UnityEngine.Random.Range(answer - wrongRange, answer + wrongRange);
+            }
+            else
+            {
+                wrong1 = UnityEngine.Random.Range(1, maxNumberA);
+            }
+        } while (wrong1 == answer || wrong1 < 0);
+
+        do
+        {
+            if (wrongRange != 0)
+            {
+                wrong2 = UnityEngine.Random.Range(answer - wrongRange, answer + wrongRange);
+            }
+            else
+            {
+                wrong2 = UnityEngine.Random.Range(1, maxNumberA);
+            }
+        } while (wrong2 == answer || wrong2 == wrong1);
+
+
+        return (number1, number2, answer, wrong1, wrong2);
     }
 
     private void GetQuestionType()
