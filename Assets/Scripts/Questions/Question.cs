@@ -95,20 +95,11 @@ public class Question
         if (questionType == QuestionType.Subtraction)
         {
             (int, int, int, int, int) numbers = GetNumbers_Subtraction();
-
-            number1 = UnityEngine.Random.Range(1, score);
-            number2 = UnityEngine.Random.Range(1, score);
-            answer = GetAnswer(number1, number2);
-
-            do
-            {
-                wrong1 = UnityEngine.Random.Range(answer - 5, answer + 5);
-            } while (wrong1 == answer);
-
-            do
-            {
-                wrong2 = UnityEngine.Random.Range(answer - 5, answer + 5);
-            } while (wrong2 == answer || wrong2 == wrong1);
+            number1 = numbers.Item1;
+            number2 = numbers.Item2;
+            answer = numbers.Item3;
+            wrong1 = numbers.Item4;
+            wrong2 = numbers.Item5;
         }
 
         if (questionType == QuestionType.Multiplication)
@@ -297,9 +288,49 @@ public class Question
         {
             minNumberA = 15;
             maxNumberA = 25;
-            minNumberB = 1;
+            minNumberB = 5;
             maxNumberB = 14;
             wrongRange = 10;
+        }
+        else if (score < 300)
+        {
+            minNumberA = 20;
+            maxNumberA = 30;
+            minNumberB = 5;
+            maxNumberB = 19;
+            wrongRange = 8;
+        }
+        else if (score < 400)
+        {
+            minNumberA = 25;
+            maxNumberA = 40;
+            minNumberB = 10;
+            maxNumberB = 24;
+            wrongRange = 6;
+        }
+        else if (score < 500)
+        {
+            minNumberA = 30;
+            maxNumberA = 50;
+            minNumberB = 15;
+            maxNumberB = 29;
+            wrongRange = 5;
+        }
+        else if (score < 600)
+        {
+            minNumberA = 35;
+            maxNumberA = 60;
+            minNumberB = 20;
+            maxNumberB = 59;
+            wrongRange = 3;
+        }
+        else
+        {
+            minNumberA = 40;
+            maxNumberA = 150;
+            minNumberB = 1;
+            maxNumberB = 39;
+            wrongRange = 5;
         }
 
         number1 = UnityEngine.Random.Range(minNumberA, maxNumberA);
@@ -317,7 +348,7 @@ public class Question
             {
                 wrong1 = UnityEngine.Random.Range(1, maxNumberA);
             }
-        } while (wrong1 == answer || wrong1 < 0);
+        } while (wrong1 == answer);
 
         do
         {
