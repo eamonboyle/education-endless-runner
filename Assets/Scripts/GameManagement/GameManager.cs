@@ -164,7 +164,11 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(.05f);
         }
 
-        NativeShare.Share(text, screenShotPath, "", "", "image/png", true, "");
+        text = "I scored " + GameState.GetScore() + " at " + GameState.GetQuestionType() + " on Math Runner, can you beat my score?";
+        string subject = "My score on Math Runner app";
+
+        new NativeShare().AddFile(screenShotPath).SetSubject(subject).SetText(text).Share();
+        //NativeShare.Share(text, screenShotPath, "", "", "image/png", true, "");
     }
 
     //---------- Helper Variables ----------//
@@ -267,6 +271,7 @@ public class GameManager : MonoBehaviour
         subject = "My score on Math Runner app";
 
         // Share
-        NativeShare.Share(text, screenShotPath, url, subject, "image/png", true, title);
+        new NativeShare().AddFile(screenShotPath).SetSubject(subject).SetText(text).Share();
+        //NativeShare.Share(text, screenShotPath, url, subject, "image/png", true, title);
     }
 }
