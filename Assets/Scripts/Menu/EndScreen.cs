@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Advertisements;
 using UnityEngine.UI;
 
-public class EndScreen : MonoBehaviour, IUnityAdsListener
+public class EndScreen : MonoBehaviour
 {
     public GameObject continueButton;
     public GameObject countdownText;
@@ -26,25 +26,25 @@ public class EndScreen : MonoBehaviour, IUnityAdsListener
         myButton = continueButton.GetComponent<Button>();
 
         // Initialize the Ads listener and service:
-        Advertisement.AddListener(this);
-        Advertisement.Initialize(gameId, testMode);
+        // Advertisement.AddListener(this);
+        // Advertisement.Initialize(gameId, testMode);
     }
 
     private void Update()
     {
-        if (GameState.GetAdCount() <= 0)
-        {
-            myButton.interactable = false;
-        }
-        else
-        {
-            myButton.interactable = Advertisement.IsReady(myPlacementId);
-        }
+        // if (GameState.GetAdCount() <= 0)
+        // {
+        //     myButton.interactable = false;
+        // }
+        // else
+        // {
+        //     myButton.interactable = Advertisement.IsReady(myPlacementId);
+        // }
     }
 
     private void OnDestroy()
     {
-        Advertisement.RemoveListener(this);
+        // Advertisement.RemoveListener(this);
     }
 
     public void GameOverUIButtonClick(string action)
@@ -75,8 +75,8 @@ public class EndScreen : MonoBehaviour, IUnityAdsListener
 
     private void ShowContinueAd()
     {
-        Advertisement.Show(myPlacementId);
-        GameState.DecreaseAdCount();
+        // Advertisement.Show(myPlacementId);
+        // GameState.DecreaseAdCount();
     }
 
     private void ContinueGame()

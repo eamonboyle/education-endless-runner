@@ -14,19 +14,20 @@ public class BannerAdScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Advertisement.Initialize(gameId, testMode);
-        StartCoroutine(ShowBannerWhenReady());
+        // Advertisement.Initialize(gameId, testMode);
+        // StartCoroutine(ShowBannerWhenReady());
     }
 
     IEnumerator ShowBannerWhenReady()
     {
-        while (!Advertisement.IsReady(placementId))
-        {
-            yield return new WaitForSeconds(0.5f);
-        }
+        return null;
+        // while (!Advertisement.IsReady(placementId))
+        // {
+        //     yield return new WaitForSeconds(0.5f);
+        // }
 
-        Advertisement.Banner.SetPosition(BannerPosition.TOP_CENTER);
-        Advertisement.Banner.Show(placementId);
+        // Advertisement.Banner.SetPosition(BannerPosition.TOP_CENTER);
+        // Advertisement.Banner.Show(placementId);
     }
 
     // Update is called once per frame
