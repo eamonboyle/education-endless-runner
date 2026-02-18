@@ -1,6 +1,5 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
-using UnityEngine.Advertisements;
 using UnityEngine.UI;
 
 public class EndScreen : MonoBehaviour
@@ -10,21 +9,18 @@ public class EndScreen : MonoBehaviour
     public GameObject questionText;
     public GameObject mainCamera;
 
-    public string gameId = "3492402";
-
+    public string gameId =
 #if UNITY_IOS
-    public string gameId = "3492403";
+        "3492403";
+#else
+        "3492402";
 #endif
 
     public bool testMode = false;
     public string myPlacementId = "rewardedVideo";
 
-    private Button myButton;
-
     private void Start()
     {
-        myButton = continueButton.GetComponent<Button>();
-
         // Initialize the Ads listener and service:
         // Advertisement.AddListener(this);
         // Advertisement.Initialize(gameId, testMode);
@@ -120,42 +116,5 @@ public class EndScreen : MonoBehaviour
         gameObject.GetComponent<Canvas>().enabled = false;
         GameObject.Find("PlayerObject").GetComponent<Animator>().SetBool("isRunning", true);
         GameState.SetRunning(true);
-    }
-
-    public void OnUnityAdsDidError(string message)
-    {
-        // Log error
-        Debug.LogError("AD DIDN'T START");
-    }
-
-    public void OnUnityAdsDidFinish(string placementId, ShowResult showResult)
-    {
-        // Define conditional logic for each ad completion status:
-        if (showResult == ShowResult.Finished)
-        {
-            // Reward the user for watching the ad to completion.
-            //Debug.Log("Ad Finished, reward with continue");
-            //Advertisement.RemoveListener(this);
-            ContinueGame();
-        }
-        else if (showResult == ShowResult.Failed)
-        {
-            Debug.LogWarning("The ad did not finish due to an error.");
-        }
-    }
-
-    public void OnUnityAdsDidStart(string placementId)
-    {
-        //Debug.Log("Ad started");
-    }
-
-    public void OnUnityAdsReady(string placementId)
-    {
-        // If the ready Placement is rewarded, show the ad:
-        if (placementId == myPlacementId)
-        {
-            //Advertisement.Show(myPlacementId);
-            myButton.interactable = true;
-        }
     }
 }

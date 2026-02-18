@@ -1,8 +1,3 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Advertisements;
-
 public static class AdvertManagement
 {
     // private static string gameId = "3492332";

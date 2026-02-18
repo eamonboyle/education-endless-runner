@@ -1,6 +1,5 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
-using UnityEngine.Advertisements;
 
 public class AdManager : MonoBehaviour
 {
