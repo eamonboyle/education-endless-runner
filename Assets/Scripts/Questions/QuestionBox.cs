@@ -1,15 +1,17 @@
-﻿using Assets.Scripts.GameManagement;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class QuestionBox : MonoBehaviour
 {
     public int number;
     public int correctNumber;
-    
+    [SerializeField] private QuestionGeneration questionGeneration;
+
+    public void Initialize(QuestionGeneration owner, int displayedNumber, int answer)
+    {
+        questionGeneration = owner;
+        number = displayedNumber;
+        correctNumber = answer;
+    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -18,17 +20,14 @@ public class QuestionBox : MonoBehaviour
             return;
         }
 
-        QuestionGeneration questionGeneration = GameObject.Find("QuestionManager").GetComponent<QuestionGeneration>();
+        if (questionGeneration == null)
+        {
+            questionGeneration = GameObject.Find("QuestionManager").GetComponent<QuestionGeneration>();
+        }
 
         // play animations on boxes here? or whatever, add a particle effect
         // can add a particle effect where the box was?
-
-        // delete this boxes
-        Destroy(questionGeneration.questionBoxes[0].gameObject);
-        Destroy(questionGeneration.questionBoxes[1].gameObject);
-        Destroy(questionGeneration.questionBoxes[2].gameObject);
-
-        questionGeneration.questionBoxes.RemoveRange(0, 3);
+        questionGeneration.ClearCurrentQuestionBoxes();
 
         if (number != correctNumber)
         {
@@ -58,6 +57,6 @@ public class QuestionBox : MonoBehaviour
     {
         GameObject player = GameObject.Find("PlayerObject");
         player.GetComponent<Animator>().Play("stumbleBackwards");
-        GameObject.Find("PlayerObject").GetComponent<Animator>().SetBool("isRunning", false);
+        player.GetComponent<Animator>().SetBool("isRunning", false);
     }
 }

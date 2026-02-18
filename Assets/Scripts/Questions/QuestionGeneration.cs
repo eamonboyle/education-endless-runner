@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -26,9 +25,11 @@ public class QuestionGeneration : MonoBehaviour
 
     private float boxZ = -1.586f;
 
-    private PlayerMovement playerMovement;
-
     private float questionSpacing = 50.0f;
+    [SerializeField] private bool useQuestionBoxPooling = true;
+    [SerializeField] private int prewarmQuestionBoxes = 9;
+
+    private readonly Queue<GameObject> pooledQuestionBoxes = new Queue<GameObject>();
 
     public enum QuestionType
     {
@@ -66,27 +67,7 @@ public class QuestionGeneration : MonoBehaviour
             float spawnZ = player.transform.position.z + (i * questionSpacing);
             question.SetZ(spawnZ);
 
-            // left
-            GameObject leftBox = Instantiate(questionBox, new Vector3(boxZ, boxHeight, question.ZPosition), Quaternion.identity, questionBoxParent.transform);
-            leftBox.GetComponent<QuestionBox>().number = question.Numbers[0];
-            leftBox.GetComponent<QuestionBox>().correctNumber = question.Answer;
-            leftBox.GetComponentInChildren<TextMeshPro>().text = leftBox.GetComponent<QuestionBox>().number.ToString();
-
-            // center
-            GameObject centerBox = Instantiate(questionBox, new Vector3(0f, boxHeight, question.ZPosition), Quaternion.identity, questionBoxParent.transform);
-            centerBox.GetComponent<QuestionBox>().number = question.Numbers[1];
-            centerBox.GetComponent<QuestionBox>().correctNumber = question.Answer;
-            centerBox.GetComponentInChildren<TextMeshPro>().text = centerBox.GetComponent<QuestionBox>().number.ToString();
-
-            // right
-            GameObject rightBox = Instantiate(questionBox, new Vector3(Math.Abs(boxZ), boxHeight, question.ZPosition), Quaternion.identity, questionBoxParent.transform);
-            rightBox.GetComponent<QuestionBox>().number = question.Numbers[2];
-            rightBox.GetComponent<QuestionBox>().correctNumber = question.Answer;
-            rightBox.GetComponentInChildren<TextMeshPro>().text = rightBox.GetComponent<QuestionBox>().number.ToString();
-
-            questionBoxes.Add(rightBox);
-            questionBoxes.Add(leftBox);
-            questionBoxes.Add(centerBox);
+            SpawnQuestionSet(question);
 
             i++;
         }
@@ -112,35 +93,24 @@ public class QuestionGeneration : MonoBehaviour
         float spawnZ = questions[questions.Count - 2].ZPosition + questionSpacing;
         question.SetZ(spawnZ);
 
-        // left
-        GameObject leftBox = Instantiate(questionBox, new Vector3(boxZ, boxHeight, question.ZPosition), Quaternion.identity, questionBoxParent.transform);
-        leftBox.GetComponent<QuestionBox>().number = question.Numbers[0];
-        leftBox.GetComponent<QuestionBox>().correctNumber = question.Answer;
-        leftBox.GetComponentInChildren<TextMeshPro>().text = leftBox.GetComponent<QuestionBox>().number.ToString();
-
-        // center
-        GameObject centerBox = Instantiate(questionBox, new Vector3(0f, boxHeight, question.ZPosition), Quaternion.identity, questionBoxParent.transform);
-        centerBox.GetComponent<QuestionBox>().number = question.Numbers[1];
-        centerBox.GetComponent<QuestionBox>().correctNumber = question.Answer;
-        centerBox.GetComponentInChildren<TextMeshPro>().text = centerBox.GetComponent<QuestionBox>().number.ToString();
-
-        // right
-        GameObject rightBox = Instantiate(questionBox, new Vector3(Math.Abs(boxZ), boxHeight, question.ZPosition), Quaternion.identity, questionBoxParent.transform);
-        rightBox.GetComponent<QuestionBox>().number = question.Numbers[2];
-        rightBox.GetComponent<QuestionBox>().correctNumber = question.Answer;
-        rightBox.GetComponentInChildren<TextMeshPro>().text = rightBox.GetComponent<QuestionBox>().number.ToString();
-
-        questionBoxes.Add(rightBox);
-        questionBoxes.Add(leftBox);
-        questionBoxes.Add(centerBox);
+        SpawnQuestionSet(question);
     }
 
     private void Start()
     {
         Debug.Log("Start Question Generator");
 
-        playerMovement = player.GetComponent<PlayerMovement>();
+        if (questionBoxes == null)
+        {
+            questionBoxes = new List<GameObject>();
+        }
+        else
+        {
+            questionBoxes.Clear();
+        }
+
         questions = new List<Question>();
+        PrewarmQuestionPool();
 
         PreloadQuestions();
     }
@@ -153,5 +123,94 @@ public class QuestionGeneration : MonoBehaviour
         }
 
         questionText.GetComponent<Text>().text = questions[0].Text;
+    }
+
+    public void ClearCurrentQuestionBoxes()
+    {
+        int boxesToClear = Mathf.Min(3, questionBoxes.Count);
+        for (int i = 0; i < boxesToClear; i++)
+        {
+            ReleaseQuestionBox(questionBoxes[0]);
+            questionBoxes.RemoveAt(0);
+        }
+    }
+
+    private void SpawnQuestionSet(Question question)
+    {
+        GameObject leftBox = SpawnQuestionBox(boxZ, question, 0);
+        GameObject centerBox = SpawnQuestionBox(0f, question, 1);
+        GameObject rightBox = SpawnQuestionBox(Math.Abs(boxZ), question, 2);
+
+        questionBoxes.Add(rightBox);
+        questionBoxes.Add(leftBox);
+        questionBoxes.Add(centerBox);
+    }
+
+    private GameObject SpawnQuestionBox(float xPosition, Question question, int numberIndex)
+    {
+        GameObject box = GetQuestionBox();
+        box.transform.SetParent(questionBoxParent.transform, true);
+        box.transform.SetPositionAndRotation(new Vector3(xPosition, boxHeight, question.ZPosition), Quaternion.identity);
+
+        QuestionBox boxScript = box.GetComponent<QuestionBox>();
+        boxScript.Initialize(this, question.Numbers[numberIndex], question.Answer);
+        box.GetComponentInChildren<TextMeshPro>().text = question.Numbers[numberIndex].ToString();
+
+        MeshRenderer rootRenderer = box.GetComponent<MeshRenderer>();
+        if (rootRenderer != null)
+        {
+            rootRenderer.enabled = true;
+        }
+
+        if (box.transform.childCount > 0)
+        {
+            MeshRenderer childRenderer = box.transform.GetChild(0).GetComponent<MeshRenderer>();
+            if (childRenderer != null)
+            {
+                childRenderer.enabled = true;
+            }
+        }
+
+        return box;
+    }
+
+    private GameObject GetQuestionBox()
+    {
+        if (useQuestionBoxPooling && pooledQuestionBoxes.Count > 0)
+        {
+            GameObject pooledBox = pooledQuestionBoxes.Dequeue();
+            pooledBox.SetActive(true);
+            return pooledBox;
+        }
+
+        return Instantiate(questionBox, questionBoxParent.transform);
+    }
+
+    private void ReleaseQuestionBox(GameObject box)
+    {
+        if (!useQuestionBoxPooling)
+        {
+            Destroy(box);
+            return;
+        }
+
+        box.SetActive(false);
+        box.transform.SetParent(questionBoxParent.transform, true);
+        pooledQuestionBoxes.Enqueue(box);
+    }
+
+    private void PrewarmQuestionPool()
+    {
+        if (!useQuestionBoxPooling)
+        {
+            return;
+        }
+
+        for (int i = 0; i < prewarmQuestionBoxes; i++)
+        {
+            GameObject pooledBox = Instantiate(questionBox, questionBoxParent.transform);
+            pooledBox.SetActive(false);
+            pooledQuestionBoxes.Enqueue(pooledBox);
+        }
     }
 }

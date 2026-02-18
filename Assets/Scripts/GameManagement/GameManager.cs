@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -21,67 +21,36 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private List<AsyncOperation> scenesLoading = new List<AsyncOperation>();
+    private readonly List<AsyncOperation> scenesLoading = new List<AsyncOperation>();
 
     public void LoadGame()
     {
-        ShowLoadingScreen();
-        UnloadScenes();
-
-        scenesLoading.Add(SceneManager.LoadSceneAsync((int)SceneIndexes.GAME, LoadSceneMode.Additive));
-
-        StartCoroutine(GetSceneLoadProgress());
+        LoadScene(SceneIndexes.GAME);
     }
 
     public void LoadMainMenu()
     {
-        GameState.Init();
-        ShowLoadingScreen();
-        UnloadScenes();
-
-        scenesLoading.Add(SceneManager.LoadSceneAsync((int)SceneIndexes.MAIN_MENU, LoadSceneMode.Additive));
-
-        StartCoroutine(GetSceneLoadProgress());
+        LoadScene(SceneIndexes.MAIN_MENU, true);
     }
 
     public void LoadModeSelect()
     {
-        ShowLoadingScreen();
-        UnloadScenes();
-
-        scenesLoading.Add(SceneManager.LoadSceneAsync((int)SceneIndexes.MODE_CHOICE, LoadSceneMode.Additive));
-
-        StartCoroutine(GetSceneLoadProgress());
+        LoadScene(SceneIndexes.MODE_CHOICE);
     }
 
     public void LoadCharacterSelection()
     {
-        ShowLoadingScreen();
-        UnloadScenes();
-
-        scenesLoading.Add(SceneManager.LoadSceneAsync((int)SceneIndexes.CHARACTER_SELECT, LoadSceneMode.Additive));
-
-        StartCoroutine(GetSceneLoadProgress());
+        LoadScene(SceneIndexes.CHARACTER_SELECT);
     }
 
     public void LoadSettings()
     {
-        ShowLoadingScreen();
-        UnloadScenes();
-
-        scenesLoading.Add(SceneManager.LoadSceneAsync((int)SceneIndexes.SETTINGS, LoadSceneMode.Additive));
-
-        StartCoroutine(GetSceneLoadProgress());
+        LoadScene(SceneIndexes.SETTINGS);
     }
 
     public void LoadTutorial()
     {
-        ShowLoadingScreen();
-        UnloadScenes();
-
-        scenesLoading.Add(SceneManager.LoadSceneAsync((int)SceneIndexes.TUTORIAL, LoadSceneMode.Additive));
-
-        StartCoroutine(GetSceneLoadProgress());
+        LoadScene(SceneIndexes.TUTORIAL);
     }
 
     public IEnumerator GetSceneLoadProgress()
@@ -122,26 +91,42 @@ public class GameManager : MonoBehaviour
     private void OnApplicationPause(bool pause)
     {
         print("ApplicationPause: " + pause);
-
-        if (GameState.IsRunning())
-        {
-            GameState.ShowPauseUI();
-        }
+        PauseIfRunIsActive();
     }
 
     private void OnApplicationFocus(bool focus)
     {
         print("ApplicationFocus: " + focus);
-
-        if (GameState.IsRunning())
-        {
-            GameState.ShowPauseUI();
-        }
+        PauseIfRunIsActive();
     }
 
     private void OnApplicationQuit()
     {
         print("Application quit");
+    }
+
+    private void LoadScene(SceneIndexes sceneIndex, bool resetGameState = false)
+    {
+        if (resetGameState)
+        {
+            GameState.Init();
+        }
+
+        ShowLoadingScreen();
+        UnloadScenes();
+
+        scenesLoading.Clear();
+        scenesLoading.Add(SceneManager.LoadSceneAsync((int)sceneIndex, LoadSceneMode.Additive));
+
+        StartCoroutine(GetSceneLoadProgress());
+    }
+
+    private static void PauseIfRunIsActive()
+    {
+        if (GameState.IsRunning())
+        {
+            GameState.ShowPauseUI();
+        }
     }
 
 

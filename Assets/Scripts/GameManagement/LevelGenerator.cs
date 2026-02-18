@@ -1,4 +1,3 @@
-﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,8 +9,10 @@ public class LevelGenerator : MonoBehaviour
     public List<GameObject> floorPieces = new List<GameObject>();
     public float floorWidth = 36.0f;
     public float currentPlace = 36.0f;
+    [SerializeField] private bool useFloorPooling = true;
 
     int floorCount = 0;
+    private readonly Queue<GameObject> pooledFloorPieces = new Queue<GameObject>();
 
     // Start is called before the first frame update
     void Start()
@@ -35,19 +36,19 @@ public class LevelGenerator : MonoBehaviour
 
             floorCount++;
 
-            int floorDegreeRandom = Random.Range(0, 2);
-
             Vector3 floorPlacement = new Vector3(0.0f, 0.0f, currentPlace + (floorWidth * 2) + 18.44f);
-            //Quaternion floorRotation = Quaternion.Euler(0.0f, floorDegreeRandom == 1 ? 180.0f : 0.0f, 0.0f);
             Quaternion floorRotation = Quaternion.identity;
 
-            GameObject nextFloor = Instantiate(floorPrefab, floorPlacement, floorRotation, levelContainer.transform);
+            GameObject nextFloor = GetFloorPiece();
+            nextFloor.transform.SetParent(levelContainer.transform, true);
+            nextFloor.transform.SetPositionAndRotation(floorPlacement, floorRotation);
+            nextFloor.SetActive(true);
 
             floorPieces.Add(nextFloor);
 
             if (floorCount == 2)
             {
-                Destroy(floorPieces[0]);
+                ReleaseFloorPiece(floorPieces[0]);
                 floorPieces.RemoveAt(0);
 
                 floorCount = 0;
@@ -57,12 +58,26 @@ public class LevelGenerator : MonoBehaviour
         }
     }
 
-    IEnumerator ExecuteAfterTime(float time)
+    private GameObject GetFloorPiece()
     {
-        Debug.Log("REMOVE FLOOR");
-        yield return new WaitForSeconds(time);
+        if (useFloorPooling && pooledFloorPieces.Count > 0)
+        {
+            return pooledFloorPieces.Dequeue();
+        }
 
-        Destroy(floorPieces[0]);
-        floorPieces.RemoveAt(0);
+        return Instantiate(floorPrefab, levelContainer.transform);
+    }
+
+    private void ReleaseFloorPiece(GameObject floorPiece)
+    {
+        if (!useFloorPooling)
+        {
+            Destroy(floorPiece);
+            return;
+        }
+
+        floorPiece.SetActive(false);
+        floorPiece.transform.SetParent(levelContainer.transform, true);
+        pooledFloorPieces.Enqueue(floorPiece);
     }
 }
