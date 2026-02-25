@@ -9,13 +9,13 @@ using UnityEngine;
 public class PowerUpCollectible : MonoBehaviour
 {
     [SerializeField, Tooltip("Which power-up this collectible grants.")]
-    private PowerUpSystem.PowerUpType powerUpType;
+    private PowerUpType powerUpType;
 
     [SerializeField, Tooltip("Rotation speed in degrees per second.")]
     private float rotationSpeed = 90f;
 
     /// <summary>The power-up type exposed for external reads (e.g. UI tooltips).</summary>
-    public PowerUpSystem.PowerUpType PowerUpType => powerUpType;
+    public PowerUpType PowerUpType => powerUpType;
 
     private void Update()
     {

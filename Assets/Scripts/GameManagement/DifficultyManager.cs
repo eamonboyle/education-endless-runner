@@ -1,26 +1,31 @@
-﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Unity.RemoteConfig;
-using System;
 
 public class DifficultyManager : MonoBehaviour
 {
     public float currentSpeed;
     public float speedMultiplier = 10.0f;
 
-    public struct userAttributes
-    {
-    }
-
-    public struct appAttributes
-    {
-    }
+    public struct userAttributes { }
+    public struct appAttributes { }
 
     private void Awake()
     {
         ConfigManager.FetchCompleted += ApplyRemoteSettings;
-        ConfigManager.FetchConfigs<userAttributes, appAttributes>(new userAttributes(), new appAttributes());
+
+        try
+        {
+            ConfigManager.FetchConfigs<userAttributes, appAttributes>(new userAttributes(), new appAttributes());
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogWarning("DifficultyManager: Remote Config fetch failed: " + e.Message);
+        }
+    }
+
+    private void OnDestroy()
+    {
+        ConfigManager.FetchCompleted -= ApplyRemoteSettings;
     }
 
     private void ApplyRemoteSettings(ConfigResponse configResponse)
@@ -28,26 +33,22 @@ public class DifficultyManager : MonoBehaviour
         switch (configResponse.requestOrigin)
         {
             case ConfigOrigin.Default:
-                Debug.Log("No settings loaded this session; using default values.");
                 break;
             case ConfigOrigin.Cached:
-                Debug.Log("No settings loaded this session; using cached values from a previous session.");
                 break;
             case ConfigOrigin.Remote:
-                Debug.Log("New settings loaded this session; update values accordingly.");
-                Debug.Log("speedMultiplier:" + ConfigManager.appConfig.GetFloat("speedMultiplier"));
-                speedMultiplier = ConfigManager.appConfig.GetFloat("speedMultiplier");
+                float remoteMultiplier = ConfigManager.appConfig.GetFloat("speedMultiplier");
+                if (remoteMultiplier > 0f)
+                    speedMultiplier = remoteMultiplier;
                 break;
         }
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         currentSpeed = GameState.GetCharacterSpeed();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (GameState.IsRunning())

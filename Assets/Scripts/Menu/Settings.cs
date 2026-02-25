@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -28,7 +28,7 @@ public class Settings : MonoBehaviour
     {
         currentGraphicSettings = SettingState.GetGraphics();
 
-        if (currentGraphicSettings == string.Empty || currentGraphicSettings == null) 
+        if (string.IsNullOrEmpty(currentGraphicSettings))
         {
             currentGraphicSettings = "Medium";
         }
@@ -49,38 +49,27 @@ public class Settings : MonoBehaviour
     public void ChangeGraphics(bool increase)
     {
         int index = graphicNames.IndexOf(currentGraphicSettings);
+        if (index < 0) return;
 
-        if (increase)
+        if (increase && index < graphicNames.Count - 1)
         {
-            // make sure left arrow is showing
             leftArrow.SetActive(true);
+            index++;
+            QualitySettings.SetQualityLevel(index);
+            currentGraphicSettings = graphicNames[index];
 
-            // increase the graphics
-            QualitySettings.SetQualityLevel(index + 1);
-            currentGraphicSettings = graphicNames[index + 1];
-
-            // if on the highest
-            if (index + 1 == graphicNames.Count - 1)
-            {
-                // hide the arrow
+            if (index == graphicNames.Count - 1)
                 rightArrow.SetActive(false);
-            }
         }
-        else
+        else if (!increase && index > 0)
         {
-            // make sure right arrow is now active
             rightArrow.SetActive(true);
+            index--;
+            QualitySettings.SetQualityLevel(index);
+            currentGraphicSettings = graphicNames[index];
 
-            // decrease the graphics
-            QualitySettings.SetQualityLevel(index - 1);
-            currentGraphicSettings = graphicNames[index - 1];
-
-            // if on the lowest
-            if (index - 1 == 0)
-            { 
-                // hide the arrow
+            if (index == 0)
                 leftArrow.SetActive(false);
-            }
         }
 
         graphicTextObj.GetComponent<Text>().text = currentGraphicSettings;

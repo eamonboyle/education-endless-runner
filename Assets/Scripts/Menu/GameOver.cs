@@ -1,27 +1,34 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
+using MathRunner.Data;
 
 public class GameOver : MonoBehaviour
 {
     public GameObject scoreObject;
 
-    // Start is called before the first frame update
     private void Start()
     {
         int score = GameState.GetScore();
-        scoreObject.GetComponent<Text>().text = "Score: " + score;
 
-        GameObject adManager = GameObject.Find("AdManager");
-        adManager.GetComponent<AdManager>().enabled = true;
+        if (scoreObject != null)
+        {
+            var text = scoreObject.GetComponent<Text>();
+            if (text != null)
+                text.text = "Score: " + score;
+        }
+
+        AchievementData.CheckAchievements();
     }
 
     public void RestartGame()
     {
-        GameManager.instance.LoadGame();
+        if (GameManager.instance != null)
+            GameManager.instance.LoadGame();
     }
 
     public void QuitGame()
     {
-        GameManager.instance.LoadMainMenu();
+        if (GameManager.instance != null)
+            GameManager.instance.LoadMainMenu();
     }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,7 +19,7 @@ public class LoadCharacter : MonoBehaviour
         // select from player prefs and choose the right prefab
         character = GameState.GetCharacter();
 
-        if (character == "" || character == null)
+        if (string.IsNullOrEmpty(character))
         {
             character = "boy";
         }

@@ -1,26 +1,36 @@
-﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
 {
-    public GameObject player;
+    [SerializeField] private GameObject player;
 
-    //private Vector3 offset;
-    private float offset2;
+    private float offsetZ;
+    private bool initialized;
 
-    // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.FindWithTag("Player");
+        if (player == null)
+            player = GameObject.FindWithTag("Player");
 
-        //offset = transform.position - player.transform.position;
-        offset2 = transform.position.z - player.transform.position.z;
+        if (player != null)
+        {
+            offsetZ = transform.position.z - player.transform.position.z;
+            initialized = true;
+        }
+        else
+        {
+            Debug.LogWarning("CameraFollow: Player not found. Camera will not follow.");
+        }
     }
 
     private void LateUpdate()
     {
-        //transform.position = player.transform.position + offset;
-        transform.position = new Vector3(transform.position.x, transform.position.y, player.transform.position.z + offset2);
+        if (!initialized || player == null) return;
+
+        transform.position = new Vector3(
+            transform.position.x,
+            transform.position.y,
+            player.transform.position.z + offsetZ
+        );
     }
 }

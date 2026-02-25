@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 public class Question
@@ -268,11 +268,21 @@ public class Question
             maxNumberA = 100f;
         }
 
+        int maxAttempts = 100;
+        int attempts = 0;
         do
         {
             number1 = UnityEngine.Random.Range((int)minNumberA, (int)maxNumberA);
-            number2 = UnityEngine.Random.Range(1, (int)minNumberA);
+            number2 = UnityEngine.Random.Range(2, System.Math.Max(3, (int)minNumberA));
             answer = (float)number1 / (float)number2;
+            attempts++;
+            if (attempts >= maxAttempts)
+            {
+                number2 = 2;
+                number1 = number2 * UnityEngine.Random.Range(2, (int)maxNumberA / 2);
+                answer = number1 / number2;
+                break;
+            }
         } while (answer % 1 != 0);
 
         do
@@ -345,17 +355,25 @@ public class Question
 
         answer = number1 * number2;
 
-        // make sure the wrong ones are divisible by number1
+        int wrongRange = System.Math.Max(3, answer / 4);
+        int safeMin = System.Math.Max(1, answer - wrongRange);
+        int safeMax = answer + wrongRange + 1;
+
+        int safetyCounter = 0;
         do
         {
-            wrong1 = UnityEngine.Random.Range(1, answer + 10);
-        } while (wrong1 % number1 != 0);
+            wrong1 = UnityEngine.Random.Range(safeMin, safeMax);
+            safetyCounter++;
+            if (safetyCounter > 50) { wrong1 = answer + 1; break; }
+        } while (wrong1 == answer);
 
+        safetyCounter = 0;
         do
         {
-            wrong2 = UnityEngine.Random.Range(1, answer + 10);
-        } while (wrong1 == wrong2 || wrong2 % number1 != 0);
-
+            wrong2 = UnityEngine.Random.Range(safeMin, safeMax);
+            safetyCounter++;
+            if (safetyCounter > 50) { wrong2 = answer + 2; break; }
+        } while (wrong2 == answer || wrong2 == wrong1);
 
         return (number1, number2, answer, wrong1, wrong2);
     }
@@ -456,7 +474,6 @@ public class Question
 
     private void GetQuestionType()
     {
-        // get player prefs for now on which question type
         string mode = GameState.GetQuestionType();
 
         switch (mode)
@@ -481,9 +498,37 @@ public class Question
                 questionSymbol = '÷';
                 break;
 
+            case "mixed":
+                SetRandomQuestionType();
+                break;
+
             default:
                 questionType = QuestionType.Addition;
                 questionSymbol = '+';
+                break;
+        }
+    }
+
+    private void SetRandomQuestionType()
+    {
+        int rand = UnityEngine.Random.Range(0, 4);
+        switch (rand)
+        {
+            case 0:
+                questionType = QuestionType.Addition;
+                questionSymbol = '+';
+                break;
+            case 1:
+                questionType = QuestionType.Subtraction;
+                questionSymbol = '-';
+                break;
+            case 2:
+                questionType = QuestionType.Multiplication;
+                questionSymbol = 'x';
+                break;
+            case 3:
+                questionType = QuestionType.Division;
+                questionSymbol = '÷';
                 break;
         }
     }

@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -16,8 +16,8 @@ public class PlayerMovement : MonoBehaviour
         None
     }
 
-    public AudioClip slideSound;
-    public GameObject dust;
+    [SerializeField] private AudioClip slideSound;
+    [SerializeField] private GameObject dust;
 
     public float forwardSpeed;
     public float directionAmount = 2.0f;
@@ -114,12 +114,17 @@ public class PlayerMovement : MonoBehaviour
 
     void PlaySlideSound()
     {
-        audioSource.clip = slideSound;
-        audioSource.Play();
+        if (audioSource != null && slideSound != null)
+        {
+            audioSource.clip = slideSound;
+            audioSource.Play();
+        }
 
-        // spawn dust particles
-        Vector3 dustSpawn = transform.position;
-        dustSpawn.z -= .5f;
-        Instantiate(dust, dustSpawn, Quaternion.identity, transform);
+        if (dust != null)
+        {
+            Vector3 dustSpawn = transform.position;
+            dustSpawn.z += MathRunner.Core.GameConstants.DUST_OFFSET_Z;
+            Instantiate(dust, dustSpawn, Quaternion.identity, transform);
+        }
     }
 }

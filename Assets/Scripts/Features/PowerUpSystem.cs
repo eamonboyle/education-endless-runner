@@ -2,22 +2,22 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>Available power-up types in Math Runner.</summary>
+public enum PowerUpType
+{
+    /// <summary>Survive one wrong answer without game over.</summary>
+    Shield,
+    /// <summary>Reduce character speed by 50 % for a limited time.</summary>
+    SlowMotion,
+    /// <summary>Double all score gains for a limited time.</summary>
+    DoublePoints
+}
+
 /// <summary>
 /// Manages active power-ups, their durations, and gameplay effects.
 /// </summary>
 public class PowerUpSystem : MonoBehaviour
 {
-    /// <summary>Available power-up types in Math Runner.</summary>
-    public enum PowerUpType
-    {
-        /// <summary>Survive one wrong answer without game over.</summary>
-        Shield,
-        /// <summary>Reduce character speed by 50 % for a limited time.</summary>
-        SlowMotion,
-        /// <summary>Double all score gains for a limited time.</summary>
-        DoublePoints
-    }
-
     #region Singleton
     /// <summary>Global singleton instance.</summary>
     public static PowerUpSystem Instance { get; private set; }

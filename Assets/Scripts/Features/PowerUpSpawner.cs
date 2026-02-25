@@ -63,8 +63,8 @@ public class PowerUpSpawner : MonoBehaviour
             return;
         }
 
-        int typeCount = System.Enum.GetValues(typeof(PowerUpSystem.PowerUpType)).Length;
-        PowerUpSystem.PowerUpType randomType = (PowerUpSystem.PowerUpType)Random.Range(0, typeCount);
+        int typeCount = System.Enum.GetValues(typeof(PowerUpType)).Length;
+        PowerUpType randomType = (PowerUpType)Random.Range(0, typeCount);
 
         // The PowerUpCollectible's serialized field is set via the prefab variant;
         // if a single generic prefab is used, override the type at runtime through reflection

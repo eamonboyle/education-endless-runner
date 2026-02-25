@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class ShowPickedCharacter : MonoBehaviour
@@ -7,56 +7,41 @@ public class ShowPickedCharacter : MonoBehaviour
     public GameObject girl;
     public GameObject modeButton;
 
-    // Start is called before the first frame update
     private void Start()
     {
         if (GameState.IsFirstLoad())
         {
-            GameManager.instance.LoadCharacterSelection();
+            if (GameManager.instance != null)
+                GameManager.instance.LoadCharacterSelection();
+            return;
         }
 
         string player = GameState.GetCharacter();
 
-        if (player == "girl")
-        {
-            girl.SetActive(true);
-            boy.SetActive(false);
-        }
-        else
-        {
-            girl.SetActive(false);
-            boy.SetActive(true);
-        }
+        if (boy != null) boy.SetActive(player != "girl");
+        if (girl != null) girl.SetActive(player == "girl");
 
-        // change the mode button
         string questionType = GameState.GetQuestionType();
-        string modeText = "Mode [";
+        string symbol = GetModeSymbol(questionType);
 
+        if (modeButton != null)
+        {
+            var text = modeButton.GetComponent<Text>();
+            if (text != null)
+                text.text = "Mode [" + symbol + "]";
+        }
+    }
+
+    private string GetModeSymbol(string questionType)
+    {
         switch (questionType)
         {
-            case "addition":
-                modeText += "+";
-                break;
-
-            case "subtraction":
-                modeText += "-";
-                break;
-
-            case "multiply":
-                modeText += "x";
-                break;
-
-            case "division":
-                modeText += "÷";
-                break;
-
-            default:
-                modeText += "+";
-                break;
+            case "addition": return "+";
+            case "subtraction": return "-";
+            case "multiply": return "x";
+            case "division": return "÷";
+            case "mixed": return "?";
+            default: return "+";
         }
-
-        modeText += "]";
-
-        modeButton.GetComponent<Text>().text = modeText;
     }
 }
