@@ -46,14 +46,15 @@ Exit code 0 = all scripts compiled. Expect ~10 CS warnings (deprecation + unused
   ~/Unity/Hub/Editor/2022.3.9f1/Editor/Unity -batchmode -nographics -projectPath /workspace -runTests -testPlatform EditMode -testResults /tmp/test_results.xml -logFile /tmp/unity_tests.log
   ```
 
-### Project Structure
+### Project Structure (135 C# files)
 
-- `Assets/Scripts/` — All C# game scripts across subdirectories
-- `Assets/Scripts/Core/` — Foundation: GameConstants, GameEnums, CountdownHelper, ObjectPool, SafeFind
-- `Assets/Scripts/Data/` — Persistence: PlayerStats, AchievementData, DailyChallengeData
-- `Assets/Scripts/Features/` — New systems: ComboSystem, PowerUpSystem, AnswerFeedback, ScorePopup, LeaderboardManager, AccessibilityManager
-- `Assets/Scripts/UI/` — UI scripts: SceneTransition, ComboDisplay, PowerUpDisplay, AchievementPopup, AnimatedText, etc.
-- `Assets/Editor/Tests/` — Unit tests (QuestionTests, GameStateTests)
+- `Assets/Scripts/Core/` (9) — GameConstants, GameEnums, CountdownHelper, ObjectPool, SafeFind, LocalizationManager, SaveSystem, InputManager, AnalyticsManager
+- `Assets/Scripts/Data/` (6) — PlayerStats, AchievementData, DailyChallengeData, WeeklyChallengeData, XPSystem, PlayerProfile
+- `Assets/Scripts/Features/` (22) — ComboSystem, PowerUpSystem, AnswerFeedback, ScorePopup, LeaderboardManager, AccessibilityManager, CharacterUnlockSystem, EnvironmentThemeManager, MusicManager, ScreenShake, SpeedTrailEffect, ParticleEffectLibrary, GhostRunSystem, OnlineLeaderboard, ShareCardGenerator, ChallengeCodeSystem, DyslexiaFontManager, ReducedMotionManager, OneHandedMode, TextToSpeechManager, PowerUpCollectible, PowerUpSpawner
+- `Assets/Scripts/GameManagement/` (15) — GameManager, GameState, Score, DifficultyManager, DifficultyPresets, LivesSystem, BossQuestion, TimeAttackMode, CampaignManager, ObstacleSpawner, Obstacle, LevelGenerator, StartCountdown, SoundManager, SceneIndexes
+- `Assets/Scripts/UI/` (12) — SceneTransition, ComboDisplay, PowerUpDisplay, AchievementPopup, AnimatedText, StatsDisplay, StatsGraphDisplay, DailyChallengeDisplay, WeeklyChallengeDisplay, GameOverEnhanced, MainMenuEnhanced, RewardAnimation
+- `Assets/Editor/Tests/` (2) — QuestionTests (11 tests), GameStateTests (10 tests)
+- `.github/workflows/unity-tests.yml` — CI pipeline using GameCI
 - `Assets/Scenes/` — Unity scenes: Persistent Scene, MainMenu, CharacterSelect, ModeChoice, Game, Tutorial, Settings
 - `Assets/Prefabs/` — Prefab game objects
 - `Assets/Models/` — 3D models (low-poly city environment)
