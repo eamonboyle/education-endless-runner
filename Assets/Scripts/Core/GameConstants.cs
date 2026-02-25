@@ -123,6 +123,18 @@ namespace MathRunner.Core
         /// <summary>Key for the daily challenge reward claimed flag. Append date string.</summary>
         public const string PREF_DAILY_REWARD_PREFIX = "dailyReward_";
 
+        /// <summary>Key for the selected difficulty level (int: 0=Easy, 1=Medium, 2=Hard).</summary>
+        public const string PREF_DIFFICULTY = "difficulty";
+
+        /// <summary>Key for the time-attack mode flag (int: 0 or 1).</summary>
+        public const string PREF_TIME_ATTACK = "timeAttack";
+
+        /// <summary>Prefix for campaign level star ratings. Append level number.</summary>
+        public const string PREF_CAMPAIGN_STARS_PREFIX = "campaignStars_";
+
+        /// <summary>Key for the highest unlocked campaign level (int).</summary>
+        public const string PREF_CAMPAIGN_PROGRESS = "campaignProgress";
+
         #endregion
     }
 }
