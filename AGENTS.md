@@ -41,11 +41,19 @@ Exit code 0 = all scripts compiled. Expect ~10 CS warnings (deprecation + unused
 
 - **Lint**: No separate linter configured. Compilation warnings serve as the lint check (run batch mode above).
 - **Build**: Use Unity batch mode with `-buildTarget` flag (e.g. `-buildTarget StandaloneLinux64`).
-- **Tests**: No automated test suites exist in this project (no `Tests/` directory or `.asmdef` test assemblies). Manual play-testing in the Editor is the only testing method.
+- **Tests**: 21 unit tests in `Assets/Editor/Tests/` (QuestionTests + GameStateTests). Run with:
+  ```
+  ~/Unity/Hub/Editor/2022.3.9f1/Editor/Unity -batchmode -nographics -projectPath /workspace -runTests -testPlatform EditMode -testResults /tmp/test_results.xml -logFile /tmp/unity_tests.log
+  ```
 
 ### Project Structure
 
-- `Assets/Scripts/` — All C# game scripts (62 files across 14 directories)
+- `Assets/Scripts/` — All C# game scripts across subdirectories
+- `Assets/Scripts/Core/` — Foundation: GameConstants, GameEnums, CountdownHelper, ObjectPool, SafeFind
+- `Assets/Scripts/Data/` — Persistence: PlayerStats, AchievementData, DailyChallengeData
+- `Assets/Scripts/Features/` — New systems: ComboSystem, PowerUpSystem, AnswerFeedback, ScorePopup, LeaderboardManager, AccessibilityManager
+- `Assets/Scripts/UI/` — UI scripts: SceneTransition, ComboDisplay, PowerUpDisplay, AchievementPopup, AnimatedText, etc.
+- `Assets/Editor/Tests/` — Unit tests (QuestionTests, GameStateTests)
 - `Assets/Scenes/` — Unity scenes: Persistent Scene, MainMenu, CharacterSelect, ModeChoice, Game, Tutorial, Settings
 - `Assets/Prefabs/` — Prefab game objects
 - `Assets/Models/` — 3D models (low-poly city environment)
