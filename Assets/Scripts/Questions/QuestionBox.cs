@@ -1,7 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using MathRunner.Core;
 using MathRunner.Data;
 
 public class QuestionBox : MonoBehaviour
@@ -11,17 +10,13 @@ public class QuestionBox : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag("Player"))
-        {
-            return;
-        }
+        if (!other.CompareTag("Player")) return;
 
         GameObject questionManager = GameObject.Find("QuestionManager");
         if (questionManager == null) return;
 
         QuestionGeneration questionGeneration = questionManager.GetComponent<QuestionGeneration>();
         if (questionGeneration == null) return;
-
         if (questionGeneration.questionBoxes.Count < 3) return;
 
         Destroy(questionGeneration.questionBoxes[0].gameObject);
@@ -34,64 +29,132 @@ public class QuestionBox : MonoBehaviour
 
         string mode = GameState.GetQuestionType();
         PlayerStats.RecordAnswer(isCorrect, mode);
+        WeeklyChallengeData.RecordProgress(mode);
+        AnalyticsManager.LogEvent("QuestionAnswered", new Dictionary<string, string> {
+            { "correct", isCorrect.ToString() },
+            { "mode", mode }
+        });
+
+        bool isTimeAttack = TimeAttackMode.IsTimeAttack();
 
         if (!isCorrect)
         {
-            var powerUpSystem = PowerUpSystem.Instance;
-            if (powerUpSystem != null && powerUpSystem.HasActivePowerUp(PowerUpType.Shield))
-            {
-                powerUpSystem.DeactivatePowerUp(PowerUpType.Shield);
-                AnswerFeedback.PlayIncorrect(transform.position);
-
-                var combo = ComboSystem.Instance;
-                if (combo != null) combo.RecordWrongAnswer();
-
-                questionGeneration.DeleteLastQuestion();
-                questionGeneration.AddQuestion(true);
-                return;
-            }
-
-            AnswerFeedback.PlayIncorrect(transform.position);
-
-            var comboSystem = ComboSystem.Instance;
-            if (comboSystem != null) comboSystem.RecordWrongAnswer();
-
-            questionGeneration.DeleteLastQuestion();
-            AnsweredIncorrectly();
+            HandleIncorrectAnswer(questionGeneration, isTimeAttack);
             return;
         }
 
+        HandleCorrectAnswer(questionGeneration, isTimeAttack);
+    }
+
+    private void HandleIncorrectAnswer(QuestionGeneration qg, bool isTimeAttack)
+    {
+        var powerUpSystem = PowerUpSystem.Instance;
+        if (powerUpSystem != null && powerUpSystem.HasActivePowerUp(PowerUpType.Shield))
+        {
+            powerUpSystem.DeactivatePowerUp(PowerUpType.Shield);
+            AnswerFeedback.PlayIncorrect(transform.position);
+            var combo = ComboSystem.Instance;
+            if (combo != null) combo.RecordWrongAnswer();
+            qg.DeleteLastQuestion();
+            qg.AddQuestion(true);
+            return;
+        }
+
+        AnswerFeedback.PlayIncorrect(transform.position);
+
+        if (ScreenShake.Instance != null)
+            ScreenShake.Instance.MediumShake();
+
+        var comboSystem = ComboSystem.Instance;
+        if (comboSystem != null) comboSystem.RecordWrongAnswer();
+
+        if (isTimeAttack)
+        {
+            var timeAttack = TimeAttackMode.Instance;
+            if (timeAttack != null) timeAttack.RecordWrongAnswer();
+            qg.DeleteLastQuestion();
+            qg.AddQuestion(true);
+            return;
+        }
+
+        var livesSystem = LivesSystem.Instance;
+        if (livesSystem != null && livesSystem.GetLives() > 0)
+        {
+            bool alive = livesSystem.LoseLife();
+            if (alive)
+            {
+                qg.DeleteLastQuestion();
+                qg.AddQuestion(true);
+                return;
+            }
+        }
+
+        qg.DeleteLastQuestion();
+        AnsweredIncorrectly();
+    }
+
+    private void HandleCorrectAnswer(QuestionGeneration qg, bool isTimeAttack)
+    {
         AnswerFeedback.PlayCorrect(transform.position);
 
         var audioSource = Camera.main != null ? Camera.main.GetComponent<AudioSource>() : null;
         if (audioSource != null) audioSource.Play();
 
-        var combo2 = ComboSystem.Instance;
+        var combo = ComboSystem.Instance;
         int bonusPoints = 10;
-        if (combo2 != null)
+        if (combo != null)
         {
-            combo2.RecordCorrectAnswer();
-            bonusPoints *= combo2.GetMultiplier();
+            combo.RecordCorrectAnswer();
+            bonusPoints *= combo.GetMultiplier();
         }
 
         var powerUp = PowerUpSystem.Instance;
         if (powerUp != null && powerUp.HasActivePowerUp(PowerUpType.DoublePoints))
-        {
             bonusPoints *= 2;
+
+        if (isTimeAttack)
+        {
+            var timeAttack = TimeAttackMode.Instance;
+            if (timeAttack != null) timeAttack.RecordCorrectAnswer();
         }
 
         GameState.AddScore(bonusPoints);
         ScorePopup.Create(transform.position + Vector3.up * 2f, bonusPoints, null);
 
-        MathRunner.Data.DailyChallengeData.RecordProgress(GameState.GetQuestionType());
+        DailyChallengeData.RecordProgress(GameState.GetQuestionType());
+        WeeklyChallengeData.RecordProgress(GameState.GetQuestionType());
 
-        questionGeneration.AddQuestion(true);
+        var ghostSystem = Object.FindObjectOfType<GhostRunSystem>();
+        if (ghostSystem != null) { /* ghost records in its own Update */ }
+
+        qg.AddQuestion(true);
     }
 
     private void AnsweredIncorrectly()
     {
+        string mode = GameState.GetQuestionType();
+        int score = GameState.GetScore();
+
+        AnalyticsManager.LogEvent("GameEnded", new Dictionary<string, string> {
+            { "score", score.ToString() },
+            { "mode", mode },
+            { "duration", GameState.GetGameDuration().ToString("F1") }
+        });
+
+        XPSystem.AddXP(CalculateXP());
+        AchievementData.CheckAchievements();
+
         GameState.ShowGameOverUI();
         PlayFallAnimation();
+    }
+
+    private int CalculateXP()
+    {
+        int baseXP = GameState.GetScore() / 10;
+        float accuracy = GameState.GetAccuracyThisGame();
+        if (accuracy > 90f) baseXP = (int)(baseXP * 1.5f);
+        else if (accuracy > 75f) baseXP = (int)(baseXP * 1.25f);
+        return Mathf.Max(1, baseXP);
     }
 
     private void PlayFallAnimation()
