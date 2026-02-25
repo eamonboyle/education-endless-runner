@@ -1,35 +1,53 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 public class SceneSwitcher : MonoBehaviour
 {
     public void GoToGame()
     {
-        GameManager.instance.LoadGame();
+        if (GameManager.instance != null)
+            GameManager.instance.LoadGame();
+        else
+            Debug.LogError("SceneSwitcher: GameManager.instance is null. Is the Persistent Scene loaded?");
     }
 
     public void GoToMainMenu()
     {
-        GameManager.instance.LoadMainMenu();
+        if (GameManager.instance != null)
+            GameManager.instance.LoadMainMenu();
+        else
+            Debug.LogError("SceneSwitcher: GameManager.instance is null.");
     }
 
     public void GoToModeSelect()
     {
-        GameManager.instance.LoadModeSelect();
+        if (GameManager.instance != null)
+            GameManager.instance.LoadModeSelect();
+        else
+            Debug.LogError("SceneSwitcher: GameManager.instance is null.");
     }
 
     public void GoToCharacterSelection()
     {
-        GameManager.instance.LoadCharacterSelection();
+        if (GameManager.instance != null)
+            GameManager.instance.LoadCharacterSelection();
+        else
+            Debug.LogError("SceneSwitcher: GameManager.instance is null.");
     }
 
     public void GoToTutorial()
     {
-        GameManager.instance.LoadTutorial();
+        if (GameManager.instance != null)
+            GameManager.instance.LoadTutorial();
+        else
+            Debug.LogError("SceneSwitcher: GameManager.instance is null.");
     }
 
     public void GoToSettings()
     {
-        GameManager.instance.LoadSettings();
+        if (GameManager.instance != null)
+            GameManager.instance.LoadSettings();
+        else
+            Debug.LogError("SceneSwitcher: GameManager.instance is null.");
     }
 
     public void ShowPauseMenu()
