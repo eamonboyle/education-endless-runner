@@ -45,7 +45,7 @@ Exit code 0 = all scripts compiled. Expect ~10 CS warnings (deprecation + unused
 
 ### Project Structure
 
-- `Assets/Scripts/` — All C# game scripts (37 files across 9 directories)
+- `Assets/Scripts/` — All C# game scripts (62 files across 14 directories)
 - `Assets/Scenes/` — Unity scenes: Persistent Scene, MainMenu, CharacterSelect, ModeChoice, Game, Tutorial, Settings
 - `Assets/Prefabs/` — Prefab game objects
 - `Assets/Models/` — 3D models (low-poly city environment)
