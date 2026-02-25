@@ -1,4 +1,5 @@
 using System;
+using MathRunner.Core;
 using UnityEngine;
 
 /// <summary>
@@ -33,6 +34,7 @@ public class ComboSystem : MonoBehaviour
     public event Action<int> OnStreakBroken;
     #endregion
 
+    private const int BaseCorrectPoints = 10;
     private const string BestStreakKey = "BestStreak";
 
     private int currentStreak;
@@ -61,7 +63,7 @@ public class ComboSystem : MonoBehaviour
         OnStreakChanged?.Invoke(currentStreak);
         UpdateMultiplier();
 
-        int bonus = GameConstants.BASE_CORRECT_POINTS * GetMultiplier();
+        int bonus = BaseCorrectPoints * GetMultiplier();
         GameState.SetScore(GameState.GetScore() + bonus);
     }
 
