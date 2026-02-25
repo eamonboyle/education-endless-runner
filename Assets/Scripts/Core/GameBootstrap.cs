@@ -15,7 +15,16 @@ public class GameBootstrap : MonoBehaviour
         EnsureSingleton<CampaignManager>();
         EnsureSingleton<PowerUpSystem>();
         EnsureSingleton<ScreenShake>();
+        EnsureSingleton<AnswerFeedback>();
         EnsureSingleton<ReducedMotionManager>();
+        EnsureSingleton<InGameHUD>();
+        EnsureSingleton<HighScoreCelebration>();
+        EnsureSingleton<SessionSummary>();
+        EnsureSingleton<QuestionHistoryDisplay>();
+        EnsureSingleton<HighScoreCelebration>();
+        EnsureSingleton<UnlockNotification>();
+        EnsureSingleton<SessionSummary>();
+        EnsureSingleton<InGameHUD>();
     }
 
     private void EnsureSingleton<T>() where T : MonoBehaviour
