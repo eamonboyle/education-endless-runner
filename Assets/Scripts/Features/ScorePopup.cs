@@ -65,9 +65,9 @@ public class ScorePopup : MonoBehaviour
 
         TextMeshPro tmp = go.AddComponent<TextMeshPro>();
         tmp.text = "+" + points;
-        tmp.fontSize = 6f;
+        tmp.fontSize = 8f;
         tmp.alignment = TextAlignmentOptions.Center;
-        tmp.color = Color.yellow;
+        tmp.color = new Color(0.6f, 1f, 0.2f, 1f);
 
         ScorePopup popup = go.AddComponent<ScorePopup>();
         return popup;

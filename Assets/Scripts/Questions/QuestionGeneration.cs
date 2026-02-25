@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -70,18 +70,21 @@ public class QuestionGeneration : MonoBehaviour
             GameObject leftBox = Instantiate(questionBox, new Vector3(boxZ, boxHeight, question.ZPosition), Quaternion.identity, questionBoxParent.transform);
             leftBox.GetComponent<QuestionBox>().number = question.Numbers[0];
             leftBox.GetComponent<QuestionBox>().correctNumber = question.Answer;
+            leftBox.GetComponent<QuestionBox>().questionText = question.Text;
             leftBox.GetComponentInChildren<TextMeshPro>().text = leftBox.GetComponent<QuestionBox>().number.ToString();
 
             // center
             GameObject centerBox = Instantiate(questionBox, new Vector3(0f, boxHeight, question.ZPosition), Quaternion.identity, questionBoxParent.transform);
             centerBox.GetComponent<QuestionBox>().number = question.Numbers[1];
             centerBox.GetComponent<QuestionBox>().correctNumber = question.Answer;
+            centerBox.GetComponent<QuestionBox>().questionText = question.Text;
             centerBox.GetComponentInChildren<TextMeshPro>().text = centerBox.GetComponent<QuestionBox>().number.ToString();
 
             // right
             GameObject rightBox = Instantiate(questionBox, new Vector3(Math.Abs(boxZ), boxHeight, question.ZPosition), Quaternion.identity, questionBoxParent.transform);
             rightBox.GetComponent<QuestionBox>().number = question.Numbers[2];
             rightBox.GetComponent<QuestionBox>().correctNumber = question.Answer;
+            rightBox.GetComponent<QuestionBox>().questionText = question.Text;
             rightBox.GetComponentInChildren<TextMeshPro>().text = rightBox.GetComponent<QuestionBox>().number.ToString();
 
             questionBoxes.Add(rightBox);
@@ -116,18 +119,21 @@ public class QuestionGeneration : MonoBehaviour
         GameObject leftBox = Instantiate(questionBox, new Vector3(boxZ, boxHeight, question.ZPosition), Quaternion.identity, questionBoxParent.transform);
         leftBox.GetComponent<QuestionBox>().number = question.Numbers[0];
         leftBox.GetComponent<QuestionBox>().correctNumber = question.Answer;
+        leftBox.GetComponent<QuestionBox>().questionText = question.Text;
         leftBox.GetComponentInChildren<TextMeshPro>().text = leftBox.GetComponent<QuestionBox>().number.ToString();
 
         // center
         GameObject centerBox = Instantiate(questionBox, new Vector3(0f, boxHeight, question.ZPosition), Quaternion.identity, questionBoxParent.transform);
         centerBox.GetComponent<QuestionBox>().number = question.Numbers[1];
         centerBox.GetComponent<QuestionBox>().correctNumber = question.Answer;
+        centerBox.GetComponent<QuestionBox>().questionText = question.Text;
         centerBox.GetComponentInChildren<TextMeshPro>().text = centerBox.GetComponent<QuestionBox>().number.ToString();
 
         // right
         GameObject rightBox = Instantiate(questionBox, new Vector3(Math.Abs(boxZ), boxHeight, question.ZPosition), Quaternion.identity, questionBoxParent.transform);
         rightBox.GetComponent<QuestionBox>().number = question.Numbers[2];
         rightBox.GetComponent<QuestionBox>().correctNumber = question.Answer;
+        rightBox.GetComponent<QuestionBox>().questionText = question.Text;
         rightBox.GetComponentInChildren<TextMeshPro>().text = rightBox.GetComponent<QuestionBox>().number.ToString();
 
         questionBoxes.Add(rightBox);

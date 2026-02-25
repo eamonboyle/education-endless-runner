@@ -21,10 +21,6 @@ public class GameBootstrap : MonoBehaviour
         EnsureSingleton<HighScoreCelebration>();
         EnsureSingleton<SessionSummary>();
         EnsureSingleton<QuestionHistoryDisplay>();
-        EnsureSingleton<HighScoreCelebration>();
-        EnsureSingleton<UnlockNotification>();
-        EnsureSingleton<SessionSummary>();
-        EnsureSingleton<InGameHUD>();
     }
 
     private void EnsureSingleton<T>() where T : MonoBehaviour

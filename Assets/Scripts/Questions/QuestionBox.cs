@@ -7,6 +7,7 @@ public class QuestionBox : MonoBehaviour
 {
     public int number;
     public int correctNumber;
+    public string questionText;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -53,14 +54,17 @@ public class QuestionBox : MonoBehaviour
         {
             powerUpSystem.DeactivatePowerUp(PowerUpType.Shield);
             AnswerFeedback.PlayIncorrect(transform.position);
+            HapticFeedback.VibrateOnWrongAnswer();
             var combo = ComboSystem.Instance;
             if (combo != null) combo.RecordWrongAnswer();
+            QuestionHistoryDisplay.RecordQuestion(questionText, number, correctNumber);
             qg.DeleteLastQuestion();
             qg.AddQuestion(true);
             return;
         }
 
         AnswerFeedback.PlayIncorrect(transform.position);
+        HapticFeedback.VibrateOnWrongAnswer();
 
         if (ScreenShake.Instance != null)
             ScreenShake.Instance.MediumShake();
@@ -72,6 +76,7 @@ public class QuestionBox : MonoBehaviour
         {
             var timeAttack = TimeAttackMode.Instance;
             if (timeAttack != null) timeAttack.RecordWrongAnswer();
+            QuestionHistoryDisplay.RecordQuestion(questionText, number, correctNumber);
             qg.DeleteLastQuestion();
             qg.AddQuestion(true);
             return;
@@ -83,12 +88,14 @@ public class QuestionBox : MonoBehaviour
             bool alive = livesSystem.LoseLife();
             if (alive)
             {
+                QuestionHistoryDisplay.RecordQuestion(questionText, number, correctNumber);
                 qg.DeleteLastQuestion();
                 qg.AddQuestion(true);
                 return;
             }
         }
 
+        QuestionHistoryDisplay.RecordQuestion(questionText, number, correctNumber);
         qg.DeleteLastQuestion();
         AnsweredIncorrectly();
     }
@@ -96,6 +103,7 @@ public class QuestionBox : MonoBehaviour
     private void HandleCorrectAnswer(QuestionGeneration qg, bool isTimeAttack)
     {
         AnswerFeedback.PlayCorrect(transform.position);
+        QuestionHistoryDisplay.RecordQuestion(questionText, number, correctNumber);
 
         var audioSource = Camera.main != null ? Camera.main.GetComponent<AudioSource>() : null;
         if (audioSource != null) audioSource.Play();
@@ -141,8 +149,16 @@ public class QuestionBox : MonoBehaviour
             { "duration", GameState.GetGameDuration().ToString("F1") }
         });
 
-        XPSystem.AddXP(CalculateXP());
+        int xpEarned = CalculateXP();
+        XPSystem.AddXP(xpEarned);
         AchievementData.CheckAchievements();
+
+        SessionSummary.ShowSummary(
+            score,
+            GameState.GetQuestionsAnsweredThisGame(),
+            GameState.GetAccuracyThisGame(),
+            xpEarned
+        );
 
         GameState.ShowGameOverUI();
         PlayFallAnimation();
