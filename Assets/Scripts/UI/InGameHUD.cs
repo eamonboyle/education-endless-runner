@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 /// <summary>
 /// Runtime in-game HUD that creates its own Canvas and UI elements.
@@ -12,6 +13,7 @@ public class InGameHUD : MonoBehaviour
     private Text comboText;
     private Text livesText;
     private Text speedText;
+    private Text scoreText;
     private bool canvasReady;
 
     private int currentMultiplier = 1;
@@ -89,7 +91,18 @@ public class InGameHUD : MonoBehaviour
         if (canvasReady && livesText != null)
         {
             livesText.text = BuildLivesString(remaining);
+            StartCoroutine(FlashLivesText());
         }
+    }
+
+    private IEnumerator FlashLivesText()
+    {
+        if (livesText == null) yield break;
+        Color original = livesText.color;
+        livesText.color = Color.white;
+        yield return new WaitForSeconds(0.15f);
+        if (livesText != null)
+            livesText.color = original;
     }
 
     private void CreateHUDCanvas()
@@ -116,6 +129,9 @@ public class InGameHUD : MonoBehaviour
 
         speedText = CreateUIText(canvasObj.transform, "SpeedText",
             new Vector2(0.95f, 0.05f), 20, new Color(1f, 1f, 1f, 0.5f));
+
+        scoreText = CreateUIText(canvasObj.transform, "ScoreText",
+            new Vector2(0.5f, 0.95f), 42, Color.white);
     }
 
     private Text CreateUIText(Transform parent, string name, Vector2 anchorPos, int fontSize, Color color)
@@ -148,6 +164,14 @@ public class InGameHUD : MonoBehaviour
 
         if (speedText != null)
             speedText.text = "Speed: " + Mathf.RoundToInt(speed);
+
+        if (scoreText != null)
+        {
+            string scoreStr = "Score: " + GameState.GetScore();
+            if (currentMultiplier > 1)
+                scoreStr += " x" + currentMultiplier + "!";
+            scoreText.text = scoreStr;
+        }
     }
 
     private string BuildLivesString(int lives)
@@ -181,6 +205,13 @@ public class InGameHUD : MonoBehaviour
         style.normal.textColor = Color.red;
         style.fontSize = 24;
         GUI.Label(new Rect(20, 20, 300, 40), BuildLivesString(currentLives), style);
+
+        style.normal.textColor = Color.white;
+        style.fontSize = 32;
+        string scoreDisplay = "Score: " + GameState.GetScore();
+        if (currentMultiplier > 1)
+            scoreDisplay += " x" + currentMultiplier + "!";
+        GUI.Label(new Rect(Screen.width / 2f - 100, 20, 200, 50), scoreDisplay, style);
 
         style.normal.textColor = new Color(1f, 1f, 1f, 0.5f);
         style.fontSize = 18;

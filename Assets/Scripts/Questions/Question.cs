@@ -7,6 +7,7 @@ public class Question
     private char questionSymbol;
     private QuestionType questionType;
     private int score = 0;
+    private static System.Collections.Generic.List<string> recentQuestions = new System.Collections.Generic.List<string>();
 
     public Question()
     {
@@ -46,6 +47,18 @@ public class Question
     private void CreateQuestion()
     {
         GenerateNumbers();
+
+        for (int attempt = 0; attempt < 5 && recentQuestions.Contains(Text); attempt++)
+        {
+            GenerateNumbers();
+        }
+
+        recentQuestions.Add(Text);
+        if (recentQuestions.Count > 5)
+        {
+            recentQuestions.RemoveAt(0);
+        }
+
         Numbers = RandomizeBoxPlacement(new List<int>() { Answer, Wrong1, Wrong2 });
     }
 
@@ -441,6 +454,13 @@ public class Question
 
         number1 = UnityEngine.Random.Range(minNumberA, maxNumberA);
         number2 = UnityEngine.Random.Range(minNumberB, maxNumberB);
+
+        if (number1 < number2)
+        {
+            int temp = number1;
+            number1 = number2;
+            number2 = temp;
+        }
 
         answer = GetAnswer(number1, number2);
 

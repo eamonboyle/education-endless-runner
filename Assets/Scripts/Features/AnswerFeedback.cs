@@ -85,11 +85,12 @@ public class AnswerFeedback : MonoBehaviour
         }
         else
         {
-            // Spawn a runtime particle system with the fallback colour
             GameObject go = new GameObject("AnswerFeedbackParticles");
             go.transform.position = position;
 
             ParticleSystem ps = go.AddComponent<ParticleSystem>();
+            ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+
             var main = ps.main;
             main.startColor = fallbackColor;
             main.startLifetime = 0.6f;
@@ -97,6 +98,7 @@ public class AnswerFeedback : MonoBehaviour
             main.maxParticles = 30;
             main.duration = 0.3f;
             main.loop = false;
+            main.playOnAwake = false;
 
             var emission = ps.emission;
             emission.rateOverTime = 0f;
@@ -107,7 +109,7 @@ public class AnswerFeedback : MonoBehaviour
             shape.radius = 0.3f;
 
             ps.Play();
-            Destroy(go, main.duration + main.startLifetime.constantMax + 0.1f);
+            Destroy(go, 1.5f);
         }
     }
 

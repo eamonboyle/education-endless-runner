@@ -40,6 +40,26 @@ public class PowerUpSpawner : MonoBehaviour
         SpawnRandomPowerUp();
     }
 
+    public void TrySpawnPowerUp(Vector3 position)
+    {
+        if (!GameState.IsRunning()) return;
+        if (powerUpPrefab == null) return;
+        if (Random.value > spawnChance) return;
+
+        float laneX = LanePositions[Random.Range(0, LanePositions.Length)];
+        float spawnZ = position.z + spawnAheadDistance;
+        Vector3 spawnPos = new Vector3(laneX, GameConstants.BOX_HEIGHT, spawnZ);
+
+        GameObject instance = Instantiate(powerUpPrefab, spawnPos, Quaternion.identity, spawnParent);
+
+        PowerUpCollectible collectible = instance.GetComponent<PowerUpCollectible>();
+        if (collectible == null)
+        {
+            Debug.LogWarning("PowerUpSpawner: Prefab is missing a PowerUpCollectible component.");
+            Destroy(instance);
+        }
+    }
+
     private void SpawnRandomPowerUp()
     {
         GameObject player = GameObject.FindWithTag("Player");

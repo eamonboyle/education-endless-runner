@@ -21,6 +21,10 @@ public class GameBootstrap : MonoBehaviour
         EnsureSingleton<HighScoreCelebration>();
         EnsureSingleton<SessionSummary>();
         EnsureSingleton<QuestionHistoryDisplay>();
+        EnsureSingleton<ScreenFlash>();
+        EnsureSingleton<UnlockNotification>();
+        EnsureSingleton<PauseButton>();
+        EnsureSingleton<DifficultyIndicator>();
     }
 
     private void EnsureSingleton<T>() where T : MonoBehaviour
@@ -28,7 +32,6 @@ public class GameBootstrap : MonoBehaviour
         if (FindObjectOfType<T>() == null)
         {
             var go = new GameObject("[" + typeof(T).Name + "]");
-            go.transform.SetParent(transform);
             go.AddComponent<T>();
         }
     }

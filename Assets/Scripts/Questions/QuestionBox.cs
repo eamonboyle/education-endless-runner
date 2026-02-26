@@ -64,6 +64,7 @@ public class QuestionBox : MonoBehaviour
         }
 
         AnswerFeedback.PlayIncorrect(transform.position);
+        ScreenFlash.FlashRed();
         HapticFeedback.VibrateOnWrongAnswer();
 
         if (ScreenShake.Instance != null)
@@ -103,6 +104,7 @@ public class QuestionBox : MonoBehaviour
     private void HandleCorrectAnswer(QuestionGeneration qg, bool isTimeAttack)
     {
         AnswerFeedback.PlayCorrect(transform.position);
+        ScreenFlash.FlashGreen();
         QuestionHistoryDisplay.RecordQuestion(questionText, number, correctNumber);
 
         var audioSource = Camera.main != null ? Camera.main.GetComponent<AudioSource>() : null;
@@ -136,6 +138,9 @@ public class QuestionBox : MonoBehaviour
         if (ghostSystem != null) { /* ghost records in its own Update */ }
 
         qg.AddQuestion(true);
+
+        var spawner = Object.FindObjectOfType<PowerUpSpawner>();
+        if (spawner != null) spawner.TrySpawnPowerUp(transform.position);
     }
 
     private void AnsweredIncorrectly()
