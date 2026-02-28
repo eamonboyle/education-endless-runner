@@ -1,59 +1,19 @@
-﻿using System.Collections;
+using System.Collections;
 using UnityEngine;
-using UnityEngine.Advertisements;
 
+/// <summary>
+/// Ad manager stub. Unity Ads integration is currently disabled.
+/// Re-enable by uncommenting the ad initialization and show calls
+/// and adding the IUnityAdsListener interface.
+/// </summary>
 public class AdManager : MonoBehaviour
 {
-    private string gameId = "3492332";
-    private bool testMode = true;
-    private string placementIdVideo = "video";
+    [SerializeField] private string gameId = "3492402";
+    [SerializeField] private bool testMode = false;
+    [SerializeField] private string placementIdVideo = "rewardedVideo";
 
-    // Start is called before the first frame update
-    void Start()
+    public void ShowVideoAdvert()
     {
-        // Debug.Log("AD MANAGER LOADED");
-
-        // // check wether to show an add
-        // int gamesPlayed = GameState.GetPlayCount();
-
-        // if (gamesPlayed % 5 == 0)
-        // {
-        //     if (Application.platform == RuntimePlatform.IPhonePlayer)
-        //     {
-        //         gameId = "3492333";
-        //     }
-
-
-        //     //Advertisement.AddListener(this);
-        //     Advertisement.Initialize(gameId, testMode);
-        //     StartCoroutine(Countdown(2));
-        // }
-
-        // GameState.IncrementPlayCount();
-    }
-
-    private IEnumerator ShowVideoAdvert()
-    {
-        return null;
-        // while (!Advertisement.IsReady(placementIdVideo))
-        // {
-        //     yield return new WaitForSeconds(0.5f);
-        // }
-        // Advertisement.Show(placementIdVideo);
-    }
-
-    private IEnumerator Countdown(int seconds)
-    {
-        return null;
-        // int count = seconds;
-
-        // while (count > 0)
-        // {
-        //     yield return new WaitForSeconds(1);
-
-        //     count--;
-        // }
-
-        // StartCoroutine(ShowVideoAdvert());
+        Debug.Log("AdManager: Ads are currently disabled.");
     }
 }

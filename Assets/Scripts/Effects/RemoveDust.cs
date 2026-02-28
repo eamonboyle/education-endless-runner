@@ -1,15 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class RemoveDust : MonoBehaviour
 {
-    public float timer = .2f;
+    public float timer = 0.2f;
 
-    // Start is called before the first frame update
     void Start()
     {
-        Invoke("Remove", timer);
+        if (timer <= 0f) timer = 0.2f;
+        Invoke(nameof(Remove), timer);
     }
 
     void Remove()

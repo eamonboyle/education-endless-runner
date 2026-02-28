@@ -1,15 +1,17 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 public class RedirectIfCharacter : MonoBehaviour
 {
-    // Start is called before the first frame update
     private void Start()
     {
         string character = GameState.GetCharacter();
 
-        if (character != "" || character != null)
+        if (!string.IsNullOrEmpty(character))
         {
-            GameManager.instance.LoadMainMenu();
+            if (GameManager.instance != null)
+            {
+                GameManager.instance.LoadMainMenu();
+            }
         }
     }
 }

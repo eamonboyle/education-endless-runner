@@ -1,13 +1,14 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MathRunner.Core;
 
 public static class SettingState
 {
     public static void SetSound(bool s)
     {
-        PlayerPrefs.SetInt("sound", s ? 1 : 0);
+        PlayerPrefs.SetInt(GameConstants.PREF_SOUND, s ? 1 : 0);
     }
 
     public static bool GetSound()
@@ -17,14 +18,7 @@ public static class SettingState
             return true;
         }
 
-        int s = PlayerPrefs.GetInt("sound");
-
-        if (s == 0)
-        {
-            return false;
-        }
-
-        return true;
+        return PlayerPrefs.GetInt(GameConstants.PREF_SOUND) != 0;
     }
 
     internal static void ChangeSound()
@@ -34,12 +28,12 @@ public static class SettingState
 
     public static void SetGraphics(string g)
     {
-        PlayerPrefs.SetString("graphics", g);
+        PlayerPrefs.SetString(GameConstants.PREF_GRAPHICS, g);
     }
 
     public static string GetGraphics()
     {
-        return PlayerPrefs.GetString("graphics");
+        return PlayerPrefs.GetString(GameConstants.PREF_GRAPHICS);
     }
 
     public static void ResetPlayerPrefs()
@@ -52,7 +46,6 @@ public static class SettingState
         GameState.SetPlayCount(playCount);
         GameState.ResetAdCount();
 
-        // TODO: REENABLE THIS
         if (!firstPlay)
         {
             GameState.SetFirstLoad();

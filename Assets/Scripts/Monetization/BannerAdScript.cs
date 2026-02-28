@@ -1,38 +1,12 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Advertisements;
 
+/// <summary>
+/// Banner ad stub. Ads are currently disabled.
+/// </summary>
 public class BannerAdScript : MonoBehaviour
 {
-    public string gameId = "3492332";
-    public string placementId = "SmallBanner";
-    public bool testMode = true;
-
-
-    // Start is called before the first frame update
-    void Start()
+    public void ShowBanner()
     {
-        // Advertisement.Initialize(gameId, testMode);
-        // StartCoroutine(ShowBannerWhenReady());
-    }
-
-    IEnumerator ShowBannerWhenReady()
-    {
-        return null;
-        // while (!Advertisement.IsReady(placementId))
-        // {
-        //     yield return new WaitForSeconds(0.5f);
-        // }
-
-        // Advertisement.Banner.SetPosition(BannerPosition.TOP_CENTER);
-        // Advertisement.Banner.Show(placementId);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        Debug.Log("BannerAdScript: Ads are currently disabled.");
     }
 }

@@ -1,5 +1,6 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
+using MathRunner.Core;
 
 public static class GameState
 {
@@ -7,14 +8,22 @@ public static class GameState
     private static bool gameOver = false;
     private static bool questionExists = false;
     private static int score = 0;
-    private static float characterSpeed = 40.0f;
+    private static float characterSpeed = GameConstants.DEFAULT_SPEED;
+    private static int questionsAnsweredThisGame = 0;
+    private static int correctAnswersThisGame = 0;
+    private static float gameStartTime = 0f;
+
+    public static event System.Action OnNewHighScore;
+    public static event System.Action<int> OnScoreChanged;
 
     public static void Init()
     {
         gameRunning = false;
         gameOver = false;
         score = 0;
-        characterSpeed = 40.0f;
+        characterSpeed = GameConstants.DEFAULT_SPEED;
+        questionsAnsweredThisGame = 0;
+        correctAnswersThisGame = 0;
         SetQuestionExists(false);
     }
 
@@ -23,6 +32,25 @@ public static class GameState
         gameRunning = true;
         gameOver = false;
         score = 0;
+        questionsAnsweredThisGame = 0;
+        correctAnswersThisGame = 0;
+        gameStartTime = Time.time;
+    }
+
+    public static int GetQuestionsAnsweredThisGame() => questionsAnsweredThisGame;
+    public static int GetCorrectAnswersThisGame() => correctAnswersThisGame;
+    public static float GetGameDuration() => Time.time - gameStartTime;
+
+    public static float GetAccuracyThisGame()
+    {
+        if (questionsAnsweredThisGame == 0) return 0f;
+        return (float)correctAnswersThisGame / questionsAnsweredThisGame * 100f;
+    }
+
+    public static void RecordAnswer(bool correct)
+    {
+        questionsAnsweredThisGame++;
+        if (correct) correctAnswersThisGame++;
     }
 
     public static void ResetAdCount()
@@ -39,6 +67,13 @@ public static class GameState
     public static void SetScore(int s)
     {
         score = s;
+        OnScoreChanged?.Invoke(score);
+    }
+
+    public static void AddScore(int points)
+    {
+        score += points;
+        OnScoreChanged?.Invoke(score);
     }
 
     public static int GetScore()
@@ -48,12 +83,12 @@ public static class GameState
 
     public static void SaveScore()
     {
-        PlayerPrefs.SetInt("score", score);
+        PlayerPrefs.SetInt(GameConstants.PREF_SCORE, score);
     }
 
     public static int GetScoreFromSave()
     {
-        return PlayerPrefs.GetInt("score");
+        return PlayerPrefs.GetInt(GameConstants.PREF_SCORE);
     }
 
     public static void SetRunning(bool running)
@@ -68,7 +103,7 @@ public static class GameState
 
     public static void SetGameOver(bool over)
     {
-        gameOver = true;
+        gameOver = over;
     }
 
     public static bool IsGameOver()
@@ -100,38 +135,38 @@ public static class GameState
 
     public static void SetCharacter(string character)
     {
-        PlayerPrefs.SetString("character", character);
+        PlayerPrefs.SetString(GameConstants.PREF_CHARACTER, character);
     }
 
     public static string GetCharacter()
     {
-        return PlayerPrefs.GetString("character");
+        return PlayerPrefs.GetString(GameConstants.PREF_CHARACTER);
     }
 
     public static int GetPlayCount()
     {
-        return PlayerPrefs.GetInt("gamesPlayed");
+        return PlayerPrefs.GetInt(GameConstants.PREF_GAMES_PLAYED);
     }
 
     public static void SetPlayCount(int playCount)
     {
-        PlayerPrefs.SetInt("gamesPlayed", playCount);
+        PlayerPrefs.SetInt(GameConstants.PREF_GAMES_PLAYED, playCount);
     }
 
     public static void IncrementPlayCount()
     {
-        int count = PlayerPrefs.GetInt("gamesPlayed");
-        PlayerPrefs.SetInt("gamesPlayed", ++count);
+        int count = PlayerPrefs.GetInt(GameConstants.PREF_GAMES_PLAYED);
+        PlayerPrefs.SetInt(GameConstants.PREF_GAMES_PLAYED, ++count);
     }
 
     public static void SetQuestionType(string questionType)
     {
-        PlayerPrefs.SetString("mode", questionType);
+        PlayerPrefs.SetString(GameConstants.PREF_MODE, questionType);
     }
 
     public static string GetQuestionType()
     {
-        return PlayerPrefs.GetString("mode");
+        return PlayerPrefs.GetString(GameConstants.PREF_MODE);
     }
 
     public static void SetQuestionExists(bool exists)
@@ -150,29 +185,37 @@ public static class GameState
 
         if (score > s)
         {
-            // TODO, DO AN EFFECT LIKE CONFETTI HERE?
-            PlayerPrefs.SetInt("highScore_" + GetQuestionType(), score);
+            PlayerPrefs.SetInt(GameConstants.PREF_HIGH_SCORE_PREFIX + GetQuestionType(), score);
+            OnNewHighScore?.Invoke();
         }
     }
 
     public static int GetHighScore()
     {
-        return PlayerPrefs.GetInt("highScore_" + GetQuestionType());
+        return PlayerPrefs.GetInt(GameConstants.PREF_HIGH_SCORE_PREFIX + GetQuestionType());
+    }
+
+    public static int GetHighScore(string mode)
+    {
+        return PlayerPrefs.GetInt(GameConstants.PREF_HIGH_SCORE_PREFIX + mode);
+    }
+
+    public static bool IsNewHighScore()
+    {
+        return score > GetHighScore();
     }
 
     public static void SetFirstLoad()
     {
-        PlayerPrefs.SetInt("firstLoad", 1);
+        PlayerPrefs.SetInt(GameConstants.PREF_FIRST_LOAD, 1);
     }
 
     public static bool IsFirstLoad()
     {
-        if (PlayerPrefs.GetInt("firstLoad") == 0)
+        if (PlayerPrefs.GetInt(GameConstants.PREF_FIRST_LOAD) == 0)
         {
-            // enter default settings
             SettingState.SetSound(true);
             SettingState.SetGraphics("Medium");
-
             return true;
         }
 
@@ -181,38 +224,41 @@ public static class GameState
 
     public static void ShowGameUI()
     {
-        GameObject.Find("InGameUI").GetComponent<Canvas>().enabled = true;
-        GameObject.Find("GameOverUI").GetComponent<Canvas>().enabled = false;
-        GameObject.Find("PauseUI").GetComponent<Canvas>().enabled = false;
+        SetCanvasEnabled("InGameUI", true);
+        SetCanvasEnabled("GameOverUI", false);
+        SetCanvasEnabled("PauseUI", false);
     }
 
     public static void ShowPauseUI()
     {
         SetRunning(false);
         QuestionBoxShow(false);
-        GameObject.Find("PlayerObject").GetComponent<Animator>().SetBool("isRunning", false);
-        GameObject.Find("InGameUI").GetComponent<Canvas>().enabled = false;
-        GameObject.Find("GameOverUI").GetComponent<Canvas>().enabled = false;
-        GameObject.Find("PauseUI").GetComponent<Canvas>().enabled = true;
-        GameObject.Find("QuestionText").SetActive(false);
+
+        var player = GameObject.Find("PlayerObject");
+        if (player != null)
+            player.GetComponent<Animator>().SetBool("isRunning", false);
+
+        SetCanvasEnabled("InGameUI", false);
+        SetCanvasEnabled("GameOverUI", false);
+        SetCanvasEnabled("PauseUI", true);
+
+        var questionText = GameObject.Find("QuestionText");
+        if (questionText != null) questionText.SetActive(false);
     }
 
     public static void QuestionBoxShow(bool show)
     {
-        if (!show)
+        foreach (GameObject box in GameObject.FindGameObjectsWithTag("QuestionBox"))
         {
-            foreach (GameObject box in GameObject.FindGameObjectsWithTag("QuestionBox"))
+            if (box == null) continue;
+
+            var meshRenderer = box.GetComponent<MeshRenderer>();
+            if (meshRenderer != null) meshRenderer.enabled = show;
+
+            if (box.transform.childCount > 0)
             {
-                box.GetComponent<MeshRenderer>().enabled = false;
-                box.transform.GetChild(0).GetComponent<MeshRenderer>().enabled = false;
-            }
-        }
-        else
-        {
-            foreach (GameObject box in GameObject.FindGameObjectsWithTag("QuestionBox"))
-            {
-                box.GetComponent<MeshRenderer>().enabled = true;
-                box.transform.GetChild(0).GetComponent<MeshRenderer>().enabled = true;
+                var childRenderer = box.transform.GetChild(0).GetComponent<MeshRenderer>();
+                if (childRenderer != null) childRenderer.enabled = show;
             }
         }
     }
@@ -223,33 +269,61 @@ public static class GameState
         SetRunning(false);
         SetQuestionExists(false);
         SetHighScore();
-        GameObject.Find("HighScoreAmount").GetComponent<Text>().text = GetHighScore().ToString();
-        GameObject.Find("CurrentScoreAmount").GetComponent<Text>().text = GetScore().ToString();
-        GameObject.Find("InGameUI").GetComponent<Canvas>().enabled = false;
-        GameObject.Find("PauseUI").GetComponent<Canvas>().enabled = false;
-        GameObject.Find("GameOverUI").GetComponent<Canvas>().enabled = true;
-        GameObject.Find("QuestionText").SetActive(false);
+
+        var highScoreText = GameObject.Find("HighScoreAmount");
+        if (highScoreText != null)
+            highScoreText.GetComponent<Text>().text = GetHighScore().ToString();
+
+        var currentScoreText = GameObject.Find("CurrentScoreAmount");
+        if (currentScoreText != null)
+            currentScoreText.GetComponent<Text>().text = GetScore().ToString();
+
+        SetCanvasEnabled("InGameUI", false);
+        SetCanvasEnabled("PauseUI", false);
+        SetCanvasEnabled("GameOverUI", true);
+
+        var questionText = GameObject.Find("QuestionText");
+        if (questionText != null) questionText.SetActive(false);
     }
 
     public static void ShowTutorialGameOver()
     {
         SetRunning(false);
-        GameObject.Find("TutorialUI").GetComponent<Canvas>().enabled = false;
-        GameObject.Find("TutorialGameOverUI").GetComponent<Canvas>().enabled = true;
-        GameObject.Find("QuestionText").SetActive(false);
+        SetCanvasEnabled("TutorialUI", false);
+        SetCanvasEnabled("TutorialGameOverUI", true);
+
+        var questionText = GameObject.Find("QuestionText");
+        if (questionText != null) questionText.SetActive(false);
     }
 
     public static void ShowTutorialCompleteUI()
     {
         SetRunning(false);
-        GameObject.Find("TutorialUI").GetComponent<Canvas>().enabled = false;
-        GameObject.Find("TutorialGameOverUI").GetComponent<Canvas>().enabled = false;
-        GameObject.Find("TutorialCompleteUI").GetComponent<Canvas>().enabled = true;
-        GameObject.Find("QuestionText").SetActive(false);
-        GameObject.Find("PlayerObject").GetComponent<Animator>().SetBool("isRunning", false);
-        GameObject.Find("PlayerObject").GetComponent<Animator>().SetBool("dancing", true);
+        SetCanvasEnabled("TutorialUI", false);
+        SetCanvasEnabled("TutorialGameOverUI", false);
+        SetCanvasEnabled("TutorialCompleteUI", true);
+
+        var questionText = GameObject.Find("QuestionText");
+        if (questionText != null) questionText.SetActive(false);
+
+        var player = GameObject.Find("PlayerObject");
+        if (player != null)
+        {
+            var animator = player.GetComponent<Animator>();
+            animator.SetBool("isRunning", false);
+            animator.SetBool("dancing", true);
+        }
+
         SetFirstLoad();
     }
 
-    // add methods for settings in here, audio etc
+    private static void SetCanvasEnabled(string objectName, bool enabled)
+    {
+        var obj = GameObject.Find(objectName);
+        if (obj != null)
+        {
+            var canvas = obj.GetComponent<Canvas>();
+            if (canvas != null) canvas.enabled = enabled;
+        }
+    }
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -97,6 +97,12 @@ public class PlayerController : MonoBehaviour
 
             this.Reset();
         }
+
+        // Keyboard input (A/D or Left/Right arrows)
+        if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
+            swipeLeft = true;
+        if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
+            swipeRight = true;
     }
 
     private void Reset()

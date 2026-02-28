@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class Score : MonoBehaviour
@@ -7,11 +7,18 @@ public class Score : MonoBehaviour
 
     private float timePassed = 0.0f;
     private int score;
+    private Text scoreText;
 
     void Start()
     {
         score = GameState.GetScore();
-        scoreObject.GetComponent<Text>().text = score.ToString();
+
+        if (scoreObject != null)
+        {
+            scoreText = scoreObject.GetComponent<Text>();
+            if (scoreText != null)
+                scoreText.text = score.ToString();
+        }
     }
 
     void Update()
@@ -22,13 +29,23 @@ public class Score : MonoBehaviour
         }
 
         timePassed += Time.deltaTime;
-        if (timePassed >= 1)
+        if (timePassed >= 1f)
         {
-            score += (int)timePassed;
-            timePassed -= (int)timePassed;
+            int timePoints = 1;
+
+            var powerUp = PowerUpSystem.Instance;
+            if (powerUp != null && powerUp.HasActivePowerUp(PowerUpType.DoublePoints))
+            {
+                timePoints *= 2;
+            }
+
+            score += timePoints;
+            timePassed -= 1f;
         }
 
-        scoreObject.GetComponent<Text>().text = score.ToString();
+        if (scoreText != null)
+            scoreText.text = score.ToString();
+
         GameState.SetScore(score);
     }
 }
