@@ -62,7 +62,7 @@ namespace MathRunner.Data
         {
             if (IsComplete) return;
             CurrentCount = Mathf.Min(CurrentCount + amount, TargetCount);
-            PlayerPrefs.Save();
+            MathRunner.Core.PrefsFlush.MarkDirty();
         }
 
         private string ProgressKey

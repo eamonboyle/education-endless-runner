@@ -61,3 +61,14 @@ sysinfo.txt
 
 # Crashlytics generated file
 crashlytics-build.properties
+
+# Android signing — never commit keystores or passwords
+*.keystore
+*.jks
+user/
+user.keystore
+
+# Local crash / compile artifacts
+mono_crash*.blob
+unity_compile.log
+Assets/_Recovery/

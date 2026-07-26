@@ -149,10 +149,7 @@ public class GameOverEnhanced : MonoBehaviour
 
     private void OnTryAgain()
     {
-        if (GameManager.instance != null)
-        {
-            GameManager.instance.LoadGame();
-        }
+        GameSession.BeginRun();
     }
 
     private void OnBackToMenu()

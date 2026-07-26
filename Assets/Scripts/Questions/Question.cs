@@ -45,6 +45,15 @@ public class Question
         ZPosition = z;
     }
 
+    /// <summary>
+    /// Clears the static recent-question history. Call at the start of each run
+    /// so uniqueness checks do not carry over between games.
+    /// </summary>
+    public static void ClearRecentHistory()
+    {
+        recentQuestions.Clear();
+    }
+
     private void CreateQuestion()
     {
         GenerateNumbers();

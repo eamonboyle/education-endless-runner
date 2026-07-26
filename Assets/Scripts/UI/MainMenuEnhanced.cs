@@ -126,7 +126,7 @@ public class MainMenuEnhanced : MonoBehaviour
 
         if (GameManager.instance != null)
         {
-            GameManager.instance.LoadGame();
+            GameSession.BeginRun();
         }
     }
 }

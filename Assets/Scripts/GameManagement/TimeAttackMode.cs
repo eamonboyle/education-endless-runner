@@ -142,6 +142,7 @@ public class TimeAttackMode : MonoBehaviour
             remainingTime = 0f;
             timerRunning = false;
             OnTimeUp?.Invoke();
+            GameState.ShowGameOverUI();
         }
     }
 }

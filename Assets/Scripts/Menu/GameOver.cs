@@ -22,8 +22,7 @@ public class GameOver : MonoBehaviour
 
     public void RestartGame()
     {
-        if (GameManager.instance != null)
-            GameManager.instance.LoadGame();
+        GameSession.BeginRun();
     }
 
     public void QuitGame()

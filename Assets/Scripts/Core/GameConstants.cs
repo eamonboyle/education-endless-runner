@@ -30,8 +30,12 @@ namespace MathRunner.Core
         /// <summary>Z distance between consecutive question rows.</summary>
         public const float QUESTION_SPACING = 50.0f;
 
-        /// <summary>Initial forward speed of the player character.</summary>
-        public const float DEFAULT_SPEED = 40.0f;
+        /// <summary>Initial forward speed of the player character (units/sec).</summary>
+        /// <remarks>
+        /// Retuned from 40 after fixing PlayerMovement's self-referencing lerp,
+        /// which previously applied only ~10% of the configured speed.
+        /// </remarks>
+        public const float DEFAULT_SPEED = 4.0f;
 
         /// <summary>Minimum swipe magnitude (in pixels) to register as a directional swipe.</summary>
         public const float SWIPE_DEADZONE = 50f;

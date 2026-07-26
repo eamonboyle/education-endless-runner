@@ -12,6 +12,8 @@ namespace MathRunner.Core
     {
         private const string EventsPrefsKey = "Analytics_Events";
         private const int MaxStoredEvents = 100;
+        private static EventList cachedEvents;
+        private static bool eventsDirty;
 
         /// <summary>
         /// Represents a single analytics event with a type, timestamp, and
@@ -62,7 +64,7 @@ namespace MathRunner.Core
                 }
             }
 
-            EventList list = LoadEvents();
+            EventList list = GetCachedEvents();
             list.Events.Add(evt);
 
             while (list.Events.Count > MaxStoredEvents)
@@ -70,7 +72,19 @@ namespace MathRunner.Core
                 list.Events.RemoveAt(0);
             }
 
-            SaveEvents(list);
+            eventsDirty = true;
+            PrefsFlush.MarkDirty();
+        }
+
+        /// <summary>
+        /// Persists buffered analytics events to PlayerPrefs if any are pending.
+        /// Called from <see cref="PrefsFlush.Flush"/> side effects via game-over / pause.
+        /// </summary>
+        public static void FlushPendingEvents()
+        {
+            if (!eventsDirty || cachedEvents == null) return;
+            SaveEvents(cachedEvents);
+            eventsDirty = false;
         }
 
         /// <summary>
@@ -147,7 +161,7 @@ namespace MathRunner.Core
         /// <returns>List of recent events.</returns>
         public static List<AnalyticsEvent> GetRecentEvents(int count)
         {
-            EventList list = LoadEvents();
+            EventList list = GetCachedEvents();
             int start = Mathf.Max(0, list.Events.Count - count);
             int length = Mathf.Min(count, list.Events.Count);
             return list.Events.GetRange(start, length);
@@ -159,7 +173,7 @@ namespace MathRunner.Core
         /// </summary>
         public static string GetMostPlayedMode()
         {
-            EventList list = LoadEvents();
+            EventList list = GetCachedEvents();
             Dictionary<string, int> modeCounts = new Dictionary<string, int>();
 
             foreach (AnalyticsEvent evt in list.Events)
@@ -194,7 +208,7 @@ namespace MathRunner.Core
         /// </summary>
         public static float GetAverageSessionLength()
         {
-            EventList list = LoadEvents();
+            EventList list = GetCachedEvents();
             float total = 0f;
             int count = 0;
 
@@ -227,7 +241,14 @@ namespace MathRunner.Core
             return evt.DataValues[idx];
         }
 
-        private static EventList LoadEvents()
+        private static EventList GetCachedEvents()
+        {
+            if (cachedEvents != null) return cachedEvents;
+            cachedEvents = LoadEventsFromPrefs();
+            return cachedEvents;
+        }
+
+        private static EventList LoadEventsFromPrefs()
         {
             string json = PlayerPrefs.GetString(EventsPrefsKey, "");
             if (string.IsNullOrEmpty(json))
@@ -253,7 +274,6 @@ namespace MathRunner.Core
             {
                 string json = JsonUtility.ToJson(list);
                 PlayerPrefs.SetString(EventsPrefsKey, json);
-                PlayerPrefs.Save();
             }
             catch (Exception e)
             {

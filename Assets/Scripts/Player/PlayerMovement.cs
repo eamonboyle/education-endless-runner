@@ -107,7 +107,9 @@ public class PlayerMovement : MonoBehaviour
     private void MoveCharacter()
     {
         Vector3 newPosition = transform.position;
-        newPosition.z = Mathf.Lerp(transform.position.z, transform.position.z + forwardSpeed * Time.deltaTime, 0.1f);
+        // Advance at forwardSpeed units/sec. Previous code lerped toward a moving
+        // target at 0.1, which unintentionally ran at ~10% of DEFAULT_SPEED.
+        newPosition.z += forwardSpeed * Time.deltaTime;
         newPosition.x = Mathf.Lerp(transform.position.x, directionAmount * direction, directionSpeed);
         transform.position = newPosition;
     }
