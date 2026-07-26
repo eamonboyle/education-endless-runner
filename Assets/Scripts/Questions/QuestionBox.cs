@@ -134,12 +134,12 @@ public class QuestionBox : MonoBehaviour
         DailyChallengeData.RecordProgress(GameState.GetQuestionType());
         WeeklyChallengeData.RecordProgress(GameState.GetQuestionType());
 
-        var ghostSystem = Object.FindObjectOfType<GhostRunSystem>();
+        var ghostSystem = Object.FindAnyObjectByType<GhostRunSystem>();
         if (ghostSystem != null) { /* ghost records in its own Update */ }
 
         qg.AddQuestion(true);
 
-        var spawner = Object.FindObjectOfType<PowerUpSpawner>();
+        var spawner = Object.FindAnyObjectByType<PowerUpSpawner>();
         if (spawner != null) spawner.TrySpawnPowerUp(transform.position);
     }
 

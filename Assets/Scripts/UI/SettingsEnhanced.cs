@@ -32,7 +32,7 @@ public class SettingsEnhanced : MonoBehaviour
             colorblindEnabled = AccessibilityManager.Instance.CurrentColorblindMode != AccessibilityManager.ColorblindMode.Normal;
         }
 
-        var dyslexiaMgr = FindObjectOfType<DyslexiaFontManager>();
+        var dyslexiaMgr = FindAnyObjectByType<DyslexiaFontManager>();
         if (dyslexiaMgr != null)
         {
             dyslexiaFontEnabled = dyslexiaMgr.IsEnabled();
@@ -115,7 +115,7 @@ public class SettingsEnhanced : MonoBehaviour
         if (newDyslexia != dyslexiaFontEnabled)
         {
             dyslexiaFontEnabled = newDyslexia;
-            var dyslexiaMgr = FindObjectOfType<DyslexiaFontManager>();
+            var dyslexiaMgr = FindAnyObjectByType<DyslexiaFontManager>();
             if (dyslexiaMgr != null)
             {
                 if (dyslexiaFontEnabled)

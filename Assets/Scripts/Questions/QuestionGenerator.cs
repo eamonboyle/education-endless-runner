@@ -18,7 +18,7 @@ namespace Assets.Scripts.GameManagement
             Division
         }
 
-        public new bool generateQuestions = true;
+        public bool generateQuestions = true;
 
         public GameObject player;
         public GameObject questionBox;

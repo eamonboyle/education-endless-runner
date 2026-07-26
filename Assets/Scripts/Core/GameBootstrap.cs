@@ -29,7 +29,7 @@ public class GameBootstrap : MonoBehaviour
 
     private void EnsureSingleton<T>() where T : MonoBehaviour
     {
-        if (FindObjectOfType<T>() == null)
+        if (FindAnyObjectByType<T>() == null)
         {
             var go = new GameObject("[" + typeof(T).Name + "]");
             go.AddComponent<T>();

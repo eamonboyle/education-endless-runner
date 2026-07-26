@@ -252,8 +252,6 @@ public class GameManager : MonoBehaviour
     {
         string text = "";
         string subject = "";
-        string url = "";
-        string title = "Select sharing app";
 
 #if UNITY_ANDROID
 
