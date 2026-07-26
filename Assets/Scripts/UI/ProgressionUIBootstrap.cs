@@ -41,7 +41,6 @@ public class ProgressionUIBootstrap : MonoBehaviour
             DestroyAllOfType<DailyChallengeDisplay>();
             DestroyAllOfType<WeeklyChallengeDisplay>();
             DestroyAllOfType<StatsDisplay>();
-            DestroyAllOfType<PlayStyleSelect>();
             DestroyAllOfType<AccessibilitySettingsUI>();
             return;
         }
@@ -56,10 +55,6 @@ public class ProgressionUIBootstrap : MonoBehaviour
         {
             EnsureInScene<StatsDisplay>(scene, "[StatsDisplay]");
             EnsureInScene<AccessibilitySettingsUI>(scene, "[AccessibilitySettingsUI]");
-        }
-        else if (name == "ModeChoice" || name == "Mode Choice")
-        {
-            EnsureInScene<PlayStyleSelect>(scene, "[PlayStyleSelect]");
         }
     }
 

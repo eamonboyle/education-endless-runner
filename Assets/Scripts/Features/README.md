@@ -19,9 +19,10 @@ Updated after the dead-feature wiring pass.
   character unlocks, campaign completion, and last-played / daily graph prefs.
 - MainMenu / Settings get runtime `DailyChallengeDisplay`, `WeeklyChallengeDisplay`, `StatsDisplay`,
   and `AccessibilitySettingsUI` via `ProgressionUIBootstrap`.
-- ModeChoice gets `PlayStyleSelect`, a second step shown after the player picks a question type
-  (Classic / Time Attack / Campaign + difficulty). It borrows the scene's button sprite, font and
-  canvas scaling at runtime, so it restyles itself if the ModeChoice art changes.
+- ModeChoice has a second step, shown after the player picks a question type: the `PlayStylePanel`
+  object authored in the scene (Classic / Time Attack / Campaign + difficulty), driven by
+  `PlayStylePanel.cs` on the Main Camera. `ModeSelect.Choose` opens it. See
+  `docs/MODE-CHOICE-PLAY-STYLE-PANEL.md` for the layout and wiring.
 
 ## Still optional / art-dependent (manual Unity polish)
 

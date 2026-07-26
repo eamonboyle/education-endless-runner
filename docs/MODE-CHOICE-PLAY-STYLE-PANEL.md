@@ -1,15 +1,17 @@
 # Building the "How do you want to play?" panel by hand
 
-This rebuilds the play-style / difficulty step as real scene objects inside
-`Assets/Scenes/ModeChoice.unity`, replacing the runtime-generated version in
-`Assets/Scripts/UI/PlayStyleSelect.cs`.
+> **Status: done.** The panel is built in `Assets/Scenes/ModeChoice.unity` and the
+> runtime version it replaced (`Assets/Scripts/UI/PlayStyleSelect.cs`) has been
+> deleted. Steps 1 and 10 are historical and no longer apply. Everything else is
+> still the reference for the panel's anchors, colours and wiring — come back
+> here when you need to retune it or rebuild a tile.
 
-You keep a controller script either way — it tracks which tile is selected,
-repaints the tiles, and starts the run. What moves into the editor is every
+This built the play-style / difficulty step as real scene objects inside
+`Assets/Scenes/ModeChoice.unity`, replacing a version that was generated in code.
+
+A controller script is needed either way — it tracks which tile is selected,
+repaints the tiles, and starts the run. What lives in the editor is every
 visual: the panel, cards, chips and buttons.
-
-Work through the steps in order. The runtime version keeps working until
-[step 9](#step-9--remove-the-runtime-version), so you can stop and come back.
 
 ---
 
@@ -61,7 +63,7 @@ difficulty chips.
 
 ---
 
-## Step 1 — Turn off the runtime version
+## Step 1 — Turn off the runtime version *(no longer applies)*
 
 So the generated overlay doesn't sit on top of what you're building.
 
@@ -704,7 +706,7 @@ question tap will send you to the tutorial rather than the panel.
 
 ---
 
-## Step 10 — Remove the runtime version
+## Step 10 — Remove the runtime version *(already done)*
 
 Once the scene version works:
 

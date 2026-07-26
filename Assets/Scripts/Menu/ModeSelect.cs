@@ -4,6 +4,7 @@ using MathRunner.Core;
 public class ModeSelect : MonoBehaviour
 {
     public GameObject homeButton;
+    public PlayStylePanel playStylePanel;
 
     private void Start()
     {
@@ -35,9 +36,9 @@ public class ModeSelect : MonoBehaviour
             return;
         }
 
-        if (PlayStyleSelect.Instance != null)
+        if (playStylePanel != null)
         {
-            PlayStyleSelect.Instance.Show(mode);
+            playStylePanel.Show(mode);
             return;
         }
 
