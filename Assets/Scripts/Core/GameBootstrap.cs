@@ -17,13 +17,13 @@ public class GameBootstrap : MonoBehaviour
         EnsureSingleton<ScreenShake>();
         EnsureSingleton<AnswerFeedback>();
         EnsureSingleton<ReducedMotionManager>();
+        // InGameHUD overlays score/lives/speed during gameplay (hidden when paused/over).
         EnsureSingleton<InGameHUD>();
         EnsureSingleton<HighScoreCelebration>();
-        EnsureSingleton<SessionSummary>();
-        EnsureSingleton<QuestionHistoryDisplay>();
+        // SessionSummary / PauseButton / QuestionHistoryDisplay intentionally omitted —
+        // they draw OnGUI overlays that duplicate the scene PauseMenu and GameOverUI canvases.
         EnsureSingleton<ScreenFlash>();
         EnsureSingleton<UnlockNotification>();
-        EnsureSingleton<PauseButton>();
         EnsureSingleton<DifficultyIndicator>();
     }
 

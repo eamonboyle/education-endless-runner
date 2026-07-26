@@ -9,6 +9,9 @@ public class QuestionBox : MonoBehaviour
     public int correctNumber;
     public string questionText;
 
+    private static PowerUpSpawner cachedPowerUpSpawner;
+    private static bool powerUpSpawnerLookupDone;
+
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Player")) return;
@@ -58,7 +61,9 @@ public class QuestionBox : MonoBehaviour
             var combo = ComboSystem.Instance;
             if (combo != null) combo.RecordWrongAnswer();
             QuestionHistoryDisplay.RecordQuestion(questionText, number, correctNumber);
-            qg.DeleteLastQuestion();
+            // Same advance path as a correct answer: spawn the next row and drop
+            // questions[0] once. Calling DeleteLastQuestion here as well would
+            // desync the HUD text from the boxes still on the track.
             qg.AddQuestion(true);
             return;
         }
@@ -78,7 +83,6 @@ public class QuestionBox : MonoBehaviour
             var timeAttack = TimeAttackMode.Instance;
             if (timeAttack != null) timeAttack.RecordWrongAnswer();
             QuestionHistoryDisplay.RecordQuestion(questionText, number, correctNumber);
-            qg.DeleteLastQuestion();
             qg.AddQuestion(true);
             return;
         }
@@ -90,14 +94,15 @@ public class QuestionBox : MonoBehaviour
             if (alive)
             {
                 QuestionHistoryDisplay.RecordQuestion(questionText, number, correctNumber);
-                qg.DeleteLastQuestion();
                 qg.AddQuestion(true);
                 return;
             }
         }
 
         QuestionHistoryDisplay.RecordQuestion(questionText, number, correctNumber);
-        qg.DeleteLastQuestion();
+        // Boxes for this question were already destroyed above. Drop it from the
+        // buffer so Continue doesn't show its text against the next row's boxes.
+        qg.DeleteOldestQuestion();
         AnsweredIncorrectly();
     }
 
@@ -134,13 +139,20 @@ public class QuestionBox : MonoBehaviour
         DailyChallengeData.RecordProgress(GameState.GetQuestionType());
         WeeklyChallengeData.RecordProgress(GameState.GetQuestionType());
 
-        var ghostSystem = Object.FindAnyObjectByType<GhostRunSystem>();
-        if (ghostSystem != null) { /* ghost records in its own Update */ }
-
         qg.AddQuestion(true);
 
-        var spawner = Object.FindAnyObjectByType<PowerUpSpawner>();
+        PowerUpSpawner spawner = GetPowerUpSpawner();
         if (spawner != null) spawner.TrySpawnPowerUp(transform.position);
+    }
+
+    private static PowerUpSpawner GetPowerUpSpawner()
+    {
+        if (!powerUpSpawnerLookupDone)
+        {
+            cachedPowerUpSpawner = Object.FindAnyObjectByType<PowerUpSpawner>();
+            powerUpSpawnerLookupDone = true;
+        }
+        return cachedPowerUpSpawner;
     }
 
     private void AnsweredIncorrectly()
@@ -158,12 +170,7 @@ public class QuestionBox : MonoBehaviour
         XPSystem.AddXP(xpEarned);
         AchievementData.CheckAchievements();
 
-        SessionSummary.ShowSummary(
-            score,
-            GameState.GetQuestionsAnsweredThisGame(),
-            GameState.GetAccuracyThisGame(),
-            xpEarned
-        );
+        PrefsFlush.Flush();
 
         GameState.ShowGameOverUI();
         PlayFallAnimation();

@@ -66,7 +66,7 @@ public class ReducedMotionManager : MonoBehaviour
 
     private static void DisableActiveParticles()
     {
-        ParticleSystem[] particles = FindObjectsByType<ParticleSystem>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        ParticleSystem[] particles = FindObjectsByType<ParticleSystem>(FindObjectsInactive.Include);
         foreach (ParticleSystem ps in particles)
         {
             if (ps == null) continue;

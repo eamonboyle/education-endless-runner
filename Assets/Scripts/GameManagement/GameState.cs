@@ -236,7 +236,11 @@ public static class GameState
 
         var player = GameObject.Find("PlayerObject");
         if (player != null)
-            player.GetComponent<Animator>().SetBool("isRunning", false);
+        {
+            var animator = player.GetComponent<Animator>();
+            if (animator != null)
+                animator.SetBool("isRunning", false);
+        }
 
         SetCanvasEnabled("InGameUI", false);
         SetCanvasEnabled("GameOverUI", false);
@@ -265,18 +269,27 @@ public static class GameState
 
     public static void ShowGameOverUI()
     {
+        PrefsFlush.Flush();
+
         QuestionBoxShow(false);
         SetRunning(false);
+        SetGameOver(true);
         SetQuestionExists(false);
         SetHighScore();
 
         var highScoreText = GameObject.Find("HighScoreAmount");
         if (highScoreText != null)
-            highScoreText.GetComponent<Text>().text = GetHighScore().ToString();
+        {
+            var text = highScoreText.GetComponent<Text>();
+            if (text != null) text.text = GetHighScore().ToString();
+        }
 
         var currentScoreText = GameObject.Find("CurrentScoreAmount");
         if (currentScoreText != null)
-            currentScoreText.GetComponent<Text>().text = GetScore().ToString();
+        {
+            var text = currentScoreText.GetComponent<Text>();
+            if (text != null) text.text = GetScore().ToString();
+        }
 
         SetCanvasEnabled("InGameUI", false);
         SetCanvasEnabled("PauseUI", false);

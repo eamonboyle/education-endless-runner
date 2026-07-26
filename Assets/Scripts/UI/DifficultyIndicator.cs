@@ -46,15 +46,16 @@ public class DifficultyIndicator : MonoBehaviour
 
         GUIStyle style = new GUIStyle(GUI.skin.label)
         {
-            fontSize = 14,
+            fontSize = Mathf.Max(28, Mathf.RoundToInt(Screen.height * 0.028f)),
             fontStyle = FontStyle.Bold,
             alignment = TextAnchor.LowerLeft
         };
         style.normal.textColor = current.Color;
 
-        float padding = 10f;
+        float padding = 24f;
+        float height = style.fontSize + 12f;
         GUI.Label(
-            new Rect(padding, Screen.height - 30f - padding, 120f, 30f),
+            new Rect(padding, Screen.height - height - padding, 220f, height),
             current.Label, style);
     }
 }

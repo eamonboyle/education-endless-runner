@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using MathRunner.Core;
 
 public class GameManager : MonoBehaviour
 {
@@ -25,6 +26,7 @@ public class GameManager : MonoBehaviour
 
     public void LoadGame()
     {
+        scenesLoading.Clear();
         ShowLoadingScreen();
         UnloadScenes();
 
@@ -36,6 +38,7 @@ public class GameManager : MonoBehaviour
     public void LoadMainMenu()
     {
         GameState.Init();
+        scenesLoading.Clear();
         ShowLoadingScreen();
         UnloadScenes();
 
@@ -46,6 +49,7 @@ public class GameManager : MonoBehaviour
 
     public void LoadModeSelect()
     {
+        scenesLoading.Clear();
         ShowLoadingScreen();
         UnloadScenes();
 
@@ -56,6 +60,7 @@ public class GameManager : MonoBehaviour
 
     public void LoadCharacterSelection()
     {
+        scenesLoading.Clear();
         ShowLoadingScreen();
         UnloadScenes();
 
@@ -66,6 +71,7 @@ public class GameManager : MonoBehaviour
 
     public void LoadSettings()
     {
+        scenesLoading.Clear();
         ShowLoadingScreen();
         UnloadScenes();
 
@@ -76,6 +82,7 @@ public class GameManager : MonoBehaviour
 
     public void LoadTutorial()
     {
+        scenesLoading.Clear();
         ShowLoadingScreen();
         UnloadScenes();
 
@@ -121,9 +128,10 @@ public class GameManager : MonoBehaviour
 
     private void OnApplicationPause(bool pause)
     {
-        print("ApplicationPause: " + pause);
+        if (pause)
+            PrefsFlush.Flush();
 
-        if (GameState.IsRunning())
+        if (pause && GameState.IsRunning())
         {
             GameState.ShowPauseUI();
         }
@@ -131,9 +139,10 @@ public class GameManager : MonoBehaviour
 
     private void OnApplicationFocus(bool focus)
     {
-        print("ApplicationFocus: " + focus);
+        if (!focus)
+            PrefsFlush.Flush();
 
-        if (GameState.IsRunning())
+        if (!focus && GameState.IsRunning())
         {
             GameState.ShowPauseUI();
         }
@@ -141,7 +150,7 @@ public class GameManager : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        print("Application quit");
+        PrefsFlush.Flush();
     }
 
 
