@@ -17,42 +17,30 @@ public class ModeSelect : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Wired to the four question-type buttons in the ModeChoice scene.
+    /// </summary>
     public void Choose(string mode)
     {
         GameState.SetQuestionType(mode);
 
-        // Choosing a classic math mode clears time-attack unless already
-        // explicitly set via ModeSelectExtras; campaign stays if active.
-        if (PlayerPrefs.GetInt(MathRunner.Core.GameConstants.PREF_CAMPAIGN_ACTIVE, 0) == 0)
-        {
-            // leave time-attack flag as set by extras UI
-        }
-
+        // First-timers go straight to the tutorial on Classic defaults; asking a
+        // new player about Time Attack or Campaign before they have run once is
+        // noise they cannot make sense of yet.
         if (GameState.IsFirstLoad())
         {
+            TimeAttackMode.SetTimeAttack(false);
+            PlayerPrefs.SetInt(MathRunner.Core.GameConstants.PREF_CAMPAIGN_ACTIVE, 0);
             GameManager.instance.LoadTutorial();
+            return;
         }
-        else
+
+        if (PlayStyleSelect.Instance != null)
         {
-            GameManager.instance.LoadMainMenu();
+            PlayStyleSelect.Instance.Show(mode);
+            return;
         }
-    }
 
-    /// <summary>Enables time-attack and returns to main menu flow.</summary>
-    public void EnableTimeAttack()
-    {
-        TimeAttackMode.SetTimeAttack(true);
-        PlayerPrefs.SetInt(MathRunner.Core.GameConstants.PREF_CAMPAIGN_ACTIVE, 0);
-    }
-
-    /// <summary>Starts campaign mode for the current unlocked level.</summary>
-    public void EnableCampaign()
-    {
-        TimeAttackMode.SetTimeAttack(false);
-        int level = CampaignManager.GetCurrentLevel();
-        PlayerPrefs.SetInt(MathRunner.Core.GameConstants.PREF_CAMPAIGN_ACTIVE, 1);
-        PlayerPrefs.SetInt(MathRunner.Core.GameConstants.PREF_CAMPAIGN_LEVEL, level);
-        var config = CampaignManager.GetLevelConfig(level);
-        GameState.SetQuestionType(config.MathMode.ToPlayerPrefsString());
+        GameManager.instance.LoadMainMenu();
     }
 }
