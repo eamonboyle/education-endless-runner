@@ -20,6 +20,10 @@ public class LevelGenerator : MonoBehaviour
             player = GameObject.FindWithTag("Player");
 
         GameObject[] floors = GameObject.FindGameObjectsWithTag("Floor");
+        
+        // Sort floor pieces by their Z coordinate in ascending order
+        System.Array.Sort(floors, (a, b) => a.transform.position.z.CompareTo(b.transform.position.z));
+
         foreach (GameObject piece in floors)
         {
             floorPieces.Add(piece);
