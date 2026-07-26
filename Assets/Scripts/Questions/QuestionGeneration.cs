@@ -30,6 +30,9 @@ public class QuestionGeneration : MonoBehaviour
 
     private float questionSpacing = 50.0f;
 
+    private int questionsSpawnedThisRun;
+    private string lastSpokenQuestion;
+
     public enum QuestionType
     {
         Addition,
@@ -39,7 +42,13 @@ public class QuestionGeneration : MonoBehaviour
     }
     public void AddQuestion(bool removeOldest = false)
     {
-        Question question = new Question();
+        questionsSpawnedThisRun++;
+        Question question;
+        if (BossQuestion.ShouldSpawnBoss(questionsSpawnedThisRun))
+            question = new Question(new BossQuestion());
+        else
+            question = new Question();
+
         questions.Add(question);
 
         if (removeOldest)
@@ -208,6 +217,25 @@ public class QuestionGeneration : MonoBehaviour
 
         var text = questionText.GetComponent<Text>();
         if (text != null)
-            text.text = questions[0].Text;
+        {
+            string next = questions[0].Text;
+            text.text = next;
+            ApplyTextScale(text);
+            if (next != lastSpokenQuestion)
+            {
+                lastSpokenQuestion = next;
+                if (TextToSpeechManager.Instance != null)
+                    TextToSpeechManager.Instance.SpeakQuestion(next);
+            }
+        }
+    }
+
+    private static void ApplyTextScale(Text text)
+    {
+        if (AccessibilityManager.Instance == null) return;
+        float scale = AccessibilityManager.Instance.GetTextScale();
+        text.fontSize = Mathf.RoundToInt(40f * scale);
+        if (AccessibilityManager.Instance.HighContrastMode)
+            text.color = Color.white;
     }
 }

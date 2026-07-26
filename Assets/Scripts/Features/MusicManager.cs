@@ -23,6 +23,7 @@ public class MusicManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
         InitAudioSources();
+        LoadClipsFromResources();
     }
 
     #endregion
@@ -52,6 +53,60 @@ public class MusicManager : MonoBehaviour
     private Coroutine crossfadeCoroutine;
     private float volume = 1.0f;
     private bool isPlayingGameplay;
+
+    private void LoadClipsFromResources()
+    {
+        if (gameplayMusic == null)
+            gameplayMusic = Resources.Load<AudioClip>("bg-music1");
+        if (menuMusic == null)
+            menuMusic = gameplayMusic;
+        if (gameOverMusic == null)
+            gameOverMusic = Resources.Load<AudioClip>("gameover");
+        if (bossMusic == null)
+            bossMusic = gameplayMusic;
+    }
+
+    private void Start()
+    {
+        MuteLegacyLoopingMusicSources();
+        PlayMenu();
+    }
+
+    private void MuteLegacyLoopingMusicSources()
+    {
+        AudioSource[] sources = Object.FindObjectsByType<AudioSource>(FindObjectsInactive.Include);
+        for (int i = 0; i < sources.Length; i++)
+        {
+            AudioSource src = sources[i];
+            if (src == null || src == sourceA || src == sourceB) continue;
+            if (src.loop && src.playOnAwake)
+            {
+                src.Stop();
+                src.playOnAwake = false;
+            }
+        }
+    }
+
+    private void OnEnable()
+    {
+        UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        UnityEngine.SceneManagement.SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode mode)
+    {
+        string n = scene.name;
+        if (n == "Game" || n == "Tutorial")
+            PlayGameplay();
+        else if (n.Contains("GameOver"))
+            PlayGameOver();
+        else
+            PlayMenu();
+    }
 
     private void InitAudioSources()
     {
@@ -90,11 +145,26 @@ public class MusicManager : MonoBehaviour
         CrossfadeTo(gameplayMusic);
     }
 
-    /// <summary>Crossfades to the game-over music track.</summary>
+    /// <summary>Stops gameplay music and plays a non-looping game-over sting when available.</summary>
     public void PlayGameOver()
     {
         isPlayingGameplay = false;
-        CrossfadeTo(gameOverMusic);
+
+        if (crossfadeCoroutine != null)
+        {
+            StopCoroutine(crossfadeCoroutine);
+            crossfadeCoroutine = null;
+        }
+
+        if (sourceA != null) { sourceA.Stop(); sourceA.loop = true; sourceA.pitch = 1f; }
+        if (sourceB != null) { sourceB.Stop(); sourceB.loop = true; sourceB.pitch = 1f; }
+
+        if (gameOverMusic == null || !SettingState.GetSound()) return;
+
+        activeSource.loop = false;
+        activeSource.clip = gameOverMusic;
+        activeSource.volume = GetEffectiveVolume();
+        activeSource.Play();
     }
 
     /// <summary>Crossfades to the boss encounter music track.</summary>
@@ -134,10 +204,13 @@ public class MusicManager : MonoBehaviour
     {
         if (clip == null) return;
 
-        if (activeSource != null && activeSource.clip == clip && activeSource.isPlaying)
+        if (activeSource != null && activeSource.clip == clip && activeSource.isPlaying && activeSource.loop)
         {
             return;
         }
+
+        if (sourceA != null) sourceA.loop = true;
+        if (sourceB != null) sourceB.loop = true;
 
         if (crossfadeCoroutine != null)
         {

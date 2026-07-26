@@ -1,30 +1,40 @@
 # Features folder status
 
-Most scripts in this folder were added as aspirational systems and are **not
-wired into scenes or prefabs**. They still compile into the player (IL2CPP /
-low managed stripping).
+Updated after the dead-feature wiring pass.
 
-## Live (via GameBootstrap / QuestionBox)
+## Live (via GameBootstrap)
 
-- `ComboSystem`
-- `PowerUpSystem`
-- `AnswerFeedback`
-- `ScreenShake`
-- `ScorePopup` (static factory)
-- `ReducedMotionManager` (instance exists; gameplay does not query it yet)
+- `ComboSystem`, `LivesSystem`, `DifficultyPresets`, `TimeAttackMode`, `CampaignManager`
+- `PowerUpSystem`, `PowerUpSpawner`, `PowerUpDisplay` (procedural pickups + HUD slots)
+- `ScreenShake` (shakes `Camera.main`), `AnswerFeedback`, `ScorePopup`
+- `ReducedMotionManager` (queried by shake / flash / particles / dust / popups)
+- `AccessibilityManager`, `DyslexiaFontManager`, `InputManager`, `TextToSpeechManager`
+- `ParticleEffectLibrary`, `MusicManager` (loads `Resources/bg-music1` + `gameover`)
+- `InGameHUD`, `HighScoreCelebration`, `ScreenFlash`, `UnlockNotification`, `DifficultyIndicator`
+- `AchievementPopup`, `RewardAnimation`, `ProgressionUIBootstrap`, `ObstacleSpawner`
 
-## Called but non-functional without a scene instance
+## Progression
 
-- `PowerUpSpawner` / `PowerUpCollectible`
+- `RunEndPipeline` (from `GameState.ShowGameOverUI`) awards XP, achievements, game/time played,
+  character unlocks, campaign completion, and last-played / daily graph prefs.
+- MainMenu / Settings get runtime `DailyChallengeDisplay`, `WeeklyChallengeDisplay`, `StatsDisplay`,
+  and `AccessibilitySettingsUI` via `ProgressionUIBootstrap`.
+- ModeChoice gets `ModeSelectExtras` (Time Attack / Campaign / Difficulty).
 
-## Currently inert (leave alone unless integrating)
+## Still optional / art-dependent (manual Unity polish)
 
-Leaderboards, music, themes, unlocks, challenge codes, share cards, TTS,
-dyslexia font, one-handed mode, accessibility manager, ghost runs, particle
-library, speed trail, online leaderboard.
+- Hand-authored power-up pickup prefab under `Resources/PowerUpPickup` (code falls back to spheres)
+- Dyslexia font asset assigned on `DyslexiaFontManager` (OpenDyslexic / Lexend)
+- Dedicated menu/boss music tracks
+- CharacterSelect lock visuals for the 8 unlockable characters
+- Hand-authored challenge / stats panels replacing the runtime overlays
 
-## Intentionally not bootstrapped (duplicate scene UI)
+## Intentionally not bootstrapped
 
-- `PauseButton` — scene already has `PauseMenu` on `InGameUI`
-- `SessionSummary` — scene already has `GameOverUI` canvas
-- `QuestionHistoryDisplay` — OnGUI panel stacked on top of `GameOverUI`
+- `PauseButton`, `SessionSummary`, `QuestionHistoryDisplay` — duplicate scene Pause/GameOver UI
+
+## Deleted as superseded
+
+- `SettingsEnhanced`, `MainMenuEnhanced`, `ModeSelectEnhanced`, `GameOverEnhanced`
+- `ComboDisplay`, `Menu/GameOver`, `SaveSystem`, `PlayerProfile`, `GameOverDataProvider`
+- `TutorialCountdown`, legacy `QuestionGenerator`

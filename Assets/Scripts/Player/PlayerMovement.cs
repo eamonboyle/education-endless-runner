@@ -1,4 +1,5 @@
 using UnityEngine;
+using MathRunner.Core;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -41,18 +42,27 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-        // get the currentSpeed
         forwardSpeed = GameState.GetCharacterSpeed();
 
-        if (playerController.swipeRight)
+        bool swipeRight = false;
+        bool swipeLeft = false;
+
+        var input = InputManager.Instance;
+        if (input != null)
         {
-            CalculateLane(MoveDirection.Right);
+            swipeRight = input.GetSwipeRight();
+            swipeLeft = input.GetSwipeLeft();
+        }
+        else if (playerController != null)
+        {
+            swipeRight = playerController.swipeRight;
+            swipeLeft = playerController.swipeLeft;
         }
 
-        if (playerController.swipeLeft)
-        {
+        if (swipeRight)
+            CalculateLane(MoveDirection.Right);
+        if (swipeLeft)
             CalculateLane(MoveDirection.Left);
-        }
 
         MoveCharacter();
     }
@@ -122,11 +132,17 @@ public class PlayerMovement : MonoBehaviour
             audioSource.Play();
         }
 
-        if (dust != null)
+        if (dust != null && !IsReducedMotion())
         {
             Vector3 dustSpawn = transform.position;
             dustSpawn.z += MathRunner.Core.GameConstants.DUST_OFFSET_Z;
             Instantiate(dust, dustSpawn, Quaternion.identity, transform);
         }
+    }
+
+    private static bool IsReducedMotion()
+    {
+        return ReducedMotionManager.Instance != null
+            && ReducedMotionManager.Instance.IsReducedMotion();
     }
 }

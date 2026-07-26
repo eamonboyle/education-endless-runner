@@ -25,6 +25,7 @@ public static class GameState
         questionsAnsweredThisGame = 0;
         correctAnswersThisGame = 0;
         SetQuestionExists(false);
+        RunEndPipeline.Reset();
     }
 
     public static void StartGame()
@@ -269,7 +270,11 @@ public static class GameState
 
     public static void ShowGameOverUI()
     {
+        RunEndPipeline.Process();
         PrefsFlush.Flush();
+
+        if (MusicManager.Instance != null)
+            MusicManager.Instance.PlayGameOver();
 
         QuestionBoxShow(false);
         SetRunning(false);

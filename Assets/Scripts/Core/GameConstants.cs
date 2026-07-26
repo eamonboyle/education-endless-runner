@@ -139,6 +139,30 @@ namespace MathRunner.Core
         /// <summary>Key for the highest unlocked campaign level (int).</summary>
         public const string PREF_CAMPAIGN_PROGRESS = "campaignProgress";
 
+        /// <summary>Key for active campaign run flag (int: 0 or 1).</summary>
+        public const string PREF_CAMPAIGN_ACTIVE = "campaignActive";
+
+        /// <summary>Key for the campaign level being played this run (int).</summary>
+        public const string PREF_CAMPAIGN_LEVEL = "campaignLevel";
+
+        /// <summary>Last run best streak (int).</summary>
+        public const string PREF_LAST_BEST_STREAK = "lastBestStreak";
+
+        /// <summary>Last run correct answers (int).</summary>
+        public const string PREF_LAST_CORRECT_ANSWERS = "lastCorrectAnswers";
+
+        /// <summary>Last played mode name (string).</summary>
+        public const string PREF_LAST_PLAYED_MODE = "lastPlayedMode";
+
+        /// <summary>Last played score (int).</summary>
+        public const string PREF_LAST_PLAYED_SCORE = "lastPlayedScore";
+
+        /// <summary>Prefix for daily high score. Append yyyy-MM-dd.</summary>
+        public const string PREF_DAILY_SCORE_PREFIX = "dailyScore_";
+
+        /// <summary>Prefix for daily questions answered. Append yyyy-MM-dd.</summary>
+        public const string PREF_DAILY_QUESTIONS_PREFIX = "dailyQuestions_";
+
         #endregion
     }
 }

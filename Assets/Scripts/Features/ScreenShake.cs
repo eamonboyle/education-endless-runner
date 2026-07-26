@@ -2,9 +2,8 @@ using System.Collections;
 using UnityEngine;
 
 /// <summary>
-/// Applies camera shake effects by temporarily offsetting the camera position.
-/// Provides preset intensities and respects the accessibility reduced-motion
-/// setting via <see cref="AccessibilityManager"/>.
+/// Applies camera shake effects by temporarily offsetting the main camera position.
+/// Respects the accessibility reduced-motion setting via <see cref="ReducedMotionManager"/>.
 /// </summary>
 public class ScreenShake : MonoBehaviour
 {
@@ -44,30 +43,41 @@ public class ScreenShake : MonoBehaviour
     [SerializeField, Tooltip("Duration for the big shake preset (seconds).")]
     private float bigDuration = 0.4f;
 
+    private Transform cameraTransform;
     private Vector3 originalPosition;
     private Coroutine shakeCoroutine;
 
     private void Start()
     {
-        originalPosition = transform.localPosition;
+        ResolveCamera();
+    }
+
+    private void ResolveCamera()
+    {
+        if (Camera.main != null)
+        {
+            cameraTransform = Camera.main.transform;
+            originalPosition = cameraTransform.localPosition;
+        }
     }
 
     /// <summary>
     /// Triggers a camera shake with the given intensity and duration.
-    /// If <see cref="AccessibilityManager"/> has reduced-motion enabled
-    /// (high-contrast mode as a proxy), the shake is skipped.
+    /// Skipped when reduced motion is enabled.
     /// </summary>
-    /// <param name="intensity">Maximum random offset magnitude.</param>
-    /// <param name="duration">How long the shake lasts in seconds.</param>
     public void Shake(float intensity, float duration)
     {
         if (ReducedMotionEnabled()) return;
         if (intensity <= 0f || duration <= 0f) return;
 
+        if (cameraTransform == null)
+            ResolveCamera();
+        if (cameraTransform == null) return;
+
         if (shakeCoroutine != null)
         {
             StopCoroutine(shakeCoroutine);
-            transform.localPosition = originalPosition;
+            cameraTransform.localPosition = originalPosition;
         }
 
         shakeCoroutine = StartCoroutine(ShakeCoroutine(intensity, duration));
@@ -97,9 +107,15 @@ public class ScreenShake : MonoBehaviour
 
         while (elapsed < duration)
         {
+            if (cameraTransform == null)
+            {
+                shakeCoroutine = null;
+                yield break;
+            }
+
             float x = Random.Range(-intensity, intensity);
             float y = Random.Range(-intensity, intensity);
-            transform.localPosition = originalPosition + new Vector3(x, y, 0f);
+            cameraTransform.localPosition = originalPosition + new Vector3(x, y, 0f);
 
             elapsed += Time.deltaTime;
             float decay = 1f - (elapsed / duration);
@@ -108,13 +124,14 @@ public class ScreenShake : MonoBehaviour
             yield return null;
         }
 
-        transform.localPosition = originalPosition;
+        if (cameraTransform != null)
+            cameraTransform.localPosition = originalPosition;
         shakeCoroutine = null;
     }
 
     private static bool ReducedMotionEnabled()
     {
-        if (AccessibilityManager.Instance == null) return false;
-        return AccessibilityManager.Instance.HighContrastMode;
+        return ReducedMotionManager.Instance != null
+            && ReducedMotionManager.Instance.IsReducedMotion();
     }
 }

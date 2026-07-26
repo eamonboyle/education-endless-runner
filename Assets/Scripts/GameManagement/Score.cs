@@ -34,10 +34,8 @@ public class Score : MonoBehaviour
             int timePoints = 1;
 
             var powerUp = PowerUpSystem.Instance;
-            if (powerUp != null && powerUp.HasActivePowerUp(PowerUpType.DoublePoints))
-            {
-                timePoints *= 2;
-            }
+            if (powerUp != null)
+                timePoints *= powerUp.GetScoreMultiplier();
 
             score += timePoints;
             timePassed -= 1f;

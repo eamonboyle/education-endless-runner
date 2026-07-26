@@ -31,6 +31,8 @@ public class DifficultyIndicator : MonoBehaviour
 
     private void OnGUI()
     {
+        // Score-based tier label is desktop-only — too noisy on a phone screen.
+        if (Application.isMobilePlatform) return;
         if (!GameState.IsRunning()) return;
 
         int score = GameState.GetScore();
@@ -46,7 +48,7 @@ public class DifficultyIndicator : MonoBehaviour
 
         GUIStyle style = new GUIStyle(GUI.skin.label)
         {
-            fontSize = Mathf.Max(28, Mathf.RoundToInt(Screen.height * 0.028f)),
+            fontSize = Mathf.Max(22, Mathf.RoundToInt(Screen.height * 0.022f)),
             fontStyle = FontStyle.Bold,
             alignment = TextAnchor.LowerLeft
         };

@@ -105,7 +105,20 @@ public class TextToSpeechManager : MonoBehaviour
 
     private IEnumerator SpeakSequence(string text)
     {
+        // Prefer pre-recorded clips; fall back to platform TTS when clips are missing.
+        bool anyClip = false;
         string[] parts = text.Split(new[] { ' ' }, System.StringSplitOptions.RemoveEmptyEntries);
+        foreach (string part in parts)
+        {
+            if (ResolveClip(part) != null) { anyClip = true; break; }
+        }
+
+        if (!anyClip)
+        {
+            SpeakNative(text);
+            speakCoroutine = null;
+            yield break;
+        }
 
         foreach (string part in parts)
         {
@@ -118,12 +131,32 @@ public class TextToSpeechManager : MonoBehaviour
             }
             else
             {
-                Debug.Log($"TextToSpeechManager: No clip for '{part}', skipping.");
                 yield return new WaitForSeconds(componentDelay);
             }
         }
 
         speakCoroutine = null;
+    }
+
+    private static void SpeakNative(string text)
+    {
+#if UNITY_ANDROID && !UNITY_EDITOR
+        try
+        {
+            using (var unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+            using (var activity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity"))
+            using (var tts = new AndroidJavaObject("android.speech.tts.TextToSpeech", activity, null))
+            {
+                tts.Call<int>("speak", text, 0, null, "mathRunnerQ");
+            }
+        }
+        catch (System.Exception e)
+        {
+            Debug.LogWarning("TextToSpeechManager native Android failed: " + e.Message);
+        }
+#else
+        Debug.Log("TTS (no clips): " + text);
+#endif
     }
 
     private AudioClip ResolveClip(string token)

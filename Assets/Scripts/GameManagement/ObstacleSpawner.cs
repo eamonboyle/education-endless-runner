@@ -3,44 +3,28 @@ using MathRunner.Core;
 
 /// <summary>
 /// Spawns non-math obstacles between question sets at random intervals.
-/// Obstacle prefabs are assigned in the Inspector and are instantiated
-/// in one of the three lanes using positions from <see cref="GameConstants"/>.
+/// When Inspector prefabs are missing, builds simple procedural obstacle cubes.
 /// </summary>
 public class ObstacleSpawner : MonoBehaviour
 {
-    /// <summary>Types of non-math obstacles.</summary>
     public enum ObstacleType
     {
-        /// <summary>Static barrier the player must dodge by being in a different lane.</summary>
         Barrier,
-        /// <summary>Visual-only gap with no collision (atmospheric effect).</summary>
         Gap,
-        /// <summary>Obstacle that slowly moves across lanes.</summary>
         MovingWall
     }
 
     [Header("Prefabs")]
-    [SerializeField, Tooltip("Prefab for the Barrier obstacle.")]
-    private GameObject barrierPrefab;
-
-    [SerializeField, Tooltip("Prefab for the Gap obstacle (visual only).")]
-    private GameObject gapPrefab;
-
-    [SerializeField, Tooltip("Prefab for the MovingWall obstacle.")]
-    private GameObject movingWallPrefab;
+    [SerializeField] private GameObject barrierPrefab;
+    [SerializeField] private GameObject gapPrefab;
+    [SerializeField] private GameObject movingWallPrefab;
 
     [Header("Settings")]
-    [SerializeField, Tooltip("Chance (0–1) of spawning an obstacle between questions.")]
-    private float spawnChance = 0.2f;
-
-    [SerializeField, Tooltip("Z offset ahead of the player where obstacles are spawned.")]
-    private float spawnDistanceAhead = 60f;
-
-    [SerializeField, Tooltip("Reference to the player GameObject.")]
-    private GameObject player;
-
-    [SerializeField, Tooltip("Parent transform for spawned obstacles (optional).")]
-    private Transform obstacleContainer;
+    [SerializeField] private float spawnChance = 0.15f;
+    [SerializeField] private float spawnDistanceAhead = 60f;
+    [SerializeField] private GameObject player;
+    [SerializeField] private Transform obstacleContainer;
+    [SerializeField] private bool enableObstacles = true;
 
     private static readonly float[] LanePositions =
     {
@@ -64,6 +48,7 @@ public class ObstacleSpawner : MonoBehaviour
 
     private void Update()
     {
+        if (!enableObstacles) return;
         if (!GameState.IsRunning() || player == null) return;
 
         if (player.transform.position.z + spawnDistanceAhead > nextSpawnZ)
@@ -73,43 +58,69 @@ public class ObstacleSpawner : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Attempts to spawn an obstacle based on <see cref="spawnChance"/>.
-    /// Called automatically between question sets.
-    /// </summary>
     public void TrySpawnObstacle()
     {
         if (Random.value > spawnChance) return;
 
         ObstacleType type = (ObstacleType)Random.Range(0, 3);
-        GameObject prefab = GetPrefab(type);
-
-        if (prefab == null) return;
-
         int laneIndex = Random.Range(0, LanePositions.Length);
         float xPos = LanePositions[laneIndex];
         float zPos = player != null ? player.transform.position.z + spawnDistanceAhead : nextSpawnZ;
-
         Vector3 spawnPos = new Vector3(xPos, GameConstants.BOX_HEIGHT, zPos);
 
-        GameObject obstacle = Instantiate(prefab, spawnPos, Quaternion.identity,
-            obstacleContainer != null ? obstacleContainer : transform);
+        GameObject prefab = GetPrefab(type);
+        GameObject obstacle;
+        if (prefab != null)
+        {
+            obstacle = Instantiate(prefab, spawnPos, Quaternion.identity,
+                obstacleContainer != null ? obstacleContainer : transform);
+        }
+        else
+        {
+            obstacle = CreateProceduralObstacle(type, spawnPos);
+        }
 
         Obstacle obstacleComponent = obstacle.GetComponent<Obstacle>();
         if (obstacleComponent != null)
-        {
             obstacleComponent.Type = type;
+    }
+
+    private GameObject CreateProceduralObstacle(ObstacleType type, Vector3 position)
+    {
+        PrimitiveType prim = type == ObstacleType.Gap ? PrimitiveType.Cylinder : PrimitiveType.Cube;
+        GameObject go = GameObject.CreatePrimitive(prim);
+        go.name = "Obstacle_" + type;
+        go.transform.SetParent(obstacleContainer != null ? obstacleContainer : transform, false);
+        go.transform.position = position;
+        go.transform.localScale = type == ObstacleType.MovingWall
+            ? new Vector3(0.8f, 1.2f, 0.8f)
+            : new Vector3(1.2f, 1.5f, 0.6f);
+
+        var col = go.GetComponent<Collider>();
+        if (col != null)
+            col.isTrigger = true;
+
+        var renderer = go.GetComponent<MeshRenderer>();
+        if (renderer != null)
+        {
+            Color c = type == ObstacleType.Gap ? new Color(0.2f, 0.2f, 0.2f, 0.4f)
+                : type == ObstacleType.MovingWall ? new Color(0.9f, 0.3f, 0.2f)
+                : new Color(0.6f, 0.35f, 0.15f);
+            renderer.material.color = c;
         }
+
+        go.AddComponent<Obstacle>().Type = type;
+        return go;
     }
 
     private GameObject GetPrefab(ObstacleType type)
     {
         switch (type)
         {
-            case ObstacleType.Barrier:    return barrierPrefab;
-            case ObstacleType.Gap:        return gapPrefab;
+            case ObstacleType.Barrier: return barrierPrefab;
+            case ObstacleType.Gap: return gapPrefab;
             case ObstacleType.MovingWall: return movingWallPrefab;
-            default:                      return barrierPrefab;
+            default: return barrierPrefab;
         }
     }
 }

@@ -164,20 +164,24 @@ public class ParticleEffectLibrary : MonoBehaviour
         go.transform.position = position;
 
         ParticleSystem ps = go.AddComponent<ParticleSystem>();
+        // AddComponent starts the system with playOnAwake; stop before mutating main module.
+        ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+
         var main = ps.main;
+        main.playOnAwake = false;
+        main.loop = false;
+        main.duration = 0.5f;
         main.startLifetime = 1f;
         main.startSpeed = 3f * scale;
         main.startSize = 0.15f * scale;
         main.startColor = color;
-        main.duration = 0.5f;
-        main.loop = false;
         main.maxParticles = Mathf.RoundToInt(30 * scale);
 
         var emission = ps.emission;
         emission.rateOverTime = 0f;
         emission.SetBursts(new ParticleSystem.Burst[]
         {
-            new ParticleSystem.Burst(0f, (short)(20 * scale))
+            new ParticleSystem.Burst(0f, (short)Mathf.Max(1, Mathf.RoundToInt(20 * scale)))
         });
 
         var shape = ps.shape;
@@ -186,7 +190,7 @@ public class ParticleEffectLibrary : MonoBehaviour
 
         ps.Play();
 
-        Destroy(go, main.duration + main.startLifetime.constantMax + 0.5f);
+        Object.Destroy(go, main.duration + main.startLifetime.constantMax + 0.5f);
     }
 
     private static Color GetFallbackColor(string effectName)

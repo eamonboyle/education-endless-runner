@@ -3,20 +3,22 @@ using UnityEngine;
 
 /// <summary>
 /// Spawns power-up collectibles in random lanes during gameplay.
-/// Attach to a manager GameObject in the game scene.
+/// Uses a Resources prefab when available, otherwise builds pickups procedurally.
 /// </summary>
 public class PowerUpSpawner : MonoBehaviour
 {
-    [SerializeField, Tooltip("Prefab with a PowerUpCollectible component.")]
+    private const string ResourcesPrefabPath = "PowerUpPickup";
+
+    [SerializeField, Tooltip("Prefab with a PowerUpCollectible component. Optional — falls back to Resources then procedural.")]
     private GameObject powerUpPrefab;
 
     [SerializeField, Tooltip("Parent transform for spawned power-ups (keeps hierarchy tidy).")]
     private Transform spawnParent;
 
-    [SerializeField, Tooltip("Chance (0-1) of spawning a power-up each time a question is answered.")]
+    [SerializeField, Tooltip("Chance (0-1) of spawning a power-up after a correct answer.")]
     private float spawnChance = 0.15f;
 
-    [SerializeField, Tooltip("How far ahead of the player to place the power-up (Z offset).")]
+    [SerializeField, Tooltip("How far ahead of the answer position to place the power-up (Z offset).")]
     private float spawnAheadDistance = 25f;
 
     private static readonly float[] LanePositions =
@@ -26,68 +28,48 @@ public class PowerUpSpawner : MonoBehaviour
         GameConstants.RIGHT_LANE
     };
 
-    /// <summary>
-    /// Call after each question is answered to potentially spawn a power-up.
-    /// Only spawns when the game is actively running.
-    /// </summary>
-    public void OnQuestionAnswered()
+    private void Awake()
     {
-        if (!GameState.IsRunning()) return;
-        if (powerUpPrefab == null) return;
-
-        if (Random.value > spawnChance) return;
-
-        SpawnRandomPowerUp();
+        if (powerUpPrefab == null)
+            powerUpPrefab = Resources.Load<GameObject>(ResourcesPrefabPath);
     }
 
+    /// <summary>
+    /// Chance-based spawn ahead of the given world position (typically a answered question box).
+    /// </summary>
     public void TrySpawnPowerUp(Vector3 position)
     {
         if (!GameState.IsRunning()) return;
-        if (powerUpPrefab == null) return;
         if (Random.value > spawnChance) return;
 
         float laneX = LanePositions[Random.Range(0, LanePositions.Length)];
         float spawnZ = position.z + spawnAheadDistance;
         Vector3 spawnPos = new Vector3(laneX, GameConstants.BOX_HEIGHT, spawnZ);
 
-        GameObject instance = Instantiate(powerUpPrefab, spawnPos, Quaternion.identity, spawnParent);
-
-        PowerUpCollectible collectible = instance.GetComponent<PowerUpCollectible>();
-        if (collectible == null)
-        {
-            Debug.LogWarning("PowerUpSpawner: Prefab is missing a PowerUpCollectible component.");
-            Destroy(instance);
-        }
+        PowerUpType randomType = (PowerUpType)Random.Range(0, System.Enum.GetValues(typeof(PowerUpType)).Length);
+        SpawnAt(spawnPos, randomType);
     }
 
-    private void SpawnRandomPowerUp()
+    private void SpawnAt(Vector3 position, PowerUpType type)
     {
-        GameObject player = GameObject.FindWithTag("Player");
-        if (player == null)
+        GameObject instance;
+        if (powerUpPrefab != null)
         {
-            Debug.LogWarning("PowerUpSpawner: No GameObject tagged 'Player' found.");
-            return;
+            instance = Instantiate(powerUpPrefab, position, Quaternion.identity, spawnParent);
         }
-
-        float laneX = LanePositions[Random.Range(0, LanePositions.Length)];
-        float spawnZ = player.transform.position.z + spawnAheadDistance;
-        Vector3 position = new Vector3(laneX, GameConstants.BOX_HEIGHT, spawnZ);
-
-        GameObject instance = Instantiate(powerUpPrefab, position, Quaternion.identity, spawnParent);
+        else
+        {
+            instance = PowerUpFactory.CreatePickup(type, position, spawnParent);
+        }
 
         PowerUpCollectible collectible = instance.GetComponent<PowerUpCollectible>();
         if (collectible == null)
         {
-            Debug.LogWarning("PowerUpSpawner: Prefab is missing a PowerUpCollectible component.");
+            Debug.LogWarning("PowerUpSpawner: Pickup is missing a PowerUpCollectible component.");
             Destroy(instance);
             return;
         }
 
-        int typeCount = System.Enum.GetValues(typeof(PowerUpType)).Length;
-        PowerUpType randomType = (PowerUpType)Random.Range(0, typeCount);
-
-        // The PowerUpCollectible's serialized field is set via the prefab variant;
-        // if a single generic prefab is used, override the type at runtime through reflection
-        // or use separate prefabs per type.  For now the prefab's default type is kept.
+        collectible.SetType(type);
     }
 }

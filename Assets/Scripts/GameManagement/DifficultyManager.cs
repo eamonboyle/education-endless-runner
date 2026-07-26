@@ -66,7 +66,11 @@ public class DifficultyManager : MonoBehaviour
         if (GameState.IsRunning())
         {
             currentSpeed += (Time.deltaTime / speedMultiplier);
-            GameState.SetCharacterSpeed(currentSpeed);
+            float effectiveSpeed = currentSpeed;
+            var powerUps = PowerUpSystem.Instance;
+            if (powerUps != null)
+                effectiveSpeed *= powerUps.GetSpeedMultiplier();
+            GameState.SetCharacterSpeed(effectiveSpeed);
         }
     }
 }

@@ -1,7 +1,4 @@
-﻿using Assets.Scripts.GameManagement;
-using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 

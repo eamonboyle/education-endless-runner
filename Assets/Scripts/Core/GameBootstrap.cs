@@ -1,4 +1,5 @@
 using UnityEngine;
+using MathRunner.Core;
 
 /// <summary>
 /// Automatically creates all singleton systems that the game needs at runtime.
@@ -14,6 +15,9 @@ public class GameBootstrap : MonoBehaviour
         EnsureSingleton<TimeAttackMode>();
         EnsureSingleton<CampaignManager>();
         EnsureSingleton<PowerUpSystem>();
+        EnsureSingleton<PowerUpSpawner>();
+        EnsureSingleton<PowerUpDisplay>();
+        EnsureSingleton<ObstacleSpawner>();
         EnsureSingleton<ScreenShake>();
         EnsureSingleton<AnswerFeedback>();
         EnsureSingleton<ReducedMotionManager>();
@@ -25,9 +29,18 @@ public class GameBootstrap : MonoBehaviour
         EnsureSingleton<ScreenFlash>();
         EnsureSingleton<UnlockNotification>();
         EnsureSingleton<DifficultyIndicator>();
+        EnsureSingleton<AchievementPopup>();
+        EnsureSingleton<RewardAnimation>();
+        EnsureSingleton<AccessibilityManager>();
+        EnsureSingleton<DyslexiaFontManager>();
+        EnsureSingleton<InputManager>();
+        EnsureSingleton<TextToSpeechManager>();
+        EnsureSingleton<ParticleEffectLibrary>();
+        EnsureSingleton<MusicManager>();
+        EnsureSingleton<ProgressionUIBootstrap>();
     }
 
-    private void EnsureSingleton<T>() where T : MonoBehaviour
+    private void EnsureSingleton<T>() where T : Component
     {
         if (FindAnyObjectByType<T>() == null)
         {

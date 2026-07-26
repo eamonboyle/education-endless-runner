@@ -10,7 +10,6 @@ public class QuestionBox : MonoBehaviour
     public string questionText;
 
     private static PowerUpSpawner cachedPowerUpSpawner;
-    private static bool powerUpSpawnerLookupDone;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -53,9 +52,8 @@ public class QuestionBox : MonoBehaviour
     private void HandleIncorrectAnswer(QuestionGeneration qg, bool isTimeAttack)
     {
         var powerUpSystem = PowerUpSystem.Instance;
-        if (powerUpSystem != null && powerUpSystem.HasActivePowerUp(PowerUpType.Shield))
+        if (powerUpSystem != null && powerUpSystem.TryConsumeShield())
         {
-            powerUpSystem.DeactivatePowerUp(PowerUpType.Shield);
             AnswerFeedback.PlayIncorrect(transform.position);
             HapticFeedback.VibrateOnWrongAnswer();
             var combo = ComboSystem.Instance;
@@ -71,6 +69,9 @@ public class QuestionBox : MonoBehaviour
         AnswerFeedback.PlayIncorrect(transform.position);
         ScreenFlash.FlashRed();
         HapticFeedback.VibrateOnWrongAnswer();
+
+        if (ParticleEffectLibrary.Instance != null)
+            ParticleEffectLibrary.Instance.PlayEffect("wrong_burst", transform.position);
 
         if (ScreenShake.Instance != null)
             ScreenShake.Instance.MediumShake();
@@ -112,6 +113,9 @@ public class QuestionBox : MonoBehaviour
         ScreenFlash.FlashGreen();
         QuestionHistoryDisplay.RecordQuestion(questionText, number, correctNumber);
 
+        if (ParticleEffectLibrary.Instance != null)
+            ParticleEffectLibrary.Instance.PlayEffect("correct_confetti", transform.position);
+
         var audioSource = Camera.main != null ? Camera.main.GetComponent<AudioSource>() : null;
         if (audioSource != null) audioSource.Play();
 
@@ -121,11 +125,13 @@ public class QuestionBox : MonoBehaviour
         {
             combo.RecordCorrectAnswer();
             bonusPoints *= combo.GetMultiplier();
+            if (ParticleEffectLibrary.Instance != null)
+                ParticleEffectLibrary.Instance.PlayStreakEffect(combo.GetCurrentStreak(), transform.position);
         }
 
         var powerUp = PowerUpSystem.Instance;
-        if (powerUp != null && powerUp.HasActivePowerUp(PowerUpType.DoublePoints))
-            bonusPoints *= 2;
+        if (powerUp != null)
+            bonusPoints *= powerUp.GetScoreMultiplier();
 
         if (isTimeAttack)
         {
@@ -137,7 +143,6 @@ public class QuestionBox : MonoBehaviour
         ScorePopup.Create(transform.position + Vector3.up * 2f, bonusPoints, null);
 
         DailyChallengeData.RecordProgress(GameState.GetQuestionType());
-        WeeklyChallengeData.RecordProgress(GameState.GetQuestionType());
 
         qg.AddQuestion(true);
 
@@ -147,42 +152,17 @@ public class QuestionBox : MonoBehaviour
 
     private static PowerUpSpawner GetPowerUpSpawner()
     {
-        if (!powerUpSpawnerLookupDone)
-        {
+        if (cachedPowerUpSpawner == null)
             cachedPowerUpSpawner = Object.FindAnyObjectByType<PowerUpSpawner>();
-            powerUpSpawnerLookupDone = true;
-        }
         return cachedPowerUpSpawner;
     }
 
     private void AnsweredIncorrectly()
     {
-        string mode = GameState.GetQuestionType();
-        int score = GameState.GetScore();
-
-        AnalyticsManager.LogEvent("GameEnded", new Dictionary<string, string> {
-            { "score", score.ToString() },
-            { "mode", mode },
-            { "duration", GameState.GetGameDuration().ToString("F1") }
-        });
-
-        int xpEarned = CalculateXP();
-        XPSystem.AddXP(xpEarned);
-        AchievementData.CheckAchievements();
-
-        PrefsFlush.Flush();
-
+        // Boxes for this question were already destroyed. Drop it from the
+        // buffer so Continue doesn't show its text against the next row's boxes.
         GameState.ShowGameOverUI();
         PlayFallAnimation();
-    }
-
-    private int CalculateXP()
-    {
-        int baseXP = GameState.GetScore() / 10;
-        float accuracy = GameState.GetAccuracyThisGame();
-        if (accuracy > 90f) baseXP = (int)(baseXP * 1.5f);
-        else if (accuracy > 75f) baseXP = (int)(baseXP * 1.25f);
-        return Mathf.Max(1, baseXP);
     }
 
     private void PlayFallAnimation()
