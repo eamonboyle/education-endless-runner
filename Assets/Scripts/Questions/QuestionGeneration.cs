@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using MathRunner.UI.Toolkit;
 
 // the new generation class
 public class QuestionGeneration : MonoBehaviour
@@ -212,21 +213,30 @@ public class QuestionGeneration : MonoBehaviour
         if (!GameState.IsRunning())
             return;
 
-        if (questionText == null || questions == null || questions.Count == 0)
+        if (questions == null || questions.Count == 0)
             return;
 
-        var text = questionText.GetComponent<Text>();
-        if (text != null)
+        string next = questions[0].Text;
+
+        if (UIRouter.Instance?.Hud != null)
         {
-            string next = questions[0].Text;
-            text.text = next;
-            ApplyTextScale(text);
-            if (next != lastSpokenQuestion)
+            UIRouter.Instance.Hud.SetQuestion(next, true);
+        }
+        else if (questionText != null)
+        {
+            var text = questionText.GetComponent<Text>();
+            if (text != null)
             {
-                lastSpokenQuestion = next;
-                if (TextToSpeechManager.Instance != null)
-                    TextToSpeechManager.Instance.SpeakQuestion(next);
+                text.text = next;
+                ApplyTextScale(text);
             }
+        }
+
+        if (next != lastSpokenQuestion)
+        {
+            lastSpokenQuestion = next;
+            if (TextToSpeechManager.Instance != null)
+                TextToSpeechManager.Instance.SpeakQuestion(next);
         }
     }
 

@@ -1,0 +1,55 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Style src="../Styles/tokens.uss" />
+    <ui:Style src="../Styles/components.uss" />
+    <ui:Style src="../Styles/accessibility.uss" />
+    <ui:VisualElement name="mode-root" class="menu-bg" picking-mode="Ignore">
+        <ui:VisualElement name="question-type-panel" class="safe-area menu-shell">
+            <ui:VisualElement class="brand-block" picking-mode="Ignore">
+                <ui:Label class="title title--on-sky" text="Pick your math" picking-mode="Ignore" />
+                <ui:Label class="subtitle subtitle--on-sky" text="Each lane holds an answer" picking-mode="Ignore" />
+                <ui:VisualElement class="lane-stripes" picking-mode="Ignore">
+                    <ui:VisualElement class="lane-dash lane-dash--left" picking-mode="Ignore" />
+                    <ui:VisualElement class="lane-dash lane-dash--center" picking-mode="Ignore" />
+                    <ui:VisualElement class="lane-dash lane-dash--right" picking-mode="Ignore" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement class="menu-dock">
+                <ui:VisualElement class="op-grid">
+                    <ui:Button name="addition-button" class="op-tile" text="+&#10;Addition" />
+                    <ui:Button name="subtraction-button" class="op-tile" text="−&#10;Subtract" />
+                    <ui:Button name="multiply-button" class="op-tile" text="×&#10;Multiply" />
+                    <ui:Button name="division-button" class="op-tile" text="÷&#10;Divide" />
+                </ui:VisualElement>
+                <ui:Button name="home-button" class="btn btn--secondary btn--block" text="Home" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="play-style-panel" class="safe-area menu-shell hidden">
+            <ui:VisualElement class="brand-block" picking-mode="Ignore">
+                <ui:Label name="style-header" class="title title--on-sky" text="How do you run?" picking-mode="Ignore" />
+                <ui:Label name="questions-pill" class="subtitle subtitle--on-sky" text="Addition" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:VisualElement class="menu-dock">
+                <ui:VisualElement name="classic-card" class="card" picking-mode="Position">
+                    <ui:Label class="card__title" text="Classic" picking-mode="Ignore" />
+                    <ui:Label class="card__subtitle" text="Endless run — keep answering" picking-mode="Ignore" />
+                </ui:VisualElement>
+                <ui:VisualElement name="timeattack-card" class="card" picking-mode="Position">
+                    <ui:Label class="card__title" text="Time Attack" picking-mode="Ignore" />
+                    <ui:Label class="card__subtitle" text="Beat the clock" picking-mode="Ignore" />
+                </ui:VisualElement>
+                <ui:VisualElement name="campaign-card" class="card" picking-mode="Position">
+                    <ui:Label class="card__title" text="Campaign" picking-mode="Ignore" />
+                    <ui:Label class="card__subtitle" text="Level-by-level climb" picking-mode="Ignore" />
+                </ui:VisualElement>
+                <ui:Label class="label label--muted" text="Difficulty" style="-unity-text-align: middle-center; margin-top: 8px;" />
+                <ui:VisualElement class="chip-row">
+                    <ui:Button name="easy-chip" class="chip" text="Easy" />
+                    <ui:Button name="normal-chip" class="chip selected" text="Normal" />
+                    <ui:Button name="hard-chip" class="chip" text="Hard" />
+                </ui:VisualElement>
+                <ui:Button name="play-button" class="btn btn--primary btn--block" text="Start run" />
+                <ui:Button name="back-button" class="btn btn--secondary btn--block" text="Back" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

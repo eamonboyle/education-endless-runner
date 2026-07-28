@@ -1,0 +1,16 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Style src="../Styles/tokens.uss" />
+    <ui:Style src="../Styles/components.uss" />
+    <ui:Style src="../Styles/accessibility.uss" />
+    <ui:VisualElement name="character-root" class="menu-bg" picking-mode="Ignore">
+        <ui:VisualElement name="safe-area" class="safe-area menu-shell" picking-mode="Ignore">
+            <ui:Label class="title title--on-sky" text="Who's running?" picking-mode="Ignore" />
+            <ui:VisualElement class="menu-dock">
+                <ui:Label class="menu-dock__hint" text="Your runner. Your streak." picking-mode="Ignore" />
+                <ui:Button name="boy-button" class="btn btn--primary btn--block" text="Boy" />
+                <ui:Button name="girl-button" class="btn btn--primary btn--block" text="Girl" />
+                <ui:Button name="back-button" class="btn btn--secondary btn--block" text="Back" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

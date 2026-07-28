@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Style src="../Styles/tokens.uss" />
+    <ui:Style src="../Styles/components.uss" />
+    <ui:Style src="../Styles/accessibility.uss" />
+    <ui:VisualElement name="toast-root" class="hud-root" picking-mode="Ignore">
+        <ui:VisualElement name="toast" class="toast" picking-mode="Ignore">
+            <ui:Label name="toast-title" class="toast__title" text="" picking-mode="Ignore" />
+            <ui:Label name="toast-body" class="toast__body" text="" picking-mode="Ignore" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

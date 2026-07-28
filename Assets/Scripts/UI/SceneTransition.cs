@@ -1,13 +1,18 @@
-using System;
 using System.Collections;
+using MathRunner.UI.Toolkit;
 using UnityEngine;
+using UnityEngine.UIElements;
 
+/// <summary>
+/// Full-screen fade for scene transitions via Toolkit TransitionScreen.
+/// Legacy CanvasGroup path retained as fallback.
+/// </summary>
 public class SceneTransition : MonoBehaviour
 {
     public static SceneTransition instance;
 
-    [SerializeField] private CanvasGroup canvasGroup;
-    [SerializeField] private float defaultFadeDuration = 0.5f;
+    [SerializeField] private UnityEngine.CanvasGroup canvasGroup;
+    [SerializeField] private float defaultFadeDuration = 0.35f;
 
     private void Awake()
     {
@@ -16,86 +21,57 @@ public class SceneTransition : MonoBehaviour
             instance = this;
             DontDestroyOnLoad(gameObject);
         }
-        else
+        else if (instance != this)
         {
             Destroy(gameObject);
-            return;
         }
+    }
 
-        if (canvasGroup != null)
+    public void TransitionTo(System.Action onMidpoint)
+    {
+        StartCoroutine(TransitionCoroutine(onMidpoint, defaultFadeDuration));
+    }
+
+    private IEnumerator TransitionCoroutine(System.Action onMidpoint, float duration)
+    {
+        if (UIRouter.Instance != null)
         {
-            canvasGroup.alpha = 0f;
-            canvasGroup.blocksRaycasts = false;
+            UIRouter.Instance.FadeOut(duration);
+            yield return new WaitForSecondsRealtime(duration);
+            onMidpoint?.Invoke();
+            UIRouter.Instance.FadeIn(duration);
+            yield break;
         }
+
+        yield return FadeOutCoroutine(duration);
+        onMidpoint?.Invoke();
+        yield return FadeInCoroutine(duration);
     }
 
-    public Coroutine FadeIn(float duration)
-    {
-        return StartCoroutine(FadeInCoroutine(duration));
-    }
-
-    public Coroutine FadeOut(float duration)
-    {
-        return StartCoroutine(FadeOutCoroutine(duration));
-    }
-
-    public IEnumerator FadeInCoroutine(float duration)
+    private IEnumerator FadeOutCoroutine(float duration)
     {
         if (canvasGroup == null) yield break;
-
-        canvasGroup.blocksRaycasts = true;
-        float elapsed = 0f;
-        float startAlpha = canvasGroup.alpha;
-
-        while (elapsed < duration)
+        float t = 0f;
+        while (t < duration)
         {
-            elapsed += Time.unscaledDeltaTime;
-            canvasGroup.alpha = Mathf.Lerp(startAlpha, 1f, elapsed / duration);
+            t += Time.unscaledDeltaTime;
+            canvasGroup.alpha = Mathf.Clamp01(t / duration);
             yield return null;
         }
-
         canvasGroup.alpha = 1f;
     }
 
-    public IEnumerator FadeOutCoroutine(float duration)
+    private IEnumerator FadeInCoroutine(float duration)
     {
         if (canvasGroup == null) yield break;
-
-        float elapsed = 0f;
-        float startAlpha = canvasGroup.alpha;
-
-        while (elapsed < duration)
+        float t = 0f;
+        float start = canvasGroup.alpha;
+        while (t < duration)
         {
-            elapsed += Time.unscaledDeltaTime;
-            canvasGroup.alpha = Mathf.Lerp(startAlpha, 0f, elapsed / duration);
+            t += Time.unscaledDeltaTime;
+            canvasGroup.alpha = Mathf.Lerp(start, 0f, Mathf.Clamp01(t / duration));
             yield return null;
         }
-
         canvasGroup.alpha = 0f;
-        canvasGroup.blocksRaycasts = false;
-    }
-
-    public void TransitionTo(Action loadAction)
-    {
-        StartCoroutine(TransitionCoroutine(loadAction, defaultFadeDuration));
-    }
-
-    public void TransitionTo(Action loadAction, float duration)
-    {
-        StartCoroutine(TransitionCoroutine(loadAction, duration));
-    }
-
-    private IEnumerator TransitionCoroutine(Action loadAction, float duration)
-    {
-        yield return StartCoroutine(FadeInCoroutine(duration));
-
-        if (loadAction != null)
-        {
-            loadAction.Invoke();
-        }
-
-        yield return new WaitForSecondsRealtime(0.1f);
-
-        yield return StartCoroutine(FadeOutCoroutine(duration));
     }
 }

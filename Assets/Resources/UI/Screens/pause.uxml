@@ -1,0 +1,18 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Style src="../Styles/tokens.uss" />
+    <ui:Style src="../Styles/components.uss" />
+    <ui:Style src="../Styles/accessibility.uss" />
+    <ui:VisualElement name="pause-root" class="modal-backdrop">
+        <ui:VisualElement name="pause-card" class="modal-card">
+            <ui:VisualElement class="lane-stripes" picking-mode="Ignore" style="margin-bottom: 16px;">
+                <ui:VisualElement class="lane-dash lane-dash--left" picking-mode="Ignore" />
+                <ui:VisualElement class="lane-dash lane-dash--center" picking-mode="Ignore" />
+                <ui:VisualElement class="lane-dash lane-dash--right" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:Label name="pause-title" class="title" text="Paused" />
+            <ui:Label class="subtitle" text="The city can wait." />
+            <ui:Button name="continue-button" class="btn btn--primary btn--block" text="Keep running" />
+            <ui:Button name="quit-button" class="btn btn--secondary btn--block" text="Quit to menu" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

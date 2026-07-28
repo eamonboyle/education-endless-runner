@@ -1,5 +1,6 @@
 using UnityEngine;
 using MathRunner.Core;
+using MathRunner.UI.Toolkit;
 
 /// <summary>
 /// Automatically creates all singleton systems that the game needs at runtime.
@@ -16,19 +17,22 @@ public class GameBootstrap : MonoBehaviour
         EnsureSingleton<CampaignManager>();
         EnsureSingleton<PowerUpSystem>();
         EnsureSingleton<PowerUpSpawner>();
-        EnsureSingleton<PowerUpDisplay>();
+        // PowerUpDisplay / InGameHUD replaced by UI Toolkit HudScreen via UIRouter.
         EnsureSingleton<ObstacleSpawner>();
         EnsureSingleton<ScreenShake>();
         EnsureSingleton<AnswerFeedback>();
         EnsureSingleton<ReducedMotionManager>();
-        // InGameHUD overlays score/lives/speed during gameplay (hidden when paused/over).
-        EnsureSingleton<InGameHUD>();
-        EnsureSingleton<HighScoreCelebration>();
-        // SessionSummary / PauseButton / QuestionHistoryDisplay intentionally omitted —
-        // they draw OnGUI overlays that duplicate the scene PauseMenu and GameOverUI canvases.
+        // UI Toolkit root + router (replaces OnGUI overlays and runtime uGUI HUDs).
+        EnsureSingleton<UIRouter>();
+        EnsureSingleton<LocalizationManager>();
+        // Thin bridges keep existing call sites working during migration.
         EnsureSingleton<ScreenFlash>();
         EnsureSingleton<UnlockNotification>();
+        EnsureSingleton<HighScoreCelebration>();
         EnsureSingleton<DifficultyIndicator>();
+        EnsureSingleton<SpeedVignette>();
+        EnsureSingleton<LaneIndicator>();
+        EnsureSingleton<PauseButton>();
         EnsureSingleton<AchievementPopup>();
         EnsureSingleton<RewardAnimation>();
         EnsureSingleton<AccessibilityManager>();
@@ -37,7 +41,7 @@ public class GameBootstrap : MonoBehaviour
         EnsureSingleton<TextToSpeechManager>();
         EnsureSingleton<ParticleEffectLibrary>();
         EnsureSingleton<MusicManager>();
-        EnsureSingleton<ProgressionUIBootstrap>();
+        // Progression overlays are now Toolkit modals (stats / challenges / a11y).
     }
 
     private void EnsureSingleton<T>() where T : Component

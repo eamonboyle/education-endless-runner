@@ -1,0 +1,27 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Style src="../Styles/tokens.uss" />
+    <ui:Style src="../Styles/components.uss" />
+    <ui:Style src="../Styles/accessibility.uss" />
+    <ui:VisualElement name="main-menu-root" class="menu-bg" picking-mode="Ignore">
+        <ui:VisualElement name="safe-area" class="safe-area menu-shell" picking-mode="Ignore">
+            <ui:VisualElement class="brand-block" picking-mode="Ignore">
+                <ui:Label name="logo-eyebrow" class="logo-eyebrow" text="SWIPE  ·  SOLVE  ·  RUN" picking-mode="Ignore" />
+                <ui:VisualElement name="logo-mark" class="logo-mark" picking-mode="Ignore" />
+                <ui:Label name="logo" class="logo hidden" text="Math&#10;Runner" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:VisualElement class="menu-dock">
+                <ui:Label class="menu-dock__hint" text="Pick a lane. Nail the answer." picking-mode="Ignore" />
+                <ui:Button name="play-button" class="btn btn--primary btn--block" text="Play" />
+                <ui:VisualElement class="btn-row">
+                    <ui:Button name="mode-button" class="btn btn--secondary" text="Mode" />
+                    <ui:Button name="character-button" class="btn btn--secondary" text="Character" />
+                </ui:VisualElement>
+                <ui:VisualElement class="btn-row">
+                    <ui:Button name="stats-button" class="btn btn--secondary" text="Stats" />
+                    <ui:Button name="challenges-button" class="btn btn--secondary" text="Challenges" />
+                </ui:VisualElement>
+                <ui:Button name="settings-button" class="btn btn--secondary btn--block" text="Settings" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,0 +1,31 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:Style src="../Styles/tokens.uss" />
+    <ui:Style src="../Styles/components.uss" />
+    <ui:Style src="../Styles/accessibility.uss" />
+    <ui:VisualElement name="hud-root" class="hud-root" picking-mode="Ignore">
+        <ui:VisualElement name="safe-area" class="safe-area" picking-mode="Ignore">
+            <ui:Label name="lives-label" class="hud-lives" text="♥ ♥ ♥" picking-mode="Ignore" />
+            <ui:Label name="score-label" class="hud-score" text="0" picking-mode="Ignore" />
+            <ui:Label name="combo-label" class="hud-combo hidden" text="" picking-mode="Ignore" />
+            <ui:Label name="speed-label" class="hud-speed" text="Speed 0" picking-mode="Ignore" />
+            <ui:VisualElement name="powerups" class="hud-powerups" picking-mode="Ignore">
+                <ui:VisualElement name="powerup-0" class="powerup-slot" picking-mode="Ignore">
+                    <ui:Label name="powerup-0-label" class="powerup-slot__label" text="" picking-mode="Ignore" />
+                </ui:VisualElement>
+                <ui:VisualElement name="powerup-1" class="powerup-slot" picking-mode="Ignore">
+                    <ui:Label name="powerup-1-label" class="powerup-slot__label" text="" picking-mode="Ignore" />
+                </ui:VisualElement>
+                <ui:VisualElement name="powerup-2" class="powerup-slot" picking-mode="Ignore">
+                    <ui:Label name="powerup-2-label" class="powerup-slot__label" text="" picking-mode="Ignore" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="question-banner" class="question-banner hidden" picking-mode="Ignore">
+                <ui:Label name="question-label" class="question-banner__text" text="" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:Label name="countdown-label" class="countdown-label hidden" text="" picking-mode="Ignore" />
+            <ui:Label name="lane-label" class="lane-label hidden" text="" picking-mode="Ignore" />
+            <ui:Label name="difficulty-label" class="difficulty-label hidden" text="" picking-mode="Ignore" />
+            <ui:Button name="pause-button" class="btn btn--ghost" text="❚❚" style="position: absolute; right: 24px; top: 140px; min-width: 96px; min-height: 96px;" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,0 +1,21 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Style src="../Styles/tokens.uss" />
+    <ui:Style src="../Styles/components.uss" />
+    <ui:Style src="../Styles/accessibility.uss" />
+    <ui:VisualElement name="a11y-root" class="menu-bg" picking-mode="Ignore">
+        <ui:VisualElement name="safe-area" class="safe-area menu-shell" picking-mode="Ignore">
+            <ui:Label class="title title--on-sky" text="Accessibility" picking-mode="Ignore" />
+            <ui:VisualElement class="menu-dock panel">
+                <ui:Label name="status-label" class="label label--muted" text="" style="margin-bottom: 16px; -unity-text-align: middle-center; white-space: normal;" />
+                <ui:Button name="reduced-motion" class="btn btn--secondary btn--block" text="Reduced motion" />
+                <ui:Button name="high-contrast" class="btn btn--secondary btn--block" text="High contrast" />
+                <ui:Button name="tts" class="btn btn--secondary btn--block" text="Read questions aloud" />
+                <ui:Button name="dyslexia" class="btn btn--secondary btn--block" text="Dyslexia-friendly font" />
+                <ui:Button name="one-handed" class="btn btn--secondary btn--block" text="One-handed controls" />
+                <ui:Button name="colorblind" class="btn btn--secondary btn--block" text="Colorblind mode" />
+                <ui:Button name="text-scale" class="btn btn--secondary btn--block" text="Text size" />
+                <ui:Button name="back-button" class="btn btn--primary btn--block" text="Done" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

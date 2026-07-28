@@ -1,0 +1,15 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Style src="../Styles/tokens.uss" />
+    <ui:Style src="../Styles/components.uss" />
+    <ui:Style src="../Styles/accessibility.uss" />
+    <ui:VisualElement name="session-root" class="modal-backdrop">
+        <ui:VisualElement class="modal-card">
+            <ui:Label class="title" text="Session Summary" />
+            <ui:Label name="summary-score" class="label" text="Score: 0" style="font-size: 48px; -unity-text-align: middle-center;" />
+            <ui:Label name="summary-accuracy" class="label" text="Accuracy: 0%" style="font-size: 36px; -unity-text-align: middle-center;" />
+            <ui:Label name="summary-questions" class="label label--muted" text="Questions: 0" style="-unity-text-align: middle-center; margin-bottom: 24px;" />
+            <ui:VisualElement name="history-list" style="max-height: 400px;" />
+            <ui:Button name="close-button" class="btn btn--block" text="Close" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

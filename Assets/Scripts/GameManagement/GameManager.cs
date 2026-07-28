@@ -5,6 +5,7 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using MathRunner.Core;
+using MathRunner.UI.Toolkit;
 
 public class GameManager : MonoBehaviour
 {
@@ -18,8 +19,26 @@ public class GameManager : MonoBehaviour
         if (instance == null)
         {
             instance = this;
+            // Ensure Toolkit router exists before the first additive scene loads.
+            if (FindAnyObjectByType<UIRouter>() == null)
+            {
+                var go = new GameObject("[UIRouter]");
+                go.AddComponent<UIRouter>();
+            }
+            SceneManager.sceneLoaded += OnSceneLoaded;
             SceneManager.LoadSceneAsync((int)SceneIndexes.MAIN_MENU, LoadSceneMode.Additive);
         }
+    }
+
+    private void OnDestroy()
+    {
+        if (instance == this)
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        NavigationService.OnSceneLoaded(scene, mode);
     }
 
     private List<AsyncOperation> scenesLoading = new List<AsyncOperation>();
@@ -118,12 +137,26 @@ public class GameManager : MonoBehaviour
 
     private void ShowLoadingScreen()
     {
-        loadingScreen.gameObject.SetActive(true);
+        if (UIRouter.Instance != null && UIRouter.Instance.IsReady)
+        {
+            string msg = MathRunner.Core.LocalizationManager.Instance != null
+                ? MathRunner.Core.LocalizationManager.Instance.GetString("ui_loading")
+                : "Loading...";
+            if (msg == "ui_loading") msg = "Loading...";
+            UIRouter.Instance.SetLoading(true, msg);
+        }
+
+        if (loadingScreen != null)
+            loadingScreen.gameObject.SetActive(true);
     }
 
     private void HideLoadingScreen()
     {
-        loadingScreen.gameObject.SetActive(false);
+        if (UIRouter.Instance != null && UIRouter.Instance.IsReady)
+            UIRouter.Instance.SetLoading(false);
+
+        if (loadingScreen != null)
+            loadingScreen.gameObject.SetActive(false);
     }
 
     private void OnApplicationPause(bool pause)

@@ -1,0 +1,19 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Style src="../Styles/tokens.uss" />
+    <ui:Style src="../Styles/components.uss" />
+    <ui:Style src="../Styles/accessibility.uss" />
+    <ui:VisualElement name="gameover-root" class="modal-backdrop">
+        <ui:VisualElement name="gameover-card" class="modal-card">
+            <ui:Label name="gameover-title" class="title" text="Run over" />
+            <ui:Label name="score-caption" class="label label--muted" text="Score" style="-unity-text-align: middle-center;" />
+            <ui:Label name="current-score" class="label--hero" text="0" style="color: rgb(16, 37, 63); font-size: 96px; text-shadow: none;" />
+            <ui:Label name="high-score-caption" class="label label--muted" text="Best" style="-unity-text-align: middle-center;" />
+            <ui:Label name="high-score" class="label" text="0" style="font-size: 48px; -unity-font-style: bold; -unity-text-align: middle-center; margin-bottom: 24px;" />
+            <ui:Button name="restart-button" class="btn btn--primary btn--block" text="Run again" />
+            <ui:Button name="share-button" class="btn btn--secondary btn--block" text="Share" />
+            <ui:Button name="history-button" class="btn btn--secondary btn--block" text="Question history" />
+            <ui:Button name="continue-button" class="btn btn--secondary btn--block" text="Continue" />
+            <ui:Button name="quit-button" class="btn btn--secondary btn--block" text="Quit to menu" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
