@@ -37,7 +37,7 @@ public class DyslexiaFontManager : MonoBehaviour
     {
         if (applied) return;
 
-        Text[] textComponents = FindObjectsOfType<Text>(true);
+        Text[] textComponents = FindObjectsByType<Text>(FindObjectsInactive.Include);
         originalFonts = new Font[textComponents.Length];
         for (int i = 0; i < textComponents.Length; i++)
         {
@@ -48,7 +48,7 @@ public class DyslexiaFontManager : MonoBehaviour
             }
         }
 
-        TextMeshProUGUI[] tmpComponents = FindObjectsOfType<TextMeshProUGUI>(true);
+        TextMeshProUGUI[] tmpComponents = FindObjectsByType<TextMeshProUGUI>(FindObjectsInactive.Include);
         originalTMPFonts = new TMP_FontAsset[tmpComponents.Length];
         for (int i = 0; i < tmpComponents.Length; i++)
         {
@@ -71,7 +71,7 @@ public class DyslexiaFontManager : MonoBehaviour
     {
         if (!applied) return;
 
-        Text[] textComponents = FindObjectsOfType<Text>(true);
+        Text[] textComponents = FindObjectsByType<Text>(FindObjectsInactive.Include);
         for (int i = 0; i < textComponents.Length && i < originalFonts.Length; i++)
         {
             if (originalFonts[i] != null)
@@ -80,7 +80,7 @@ public class DyslexiaFontManager : MonoBehaviour
             }
         }
 
-        TextMeshProUGUI[] tmpComponents = FindObjectsOfType<TextMeshProUGUI>(true);
+        TextMeshProUGUI[] tmpComponents = FindObjectsByType<TextMeshProUGUI>(FindObjectsInactive.Include);
         for (int i = 0; i < tmpComponents.Length && i < originalTMPFonts.Length; i++)
         {
             if (originalTMPFonts[i] != null)

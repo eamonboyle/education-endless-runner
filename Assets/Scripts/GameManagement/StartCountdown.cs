@@ -1,7 +1,4 @@
-﻿using Assets.Scripts.GameManagement;
-using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -59,6 +56,13 @@ public class StartCountdown : MonoBehaviour
         GameState.QuestionBoxShow(true);
         questionText.SetActive(true);
         countdownText.SetActive(false);
-        GameObject.Find("PlayerObject").GetComponent<Animator>().SetBool("isRunning", true);
+
+        var player = GameObject.Find("PlayerObject");
+        if (player != null)
+        {
+            var animator = player.GetComponent<Animator>();
+            if (animator != null)
+                animator.SetBool("isRunning", true);
+        }
     }
 }

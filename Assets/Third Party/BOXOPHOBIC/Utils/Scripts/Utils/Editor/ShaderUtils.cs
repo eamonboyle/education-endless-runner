@@ -31,11 +31,12 @@ namespace Boxophobic.Utils
             {
                 List<string> features = new List<string>();
 
-                var propsCount = ShaderUtil.GetPropertyCount(material.shader);
+                Shader shader = material.shader;
+                var propsCount = shader.GetPropertyCount();
 
                 for (int i = 0; i < propsCount; i++)
                 {
-                    var propName = ShaderUtil.GetPropertyName(material.shader, i);
+                    var propName = shader.GetPropertyName(i);
 
                     if (propName.ToUpper() == propName)
                     {

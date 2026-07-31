@@ -832,7 +832,6 @@ GameObject:
   - component: {fileID: 394016463}
   - component: {fileID: 394016471}
   - component: {fileID: 394016470}
-  - component: {fileID: 394016462}
   - component: {fileID: 394016464}
   - component: {fileID: 394016465}
   - component: {fileID: 394016466}
@@ -846,24 +845,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &394016462
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 394016461}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7d5305bc95030034487e30f05be629b4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  generateQuestions: 1
-  player: {fileID: 0}
-  questionBox: {fileID: 2694907628137712924, guid: 154c824974f2f9c418025bcac7d206d7,
-    type: 3}
-  questionText: {fileID: 1782689450}
-  questionBoxes: []
 --- !u!4 &394016463
 Transform:
   m_ObjectHideFlags: 0

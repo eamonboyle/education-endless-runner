@@ -4,10 +4,7 @@ public class SceneSwitcher : MonoBehaviour
 {
     public void GoToGame()
     {
-        if (GameManager.instance != null)
-            GameManager.instance.LoadGame();
-        else
-            Debug.LogError("SceneSwitcher: GameManager.instance is null. Is the Persistent Scene loaded?");
+        GameSession.BeginRun();
     }
 
     public void GoToMainMenu()

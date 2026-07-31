@@ -181,7 +181,7 @@ public class StatsGraphDisplay : MonoBehaviour
         for (int i = 0; i < days; i++)
         {
             string dateKey = DateTime.UtcNow.AddDays(-(days - 1 - i)).ToString("yyyy-MM-dd");
-            scores[i] = PlayerPrefs.GetInt("dailyScore_" + dateKey, 0);
+            scores[i] = PlayerPrefs.GetInt(MathRunner.Core.GameConstants.PREF_DAILY_SCORE_PREFIX + dateKey, 0);
         }
 
         return scores;
@@ -194,7 +194,7 @@ public class StatsGraphDisplay : MonoBehaviour
         for (int i = 0; i < days; i++)
         {
             string dateKey = DateTime.UtcNow.AddDays(-(days - 1 - i)).ToString("yyyy-MM-dd");
-            int total = PlayerPrefs.GetInt("dailyQuestions_" + dateKey, 0);
+            int total = PlayerPrefs.GetInt(MathRunner.Core.GameConstants.PREF_DAILY_QUESTIONS_PREFIX + dateKey, 0);
             int correct = PlayerPrefs.GetInt("dailyCorrect_" + dateKey, 0);
 
             accuracies[i] = total > 0 ? (float)correct / total : -1f;

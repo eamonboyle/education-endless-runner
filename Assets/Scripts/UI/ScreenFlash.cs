@@ -21,14 +21,29 @@ public class ScreenFlash : MonoBehaviour
 
     public static void FlashGreen()
     {
+        if (IsReducedMotion()) return;
         if (Instance != null)
-            Instance.StartFlash(new Color(0.2f, 1f, 0.2f, 0.3f), 0.25f);
+            Instance.StartFlash(Adjust(new Color(0.2f, 1f, 0.2f, 0.3f)), 0.25f);
     }
 
     public static void FlashRed()
     {
+        if (IsReducedMotion()) return;
         if (Instance != null)
-            Instance.StartFlash(new Color(1f, 0.2f, 0.2f, 0.35f), 0.3f);
+            Instance.StartFlash(Adjust(new Color(1f, 0.2f, 0.2f, 0.35f)), 0.3f);
+    }
+
+    private static bool IsReducedMotion()
+    {
+        return ReducedMotionManager.Instance != null
+            && ReducedMotionManager.Instance.IsReducedMotion();
+    }
+
+    private static Color Adjust(Color c)
+    {
+        return AccessibilityManager.Instance != null
+            ? AccessibilityManager.Instance.GetAdjustedColor(c)
+            : c;
     }
 
     private void StartFlash(Color color, float duration)

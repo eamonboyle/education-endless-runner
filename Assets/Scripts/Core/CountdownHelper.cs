@@ -8,7 +8,7 @@ namespace MathRunner.Core
     /// <summary>
     /// Reusable countdown component (3-2-1-GO!) with a scale-bounce animation.
     /// Replaces the duplicated countdown coroutines in StartCountdown, Pause,
-    /// EndScreen, and TutorialCountdown.
+    /// EndScreen, and Pause.
     /// </summary>
     public class CountdownHelper : MonoBehaviour
     {

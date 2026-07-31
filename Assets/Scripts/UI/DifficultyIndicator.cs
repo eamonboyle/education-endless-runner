@@ -1,60 +1,55 @@
+using MathRunner.Core;
 using UnityEngine;
 
 /// <summary>
-/// Displays a small colour-coded difficulty tier label in the bottom-left
-/// corner during gameplay, based on the player's current score.
-/// Uses OnGUI for rendering — no scene setup required.
+/// Displays the difficulty the player selected, colour-coded, in the bottom-left
+/// corner during gameplay. Uses OnGUI for rendering — no scene setup required.
 /// </summary>
 public class DifficultyIndicator : MonoBehaviour
 {
-    private struct Tier
-    {
-        public string Label;
-        public Color Color;
-        public int MinScore;
-
-        public Tier(string label, Color color, int minScore)
-        {
-            Label = label;
-            Color = color;
-            MinScore = minScore;
-        }
-    }
-
-    private static readonly Tier[] Tiers =
-    {
-        new Tier("Insane", Color.red,    600),
-        new Tier("Hard",   new Color(1f, 0.5f, 0f), 300),
-        new Tier("Medium", Color.yellow, 100),
-        new Tier("Easy",   Color.green,  0)
-    };
-
     private void OnGUI()
     {
+        // Desktop and editor only — the label is too noisy on a phone screen.
+        if (Application.isMobilePlatform) return;
         if (!GameState.IsRunning()) return;
 
-        int score = GameState.GetScore();
-        Tier current = Tiers[Tiers.Length - 1];
-        for (int i = 0; i < Tiers.Length; i++)
-        {
-            if (score >= Tiers[i].MinScore)
-            {
-                current = Tiers[i];
-                break;
-            }
-        }
+        DifficultyLevel level = DifficultyPresets.GetDifficulty();
 
         GUIStyle style = new GUIStyle(GUI.skin.label)
         {
-            fontSize = 14,
+            fontSize = Mathf.Max(22, Mathf.RoundToInt(Screen.height * 0.022f)),
             fontStyle = FontStyle.Bold,
             alignment = TextAnchor.LowerLeft
         };
-        style.normal.textColor = current.Color;
+        style.normal.textColor = ColourFor(level);
 
-        float padding = 10f;
+        const float padding = 24f;
+        float height = style.fontSize + 12f;
         GUI.Label(
-            new Rect(padding, Screen.height - 30f - padding, 120f, 30f),
-            current.Label, style);
+            new Rect(padding, Screen.height - height - padding, 220f, height),
+            LabelFor(level), style);
+    }
+
+    /// <summary>Matches the wording on the play-style panel, which calls Medium "Normal".</summary>
+    private static string LabelFor(DifficultyLevel level)
+    {
+        switch (level)
+        {
+            case DifficultyLevel.Easy: return "EASY";
+            case DifficultyLevel.Hard: return "HARD";
+            case DifficultyLevel.Medium:
+            default: return "NORMAL";
+        }
+    }
+
+    private static Color ColourFor(DifficultyLevel level)
+    {
+        switch (level)
+        {
+            case DifficultyLevel.Easy: return Color.green;
+            case DifficultyLevel.Hard: return new Color(1f, 0.4f, 0.3f);
+            case DifficultyLevel.Medium:
+            default: return Color.yellow;
+        }
     }
 }

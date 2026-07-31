@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 
+[Serializable]
 public class Question
 {
     public PlayerMovement.Lane correctLane;
@@ -15,6 +16,20 @@ public class Question
         CreateQuestion();
 
         correctLane = FindCorrectLane();
+    }
+
+    /// <summary>Creates a question from a generated boss expression.</summary>
+    public Question(BossQuestion boss)
+    {
+        Text = boss.Text;
+        Answer = boss.Answer;
+        Wrong1 = boss.Wrong1;
+        Wrong2 = boss.Wrong2;
+        Numbers = new List<int>(boss.Numbers);
+        correctLane = FindCorrectLane();
+        recentQuestions.Add(Text);
+        if (recentQuestions.Count > 5)
+            recentQuestions.RemoveAt(0);
     }
 
     public enum QuestionType
@@ -42,6 +57,15 @@ public class Question
     public void SetZ(float z)
     {
         ZPosition = z;
+    }
+
+    /// <summary>
+    /// Clears the static recent-question history. Call at the start of each run
+    /// so uniqueness checks do not carry over between games.
+    /// </summary>
+    public static void ClearRecentHistory()
+    {
+        recentQuestions.Clear();
     }
 
     private void CreateQuestion()

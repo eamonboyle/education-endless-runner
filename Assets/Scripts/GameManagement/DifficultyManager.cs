@@ -1,5 +1,8 @@
+using System.Threading.Tasks;
 using UnityEngine;
-using Unity.RemoteConfig;
+using Unity.Services.Authentication;
+using Unity.Services.Core;
+using Unity.Services.RemoteConfig;
 
 public class DifficultyManager : MonoBehaviour
 {
@@ -9,13 +12,22 @@ public class DifficultyManager : MonoBehaviour
     public struct userAttributes { }
     public struct appAttributes { }
 
-    private void Awake()
+    private async void Awake()
     {
-        ConfigManager.FetchCompleted += ApplyRemoteSettings;
+        RemoteConfigService.Instance.FetchCompleted += ApplyRemoteSettings;
 
         try
         {
-            ConfigManager.FetchConfigs<userAttributes, appAttributes>(new userAttributes(), new appAttributes());
+            await UnityServices.InitializeAsync();
+
+            if (!AuthenticationService.Instance.IsSignedIn)
+            {
+                await AuthenticationService.Instance.SignInAnonymouslyAsync();
+            }
+
+            RemoteConfigService.Instance.FetchConfigs<userAttributes, appAttributes>(
+                new userAttributes(),
+                new appAttributes());
         }
         catch (System.Exception e)
         {
@@ -25,7 +37,7 @@ public class DifficultyManager : MonoBehaviour
 
     private void OnDestroy()
     {
-        ConfigManager.FetchCompleted -= ApplyRemoteSettings;
+        RemoteConfigService.Instance.FetchCompleted -= ApplyRemoteSettings;
     }
 
     private void ApplyRemoteSettings(ConfigResponse configResponse)
@@ -37,7 +49,7 @@ public class DifficultyManager : MonoBehaviour
             case ConfigOrigin.Cached:
                 break;
             case ConfigOrigin.Remote:
-                float remoteMultiplier = ConfigManager.appConfig.GetFloat("speedMultiplier");
+                float remoteMultiplier = RemoteConfigService.Instance.appConfig.GetFloat("speedMultiplier");
                 if (remoteMultiplier > 0f)
                     speedMultiplier = remoteMultiplier;
                 break;
@@ -54,7 +66,11 @@ public class DifficultyManager : MonoBehaviour
         if (GameState.IsRunning())
         {
             currentSpeed += (Time.deltaTime / speedMultiplier);
-            GameState.SetCharacterSpeed(currentSpeed);
+            float effectiveSpeed = currentSpeed;
+            var powerUps = PowerUpSystem.Instance;
+            if (powerUps != null)
+                effectiveSpeed *= powerUps.GetSpeedMultiplier();
+            GameState.SetCharacterSpeed(effectiveSpeed);
         }
     }
 }

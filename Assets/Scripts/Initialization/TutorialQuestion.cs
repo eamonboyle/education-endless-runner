@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
 public class TutorialQuestion
 {
     public TutorialQuestion(int number1, int number2, int answer, int wrong1, int wrong2)

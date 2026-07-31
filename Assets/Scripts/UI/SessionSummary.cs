@@ -12,9 +12,15 @@ public class SessionSummary : MonoBehaviour
     private static int summaryQuestions;
     private static float summaryAccuracy;
     private static int summaryXP;
+    private static float s_displayDuration = 5f;
 
     [SerializeField]
     private float displayDuration = 5f;
+
+    private void Awake()
+    {
+        s_displayDuration = displayDuration;
+    }
 
     /// <summary>
     /// Triggers the summary overlay with the provided session statistics.
@@ -25,7 +31,7 @@ public class SessionSummary : MonoBehaviour
         summaryQuestions = questions;
         summaryAccuracy = accuracy;
         summaryXP = xp;
-        showTimer = 5f;
+        showTimer = s_displayDuration;
         isShowing = true;
     }
 

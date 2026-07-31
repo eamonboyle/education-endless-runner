@@ -56,6 +56,13 @@ public class Obstacle : MonoBehaviour
 
         if (obstacleType == ObstacleSpawner.ObstacleType.Gap) return;
 
+        var powerUps = PowerUpSystem.Instance;
+        if (powerUps != null && powerUps.TryConsumeShield())
+        {
+            Destroy(gameObject);
+            return;
+        }
+
         LivesSystem lives = LivesSystem.Instance;
         if (lives != null)
         {

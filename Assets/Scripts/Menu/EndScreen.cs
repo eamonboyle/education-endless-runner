@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using UnityEngine;
-using UnityEngine.Advertisements;
 using UnityEngine.UI;
 
 public class EndScreen : MonoBehaviour
@@ -10,41 +9,12 @@ public class EndScreen : MonoBehaviour
     public GameObject questionText;
     public GameObject mainCamera;
 
-    public string gameId = "3492402";
-
-#if UNITY_IOS
-    public string gameId = "3492403";
-#endif
-
-    public bool testMode = false;
-    public string myPlacementId = "rewardedVideo";
-
     private Button myButton;
 
     private void Start()
     {
-        myButton = continueButton.GetComponent<Button>();
-
-        // Initialize the Ads listener and service:
-        // Advertisement.AddListener(this);
-        // Advertisement.Initialize(gameId, testMode);
-    }
-
-    private void Update()
-    {
-        // if (GameState.GetAdCount() <= 0)
-        // {
-        //     myButton.interactable = false;
-        // }
-        // else
-        // {
-        //     myButton.interactable = Advertisement.IsReady(myPlacementId);
-        // }
-    }
-
-    private void OnDestroy()
-    {
-        // Advertisement.RemoveListener(this);
+        if (continueButton != null)
+            myButton = continueButton.GetComponent<Button>();
     }
 
     public void GameOverUIButtonClick(string action)
@@ -52,20 +22,22 @@ public class EndScreen : MonoBehaviour
         switch (action)
         {
             case "restart":
-                GameState.Init();
-                GameManager.instance.LoadGame();
+                GameSession.BeginRun();
                 break;
 
             case "continue":
-                ShowContinueAd();
+                // Ads are disabled — continue immediately.
+                ContinueGame();
                 break;
 
             case "share":
-                GameManager.instance.Screenshot();
+                if (GameManager.instance != null)
+                    GameManager.instance.Screenshot();
                 break;
 
             case "quit":
-                GameManager.instance.LoadMainMenu();
+                if (GameManager.instance != null)
+                    GameManager.instance.LoadMainMenu();
                 break;
 
             default:
@@ -73,14 +45,17 @@ public class EndScreen : MonoBehaviour
         }
     }
 
-    private void ShowContinueAd()
-    {
-        // Advertisement.Show(myPlacementId);
-        // GameState.DecreaseAdCount();
-    }
-
     private void ContinueGame()
     {
+        GameState.SetGameOver(false);
+
+        if (LivesSystem.Instance != null)
+            LivesSystem.Instance.ResetLives();
+
+        var questionGeneration = FindAnyObjectByType<QuestionGeneration>();
+        if (questionGeneration != null)
+            questionGeneration.ResyncAfterContinue();
+
         GameState.ShowGameUI();
         StartCoroutine(Countdown(4));
     }
@@ -88,24 +63,25 @@ public class EndScreen : MonoBehaviour
     private IEnumerator Countdown(int seconds)
     {
         int count = seconds;
-        countdownText.SetActive(true);
+        if (countdownText != null)
+            countdownText.SetActive(true);
 
         while (count > 0)
         {
-            if (count == 1)
+            if (countdownText != null)
             {
-                countdownText.GetComponent<Text>().text = "GO!";
-            }
-            else
-            {
-                countdownText.GetComponent<Text>().text = (count - 1).ToString();
+                var text = countdownText.GetComponent<Text>();
+                if (text != null)
+                    text.text = count == 1 ? "GO!" : (count - 1).ToString();
             }
 
-            // TODO: Change this sound and try put an animation on the text
-            mainCamera.GetComponent<AudioSource>().Play();
+            if (mainCamera != null)
+            {
+                var audio = mainCamera.GetComponent<AudioSource>();
+                if (audio != null) audio.Play();
+            }
 
             yield return new WaitForSeconds(1);
-
             count--;
         }
 
@@ -115,47 +91,20 @@ public class EndScreen : MonoBehaviour
     private void StartGame()
     {
         GameState.QuestionBoxShow(true);
-        countdownText.SetActive(false);
-        questionText.SetActive(true);
-        gameObject.GetComponent<Canvas>().enabled = false;
-        GameObject.Find("PlayerObject").GetComponent<Animator>().SetBool("isRunning", true);
+        if (countdownText != null) countdownText.SetActive(false);
+        if (questionText != null) questionText.SetActive(true);
+
+        var canvas = gameObject.GetComponent<Canvas>();
+        if (canvas != null) canvas.enabled = false;
+
+        var player = GameObject.Find("PlayerObject");
+        if (player != null)
+        {
+            var animator = player.GetComponent<Animator>();
+            if (animator != null)
+                animator.SetBool("isRunning", true);
+        }
+
         GameState.SetRunning(true);
-    }
-
-    public void OnUnityAdsDidError(string message)
-    {
-        // Log error
-        Debug.LogError("AD DIDN'T START");
-    }
-
-    public void OnUnityAdsDidFinish(string placementId, ShowResult showResult)
-    {
-        // Define conditional logic for each ad completion status:
-        if (showResult == ShowResult.Finished)
-        {
-            // Reward the user for watching the ad to completion.
-            //Debug.Log("Ad Finished, reward with continue");
-            //Advertisement.RemoveListener(this);
-            ContinueGame();
-        }
-        else if (showResult == ShowResult.Failed)
-        {
-            Debug.LogWarning("The ad did not finish due to an error.");
-        }
-    }
-
-    public void OnUnityAdsDidStart(string placementId)
-    {
-        //Debug.Log("Ad started");
-    }
-
-    public void OnUnityAdsReady(string placementId)
-    {
-        // If the ready Placement is rewarded, show the ad:
-        if (placementId == myPlacementId)
-        {
-            //Advertisement.Show(myPlacementId);
-            myButton.interactable = true;
-        }
     }
 }

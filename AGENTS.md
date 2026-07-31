@@ -2,13 +2,13 @@
 
 ## Project Overview
 
-Educational endless runner mobile game built with **Unity 2022.3.9f1** (C#). Player runs through a 3D environment answering math questions (addition, subtraction, multiplication, division) by swiping into the correct lane.
+Educational endless runner mobile game built with **Unity 6000.5.5f1** (Unity 6, C#). Player runs through a 3D environment answering math questions (addition, subtraction, multiplication, division) by swiping into the correct lane.
 
 ## Cursor Cloud specific instructions
 
 ### Prerequisites
 
-- **Unity Editor 2022.3.9f1** installed via Unity Hub at `~/Unity/Hub/Editor/2022.3.9f1/Editor/Unity`
+- **Unity Editor 6000.5.5f1** installed via Unity Hub at `~/Unity/Hub/Editor/6000.5.5f1/Editor/Unity`
 - **Unity Hub** installed (`unityhub` package) — used for license management and editor installs
 - **.NET SDK 8.0** installed for auxiliary C# tooling
 
@@ -27,13 +27,13 @@ The `--no-sandbox` flag is **required** because this environment runs inside a c
 
 **GUI mode** (for play-testing via Desktop pane):
 ```
-DISPLAY=:1 ~/Unity/Hub/Editor/2022.3.9f1/Editor/Unity -projectPath /workspace &
+DISPLAY=:1 ~/Unity/Hub/Editor/6000.5.5f1/Editor/Unity -projectPath /workspace &
 ```
 Open `Assets/Scenes/Persistent Scene.unity` then press Play. The game flows: Character Select → Mode Choice → Tutorial/Game → Game Over.
 
 **Batch mode** (headless compilation check — no GPU needed):
 ```
-~/Unity/Hub/Editor/2022.3.9f1/Editor/Unity -batchmode -nographics -projectPath /workspace -logFile /tmp/unity.log -quit
+~/Unity/Hub/Editor/6000.5.5f1/Editor/Unity -batchmode -nographics -projectPath /workspace -logFile /tmp/unity.log -quit
 ```
 Exit code 0 = all scripts compiled. Expect ~10 CS warnings (deprecation + unused vars) but zero errors.
 
@@ -41,20 +41,20 @@ Exit code 0 = all scripts compiled. Expect ~10 CS warnings (deprecation + unused
 
 - **Lint**: No separate linter configured. Compilation warnings serve as the lint check (run batch mode above).
 - **Build**: Use Unity batch mode with `-buildTarget` flag (e.g. `-buildTarget StandaloneLinux64`).
-- **Tests**: 21 unit tests in `Assets/Editor/Tests/` (QuestionTests + GameStateTests). Run with:
+- **Tests**: 21+ unit tests in `Assets/Editor/Tests/` (QuestionTests + GameStateTests + GameSessionTests). Run with:
   ```
-  ~/Unity/Hub/Editor/2022.3.9f1/Editor/Unity -batchmode -nographics -projectPath /workspace -runTests -testPlatform EditMode -testResults /tmp/test_results.xml -logFile /tmp/unity_tests.log
+  ~/Unity/Hub/Editor/6000.5.5f1/Editor/Unity -batchmode -nographics -projectPath /workspace -runTests -testPlatform EditMode -testResults /tmp/test_results.xml -logFile /tmp/unity_tests.log
   ```
 
 ### Project Structure (135 C# files)
 
-- `Assets/Scripts/Core/` (9) — GameConstants, GameEnums, CountdownHelper, ObjectPool, SafeFind, LocalizationManager, SaveSystem, InputManager, AnalyticsManager
+- `Assets/Scripts/Core/` — GameConstants, GameEnums, CountdownHelper, ObjectPool, SafeFind, LocalizationManager, SaveSystem, InputManager, AnalyticsManager, GameSession
 - `Assets/Scripts/Data/` (6) — PlayerStats, AchievementData, DailyChallengeData, WeeklyChallengeData, XPSystem, PlayerProfile
 - `Assets/Scripts/Features/` (22) — ComboSystem, PowerUpSystem, AnswerFeedback, ScorePopup, LeaderboardManager, AccessibilityManager, CharacterUnlockSystem, EnvironmentThemeManager, MusicManager, ScreenShake, SpeedTrailEffect, ParticleEffectLibrary, GhostRunSystem, OnlineLeaderboard, ShareCardGenerator, ChallengeCodeSystem, DyslexiaFontManager, ReducedMotionManager, OneHandedMode, TextToSpeechManager, PowerUpCollectible, PowerUpSpawner
 - `Assets/Scripts/GameManagement/` (15) — GameManager, GameState, Score, DifficultyManager, DifficultyPresets, LivesSystem, BossQuestion, TimeAttackMode, CampaignManager, ObstacleSpawner, Obstacle, LevelGenerator, StartCountdown, SoundManager, SceneIndexes
 - `Assets/Scripts/UI/` (12) — SceneTransition, ComboDisplay, PowerUpDisplay, AchievementPopup, AnimatedText, StatsDisplay, StatsGraphDisplay, DailyChallengeDisplay, WeeklyChallengeDisplay, GameOverEnhanced, MainMenuEnhanced, RewardAnimation
-- `Assets/Editor/Tests/` (2) — QuestionTests (11 tests), GameStateTests (10 tests)
-- `.github/workflows/unity-tests.yml` — CI pipeline using GameCI
+- `Assets/Editor/Tests/` — QuestionTests, GameStateTests, GameSessionTests
+- `.github/workflows/unity-tests.yml` — CI pipeline using GameCI (EditMode tests + Android player build)
 - `Assets/Scenes/` — Unity scenes: Persistent Scene, MainMenu, CharacterSelect, ModeChoice, Game, Tutorial, Settings
 - `Assets/Prefabs/` — Prefab game objects
 - `Assets/Models/` — 3D models (low-poly city environment)
@@ -67,6 +67,7 @@ Exit code 0 = all scripts compiled. Expect ~10 CS warnings (deprecation + unused
 - Ad monetization code (`Assets/Scripts/Monetization/`) is currently commented out/disabled
 - Unity Remote Config is used for difficulty tuning (`DifficultyManager.cs`) but falls back to defaults when offline
 - Touch input is simulated via mouse click-and-drag in the Unity Editor (`PlayerController.cs`)
-- The project targets Android (min SDK 22) and iOS (min 12.0); a `user.keystore` for Android signing is included in the repo
+- The project targets Android (min SDK 26) and iOS (min 15.0); bundle ID is `com.eamonboyle.LearningEndlessRunner`
+- Android signing keystore is **not** committed — store it as a CI secret and enrol in Play App Signing
 - First batch-mode open takes ~40s (asset import + compilation). Subsequent opens are ~5s.
 - ALSA audio errors in logs are harmless — the VM has no sound card; the game continues without audio

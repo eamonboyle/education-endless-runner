@@ -9,6 +9,8 @@ public class QuestionBox : MonoBehaviour
     public int correctNumber;
     public string questionText;
 
+    private static PowerUpSpawner cachedPowerUpSpawner;
+
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Player")) return;
@@ -50,15 +52,16 @@ public class QuestionBox : MonoBehaviour
     private void HandleIncorrectAnswer(QuestionGeneration qg, bool isTimeAttack)
     {
         var powerUpSystem = PowerUpSystem.Instance;
-        if (powerUpSystem != null && powerUpSystem.HasActivePowerUp(PowerUpType.Shield))
+        if (powerUpSystem != null && powerUpSystem.TryConsumeShield())
         {
-            powerUpSystem.DeactivatePowerUp(PowerUpType.Shield);
             AnswerFeedback.PlayIncorrect(transform.position);
             HapticFeedback.VibrateOnWrongAnswer();
             var combo = ComboSystem.Instance;
             if (combo != null) combo.RecordWrongAnswer();
             QuestionHistoryDisplay.RecordQuestion(questionText, number, correctNumber);
-            qg.DeleteLastQuestion();
+            // Same advance path as a correct answer: spawn the next row and drop
+            // questions[0] once. Calling DeleteLastQuestion here as well would
+            // desync the HUD text from the boxes still on the track.
             qg.AddQuestion(true);
             return;
         }
@@ -66,6 +69,9 @@ public class QuestionBox : MonoBehaviour
         AnswerFeedback.PlayIncorrect(transform.position);
         ScreenFlash.FlashRed();
         HapticFeedback.VibrateOnWrongAnswer();
+
+        if (ParticleEffectLibrary.Instance != null)
+            ParticleEffectLibrary.Instance.PlayEffect("wrong_burst", transform.position);
 
         if (ScreenShake.Instance != null)
             ScreenShake.Instance.MediumShake();
@@ -78,7 +84,6 @@ public class QuestionBox : MonoBehaviour
             var timeAttack = TimeAttackMode.Instance;
             if (timeAttack != null) timeAttack.RecordWrongAnswer();
             QuestionHistoryDisplay.RecordQuestion(questionText, number, correctNumber);
-            qg.DeleteLastQuestion();
             qg.AddQuestion(true);
             return;
         }
@@ -90,14 +95,15 @@ public class QuestionBox : MonoBehaviour
             if (alive)
             {
                 QuestionHistoryDisplay.RecordQuestion(questionText, number, correctNumber);
-                qg.DeleteLastQuestion();
                 qg.AddQuestion(true);
                 return;
             }
         }
 
         QuestionHistoryDisplay.RecordQuestion(questionText, number, correctNumber);
-        qg.DeleteLastQuestion();
+        // Boxes for this question were already destroyed above. Drop it from the
+        // buffer so Continue doesn't show its text against the next row's boxes.
+        qg.DeleteOldestQuestion();
         AnsweredIncorrectly();
     }
 
@@ -106,6 +112,9 @@ public class QuestionBox : MonoBehaviour
         AnswerFeedback.PlayCorrect(transform.position);
         ScreenFlash.FlashGreen();
         QuestionHistoryDisplay.RecordQuestion(questionText, number, correctNumber);
+
+        if (ParticleEffectLibrary.Instance != null)
+            ParticleEffectLibrary.Instance.PlayEffect("correct_confetti", transform.position);
 
         var audioSource = Camera.main != null ? Camera.main.GetComponent<AudioSource>() : null;
         if (audioSource != null) audioSource.Play();
@@ -116,11 +125,13 @@ public class QuestionBox : MonoBehaviour
         {
             combo.RecordCorrectAnswer();
             bonusPoints *= combo.GetMultiplier();
+            if (ParticleEffectLibrary.Instance != null)
+                ParticleEffectLibrary.Instance.PlayStreakEffect(combo.GetCurrentStreak(), transform.position);
         }
 
         var powerUp = PowerUpSystem.Instance;
-        if (powerUp != null && powerUp.HasActivePowerUp(PowerUpType.DoublePoints))
-            bonusPoints *= 2;
+        if (powerUp != null)
+            bonusPoints *= powerUp.GetScoreMultiplier();
 
         if (isTimeAttack)
         {
@@ -132,50 +143,26 @@ public class QuestionBox : MonoBehaviour
         ScorePopup.Create(transform.position + Vector3.up * 2f, bonusPoints, null);
 
         DailyChallengeData.RecordProgress(GameState.GetQuestionType());
-        WeeklyChallengeData.RecordProgress(GameState.GetQuestionType());
-
-        var ghostSystem = Object.FindObjectOfType<GhostRunSystem>();
-        if (ghostSystem != null) { /* ghost records in its own Update */ }
 
         qg.AddQuestion(true);
 
-        var spawner = Object.FindObjectOfType<PowerUpSpawner>();
+        PowerUpSpawner spawner = GetPowerUpSpawner();
         if (spawner != null) spawner.TrySpawnPowerUp(transform.position);
+    }
+
+    private static PowerUpSpawner GetPowerUpSpawner()
+    {
+        if (cachedPowerUpSpawner == null)
+            cachedPowerUpSpawner = Object.FindAnyObjectByType<PowerUpSpawner>();
+        return cachedPowerUpSpawner;
     }
 
     private void AnsweredIncorrectly()
     {
-        string mode = GameState.GetQuestionType();
-        int score = GameState.GetScore();
-
-        AnalyticsManager.LogEvent("GameEnded", new Dictionary<string, string> {
-            { "score", score.ToString() },
-            { "mode", mode },
-            { "duration", GameState.GetGameDuration().ToString("F1") }
-        });
-
-        int xpEarned = CalculateXP();
-        XPSystem.AddXP(xpEarned);
-        AchievementData.CheckAchievements();
-
-        SessionSummary.ShowSummary(
-            score,
-            GameState.GetQuestionsAnsweredThisGame(),
-            GameState.GetAccuracyThisGame(),
-            xpEarned
-        );
-
+        // Boxes for this question were already destroyed. Drop it from the
+        // buffer so Continue doesn't show its text against the next row's boxes.
         GameState.ShowGameOverUI();
         PlayFallAnimation();
-    }
-
-    private int CalculateXP()
-    {
-        int baseXP = GameState.GetScore() / 10;
-        float accuracy = GameState.GetAccuracyThisGame();
-        if (accuracy > 90f) baseXP = (int)(baseXP * 1.5f);
-        else if (accuracy > 75f) baseXP = (int)(baseXP * 1.25f);
-        return Mathf.Max(1, baseXP);
     }
 
     private void PlayFallAnimation()

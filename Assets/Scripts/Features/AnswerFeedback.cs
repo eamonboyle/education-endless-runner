@@ -55,14 +55,11 @@ public class AnswerFeedback : MonoBehaviour
             return;
         }
 
-        Instance.SpawnParticles(Instance.correctParticlePrefab, position, new Color(0.2f, 0.9f, 0.2f, 1f));
+        if (!IsReducedMotion())
+            Instance.SpawnParticles(Instance.correctParticlePrefab, position, Adjust(new Color(0.2f, 0.9f, 0.2f, 1f)));
         Instance.PlayClip(Instance.correctSound);
     }
 
-    /// <summary>
-    /// Play incorrect-answer feedback at the given world position:
-    /// red particle burst + sad sound.
-    /// </summary>
     public static void PlayIncorrect(Vector3 position)
     {
         if (Instance == null)
@@ -71,8 +68,32 @@ public class AnswerFeedback : MonoBehaviour
             return;
         }
 
-        Instance.SpawnParticles(Instance.incorrectParticlePrefab, position, new Color(0.9f, 0.2f, 0.2f, 1f));
+        if (!IsReducedMotion())
+            Instance.SpawnParticles(Instance.incorrectParticlePrefab, position, Adjust(new Color(0.9f, 0.2f, 0.2f, 1f)));
         Instance.PlayClip(Instance.incorrectSound);
+    }
+
+    private static bool IsReducedMotion()
+    {
+        return ReducedMotionManager.Instance != null
+            && ReducedMotionManager.Instance.IsReducedMotion();
+    }
+
+    private static Color Adjust(Color c)
+    {
+        return AccessibilityManager.Instance != null
+            ? AccessibilityManager.Instance.GetAdjustedColor(c)
+            : c;
+    }
+
+    private void Start()
+    {
+        if (correctSound == null)
+            correctSound = Resources.Load<AudioClip>("question-correct");
+        if (incorrectSound == null)
+            incorrectSound = Resources.Load<AudioClip>("gameover");
+        if (audioSource == null)
+            audioSource = gameObject.AddComponent<AudioSource>();
     }
 
     private void SpawnParticles(ParticleSystem prefab, Vector3 position, Color fallbackColor)

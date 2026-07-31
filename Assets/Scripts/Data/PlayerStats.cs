@@ -53,7 +53,7 @@ namespace MathRunner.Data
                 PlayerPrefs.SetInt(GameConstants.PREF_CURRENT_STREAK, 0);
             }
 
-            PlayerPrefs.Save();
+            PrefsFlush.MarkDirty();
         }
 
         /// <summary>

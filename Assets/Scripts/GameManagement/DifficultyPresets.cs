@@ -118,7 +118,11 @@ public class DifficultyPresets : MonoBehaviour
         return GetPreset(GetDifficulty()).speedIncreaseRate;
     }
 
-    private void ApplyDifficulty()
+    /// <summary>
+    /// Applies the current difficulty's speed multiplier to <see cref="GameState"/>.
+    /// Must be called after <see cref="GameState.Init"/> at the start of each run.
+    /// </summary>
+    public void ApplyDifficulty()
     {
         float baseSpeed = GameConstants.DEFAULT_SPEED * GetSpeedMultiplier();
         GameState.SetCharacterSpeed(baseSpeed);

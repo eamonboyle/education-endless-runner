@@ -1,4 +1,5 @@
 using UnityEngine;
+using MathRunner.Core;
 
 /// <summary>
 /// Automatically creates all singleton systems that the game needs at runtime.
@@ -14,22 +15,34 @@ public class GameBootstrap : MonoBehaviour
         EnsureSingleton<TimeAttackMode>();
         EnsureSingleton<CampaignManager>();
         EnsureSingleton<PowerUpSystem>();
+        EnsureSingleton<PowerUpSpawner>();
+        EnsureSingleton<PowerUpDisplay>();
+        EnsureSingleton<ObstacleSpawner>();
         EnsureSingleton<ScreenShake>();
         EnsureSingleton<AnswerFeedback>();
         EnsureSingleton<ReducedMotionManager>();
+        // InGameHUD overlays score/lives/speed during gameplay (hidden when paused/over).
         EnsureSingleton<InGameHUD>();
         EnsureSingleton<HighScoreCelebration>();
-        EnsureSingleton<SessionSummary>();
-        EnsureSingleton<QuestionHistoryDisplay>();
+        // SessionSummary / PauseButton / QuestionHistoryDisplay intentionally omitted —
+        // they draw OnGUI overlays that duplicate the scene PauseMenu and GameOverUI canvases.
         EnsureSingleton<ScreenFlash>();
         EnsureSingleton<UnlockNotification>();
-        EnsureSingleton<PauseButton>();
         EnsureSingleton<DifficultyIndicator>();
+        EnsureSingleton<AchievementPopup>();
+        EnsureSingleton<RewardAnimation>();
+        EnsureSingleton<AccessibilityManager>();
+        EnsureSingleton<DyslexiaFontManager>();
+        EnsureSingleton<InputManager>();
+        EnsureSingleton<TextToSpeechManager>();
+        EnsureSingleton<ParticleEffectLibrary>();
+        EnsureSingleton<MusicManager>();
+        EnsureSingleton<ProgressionUIBootstrap>();
     }
 
-    private void EnsureSingleton<T>() where T : MonoBehaviour
+    private void EnsureSingleton<T>() where T : Component
     {
-        if (FindObjectOfType<T>() == null)
+        if (FindAnyObjectByType<T>() == null)
         {
             var go = new GameObject("[" + typeof(T).Name + "]");
             go.AddComponent<T>();

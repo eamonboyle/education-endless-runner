@@ -12,7 +12,8 @@ public class LevelGenerator : MonoBehaviour
     public float floorWidth = GameConstants.FLOOR_WIDTH;
     public float currentPlace = GameConstants.FLOOR_WIDTH;
 
-    private int floorCount = 0;
+    [SerializeField, Tooltip("How many floor tiles to keep alive behind/around the player.")]
+    private int maxActiveFloors = 4;
 
     void Start()
     {
@@ -20,6 +21,10 @@ public class LevelGenerator : MonoBehaviour
             player = GameObject.FindWithTag("Player");
 
         GameObject[] floors = GameObject.FindGameObjectsWithTag("Floor");
+
+        // Sort floor pieces by their Z coordinate in ascending order
+        System.Array.Sort(floors, (a, b) => a.transform.position.z.CompareTo(b.transform.position.z));
+
         foreach (GameObject piece in floors)
         {
             floorPieces.Add(piece);
@@ -32,8 +37,6 @@ public class LevelGenerator : MonoBehaviour
 
         if (player.transform.position.z > (currentPlace + 4.0f))
         {
-            floorCount++;
-
             Vector3 floorPlacement = new Vector3(0.0f, 0.0f, currentPlace + (floorWidth * 2) + GameConstants.FLOOR_OFFSET);
             Quaternion floorRotation = Quaternion.identity;
 
@@ -42,13 +45,11 @@ public class LevelGenerator : MonoBehaviour
 
             floorPieces.Add(nextFloor);
 
-            if (floorCount == 2)
+            while (floorPieces.Count > maxActiveFloors)
             {
-                if (floorPieces.Count > 0 && floorPieces[0] != null)
+                if (floorPieces[0] != null)
                     Destroy(floorPieces[0]);
-
                 floorPieces.RemoveAt(0);
-                floorCount = 0;
             }
 
             currentPlace += floorWidth;

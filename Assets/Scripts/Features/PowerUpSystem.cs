@@ -52,19 +52,18 @@ public class PowerUpSystem : MonoBehaviour
 
     private readonly Dictionary<PowerUpType, float> activeTimers = new Dictionary<PowerUpType, float>();
 
-    private float originalSpeed;
-    private bool slowMotionActive;
-
     private void Update()
     {
         if (!GameState.IsRunning()) return;
 
         List<PowerUpType> expired = null;
 
-        // Tick down duration-based power-ups
+        // Tick down duration-based power-ups (Shield uses MaxValue and never expires here)
         var keys = new List<PowerUpType>(activeTimers.Keys);
         foreach (PowerUpType type in keys)
         {
+            if (type == PowerUpType.Shield) continue;
+
             float remaining = activeTimers[type] - Time.deltaTime;
             if (remaining <= 0f)
             {
@@ -89,6 +88,8 @@ public class PowerUpSystem : MonoBehaviour
     /// <summary>
     /// Activates the given power-up. Shield has no timer; SlowMotion
     /// and DoublePoints run for their configured durations.
+    /// SlowMotion is applied as a multiplier by <see cref="DifficultyManager"/>
+    /// so it is not overwritten by the speed ramp.
     /// </summary>
     public void ActivatePowerUp(PowerUpType type)
     {
@@ -99,12 +100,6 @@ public class PowerUpSystem : MonoBehaviour
                 break;
 
             case PowerUpType.SlowMotion:
-                if (!slowMotionActive)
-                {
-                    originalSpeed = GameState.GetCharacterSpeed();
-                    GameState.SetCharacterSpeed(originalSpeed * slowMotionFactor);
-                    slowMotionActive = true;
-                }
                 activeTimers[type] = slowMotionDuration;
                 break;
 
@@ -123,20 +118,32 @@ public class PowerUpSystem : MonoBehaviour
     }
 
     /// <summary>
-    /// Immediately deactivates a power-up and reverses its gameplay effect.
+    /// Speed multiplier for <see cref="DifficultyManager"/> (slow-mo factor or 1).
+    /// </summary>
+    public float GetSpeedMultiplier()
+    {
+        return HasActivePowerUp(PowerUpType.SlowMotion) ? slowMotionFactor : 1f;
+    }
+
+    /// <summary>
+    /// Remaining duration for a timed power-up, or 0 if inactive.
+    /// Shield returns <see cref="float.PositiveInfinity"/> while active.
+    /// </summary>
+    public float GetRemainingDuration(PowerUpType type)
+    {
+        if (!activeTimers.TryGetValue(type, out float remaining)) return 0f;
+        if (type == PowerUpType.Shield) return float.PositiveInfinity;
+        return remaining;
+    }
+
+    /// <summary>
+    /// Immediately deactivates a power-up and fires expiry event.
     /// </summary>
     public void DeactivatePowerUp(PowerUpType type)
     {
         if (!activeTimers.ContainsKey(type)) return;
 
         activeTimers.Remove(type);
-
-        if (type == PowerUpType.SlowMotion && slowMotionActive)
-        {
-            GameState.SetCharacterSpeed(originalSpeed);
-            slowMotionActive = false;
-        }
-
         OnPowerUpExpired?.Invoke(type);
     }
 

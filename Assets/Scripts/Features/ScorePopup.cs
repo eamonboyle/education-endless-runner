@@ -55,6 +55,9 @@ public class ScorePopup : MonoBehaviour
     /// <returns>The created <see cref="ScorePopup"/> instance, or null if no prefab is found.</returns>
     public static ScorePopup Create(Vector3 position, int points, Transform parent = null)
     {
+        if (ReducedMotionManager.Instance != null && ReducedMotionManager.Instance.IsReducedMotion())
+            return null;
+
         GameObject go = new GameObject("ScorePopup");
         go.transform.position = position;
 
@@ -65,9 +68,15 @@ public class ScorePopup : MonoBehaviour
 
         TextMeshPro tmp = go.AddComponent<TextMeshPro>();
         tmp.text = "+" + points;
-        tmp.fontSize = 8f;
+        float scale = AccessibilityManager.Instance != null
+            ? AccessibilityManager.Instance.GetTextScale()
+            : 1f;
+        tmp.fontSize = 8f * scale;
         tmp.alignment = TextAlignmentOptions.Center;
-        tmp.color = new Color(0.6f, 1f, 0.2f, 1f);
+        Color c = new Color(0.6f, 1f, 0.2f, 1f);
+        if (AccessibilityManager.Instance != null)
+            c = AccessibilityManager.Instance.GetAdjustedColor(c);
+        tmp.color = c;
 
         ScorePopup popup = go.AddComponent<ScorePopup>();
         return popup;
