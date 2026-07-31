@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Style src="../Styles/tokens.uss" />
+    <ui:Style src="../Styles/components.uss" />
+    <ui:Style src="../Styles/accessibility.uss" />
+    <ui:VisualElement name="transition-root" class="hud-root" picking-mode="Ignore">
+        <ui:VisualElement name="fade" class="fade-overlay" picking-mode="Ignore" />
+        <ui:Label name="loading-label" class="loading-label" text="Loading..." picking-mode="Ignore" />
+    </ui:VisualElement>
+</ui:UXML>

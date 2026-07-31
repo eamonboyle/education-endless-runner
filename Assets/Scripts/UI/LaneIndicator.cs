@@ -1,54 +1,26 @@
+using MathRunner.UI.Toolkit;
 using UnityEngine;
 
 /// <summary>
-/// Attaches to the player GameObject and displays a subtle lane indicator
-/// at the bottom of the screen via OnGUI.
+/// Bridge: lane label on Toolkit HUD (LEFT / CENTER / RIGHT).
 /// </summary>
 public class LaneIndicator : MonoBehaviour
 {
-    private PlayerMovement playerMovement;
-
-    private void Start()
+    private void Update()
     {
-        playerMovement = GetComponent<PlayerMovement>();
-    }
-
-    private void OnGUI()
-    {
-        if (playerMovement == null) return;
-        if (!GameState.IsRunning()) return;
-
-        GUIStyle style = new GUIStyle(GUI.skin.label)
+        var hud = UIRouter.Instance?.Hud;
+        if (hud == null) return;
+        if (!GameState.IsRunning())
         {
-            fontSize = 22,
-            alignment = TextAnchor.MiddleCenter,
-            fontStyle = FontStyle.Bold
-        };
-        style.normal.textColor = new Color(1f, 1f, 1f, 0.35f);
-
-        float width = 200f;
-        float height = 36f;
-        Rect rect = new Rect(
-            (Screen.width - width) / 2f,
-            Screen.height - height - 20f,
-            width,
-            height
-        );
-
-        string label;
-        switch (playerMovement.currentLane)
-        {
-            case PlayerMovement.Lane.Left:
-                label = "\u25C4 LEFT";
-                break;
-            case PlayerMovement.Lane.Right:
-                label = "RIGHT \u25BA";
-                break;
-            default:
-                label = "CENTER";
-                break;
+            hud.SetLane("");
+            return;
         }
 
-        GUI.Label(rect, label, style);
+        var player = GameObject.Find("PlayerObject");
+        if (player == null) return;
+
+        float x = player.transform.position.x;
+        string lane = x < -1f ? "LEFT" : x > 1f ? "RIGHT" : "CENTER";
+        hud.SetLane(lane);
     }
 }

@@ -1,0 +1,20 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Style src="../Styles/tokens.uss" />
+    <ui:Style src="../Styles/components.uss" />
+    <ui:Style src="../Styles/accessibility.uss" />
+    <ui:VisualElement name="stats-root" class="menu-bg" picking-mode="Ignore">
+        <ui:VisualElement name="safe-area" class="safe-area menu-shell" picking-mode="Ignore">
+            <ui:Label class="title title--on-sky" text="Your run log" picking-mode="Ignore" />
+            <ui:VisualElement class="menu-dock panel">
+                <ui:VisualElement class="stats-row"><ui:Label class="label" text="Games played" /><ui:Label name="games-played" class="label" text="0" /></ui:VisualElement>
+                <ui:VisualElement class="stats-row"><ui:Label class="label" text="Best score" /><ui:Label name="best-score" class="label" text="0" /></ui:VisualElement>
+                <ui:VisualElement class="stats-row"><ui:Label class="label" text="Accuracy" /><ui:Label name="accuracy" class="label" text="0%" /></ui:VisualElement>
+                <ui:VisualElement class="stats-row"><ui:Label class="label" text="Best streak" /><ui:Label name="best-streak" class="label" text="0" /></ui:VisualElement>
+                <ui:VisualElement class="stats-row"><ui:Label class="label" text="Total correct" /><ui:Label name="total-correct" class="label" text="0" /></ui:VisualElement>
+                <ui:Label class="label label--muted" text="Last 7 days" style="margin-top: 20px; -unity-text-align: middle-center;" />
+                <ui:VisualElement name="graph-row" class="graph-row" />
+                <ui:Button name="back-button" class="btn btn--secondary btn--block" text="Back" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

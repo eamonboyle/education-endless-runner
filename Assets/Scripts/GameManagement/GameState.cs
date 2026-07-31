@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using MathRunner.Core;
+using MathRunner.UI.Toolkit;
 
 public static class GameState
 {
@@ -225,6 +226,17 @@ public static class GameState
 
     public static void ShowGameUI()
     {
+        if (UIRouter.Instance != null && UIRouter.Instance.IsReady)
+        {
+            UIRouter.Instance.HideModal();
+            UIRouter.Instance.ShowHud();
+            // Toolkit HUD owns gameplay chrome — hide legacy InGameUI to avoid duplicates.
+            SetCanvasEnabled("InGameUI", false);
+            SetCanvasEnabled("GameOverUI", false);
+            SetCanvasEnabled("PauseUI", false);
+            return;
+        }
+
         SetCanvasEnabled("InGameUI", true);
         SetCanvasEnabled("GameOverUI", false);
         SetCanvasEnabled("PauseUI", false);
@@ -243,9 +255,20 @@ public static class GameState
                 animator.SetBool("isRunning", false);
         }
 
-        SetCanvasEnabled("InGameUI", false);
-        SetCanvasEnabled("GameOverUI", false);
-        SetCanvasEnabled("PauseUI", true);
+        if (UIRouter.Instance != null && UIRouter.Instance.IsReady)
+        {
+            UIRouter.Instance.HideHud();
+            UIRouter.Instance.ShowModal("pause");
+            SetCanvasEnabled("InGameUI", false);
+            SetCanvasEnabled("GameOverUI", false);
+            SetCanvasEnabled("PauseUI", false);
+        }
+        else
+        {
+            SetCanvasEnabled("InGameUI", false);
+            SetCanvasEnabled("GameOverUI", false);
+            SetCanvasEnabled("PauseUI", true);
+        }
 
         var questionText = GameObject.Find("QuestionText");
         if (questionText != null) questionText.SetActive(false);
@@ -282,23 +305,34 @@ public static class GameState
         SetQuestionExists(false);
         SetHighScore();
 
-        var highScoreText = GameObject.Find("HighScoreAmount");
-        if (highScoreText != null)
+        if (UIRouter.Instance != null && UIRouter.Instance.IsReady)
         {
-            var text = highScoreText.GetComponent<Text>();
-            if (text != null) text.text = GetHighScore().ToString();
+            UIRouter.Instance.HideHud();
+            UIRouter.Instance.ShowModal("game_over");
+            SetCanvasEnabled("InGameUI", false);
+            SetCanvasEnabled("PauseUI", false);
+            SetCanvasEnabled("GameOverUI", false);
         }
-
-        var currentScoreText = GameObject.Find("CurrentScoreAmount");
-        if (currentScoreText != null)
+        else
         {
-            var text = currentScoreText.GetComponent<Text>();
-            if (text != null) text.text = GetScore().ToString();
-        }
+            var highScoreText = GameObject.Find("HighScoreAmount");
+            if (highScoreText != null)
+            {
+                var text = highScoreText.GetComponent<Text>();
+                if (text != null) text.text = GetHighScore().ToString();
+            }
 
-        SetCanvasEnabled("InGameUI", false);
-        SetCanvasEnabled("PauseUI", false);
-        SetCanvasEnabled("GameOverUI", true);
+            var currentScoreText = GameObject.Find("CurrentScoreAmount");
+            if (currentScoreText != null)
+            {
+                var text = currentScoreText.GetComponent<Text>();
+                if (text != null) text.text = GetScore().ToString();
+            }
+
+            SetCanvasEnabled("InGameUI", false);
+            SetCanvasEnabled("PauseUI", false);
+            SetCanvasEnabled("GameOverUI", true);
+        }
 
         var questionText = GameObject.Find("QuestionText");
         if (questionText != null) questionText.SetActive(false);
@@ -307,6 +341,11 @@ public static class GameState
     public static void ShowTutorialGameOver()
     {
         SetRunning(false);
+        if (UIRouter.Instance != null && UIRouter.Instance.IsReady)
+        {
+            UIRouter.Instance.HideHud();
+            UIRouter.Instance.ShowModal("tutorial_gameover");
+        }
         SetCanvasEnabled("TutorialUI", false);
         SetCanvasEnabled("TutorialGameOverUI", true);
 
@@ -317,6 +356,11 @@ public static class GameState
     public static void ShowTutorialCompleteUI()
     {
         SetRunning(false);
+        if (UIRouter.Instance != null && UIRouter.Instance.IsReady)
+        {
+            UIRouter.Instance.HideHud();
+            UIRouter.Instance.ShowModal("tutorial_complete");
+        }
         SetCanvasEnabled("TutorialUI", false);
         SetCanvasEnabled("TutorialGameOverUI", false);
         SetCanvasEnabled("TutorialCompleteUI", true);

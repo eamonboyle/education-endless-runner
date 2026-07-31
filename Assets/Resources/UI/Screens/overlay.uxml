@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Style src="../Styles/tokens.uss" />
+    <ui:Style src="../Styles/components.uss" />
+    <ui:Style src="../Styles/accessibility.uss" />
+    <ui:VisualElement name="overlay-root" class="hud-root" picking-mode="Ignore">
+        <ui:VisualElement name="flash" class="flash-overlay" picking-mode="Ignore" />
+        <ui:VisualElement name="vignette" class="vignette" picking-mode="Ignore" />
+        <ui:Label name="celebration" class="celebration" text="NEW HIGH SCORE!" picking-mode="Ignore" />
+    </ui:VisualElement>
+</ui:UXML>

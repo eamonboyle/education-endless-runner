@@ -1,0 +1,52 @@
+/* Math Runner tokens — casual mobile candy UI over the low-poly city */
+:root {
+    --color-ink: rgb(74, 37, 28);
+    --color-ink-soft: rgba(74, 37, 28, 0.82);
+    --color-ink-muted: rgba(74, 37, 28, 0.62);
+    --color-paper: rgba(255, 248, 235, 0.94);
+    --color-paper-solid: rgb(255, 252, 247);
+    --color-paper-edge: rgb(42, 28, 18);
+    --color-sprint: rgb(232, 75, 48);
+    --color-sprint-deep: rgb(151, 48, 38);
+    --color-lane: rgb(255, 194, 75);
+    --color-lane-left: rgb(61, 220, 151);
+    --color-lane-right: rgb(255, 90, 95);
+    --color-correct: rgb(61, 220, 151);
+    --color-wrong: rgb(255, 90, 95);
+    --color-warn: rgb(255, 180, 40);
+    --color-gold: rgb(255, 210, 74);
+    --color-heart: rgb(255, 64, 89);
+    --color-overlay: rgba(10, 22, 40, 0.45);
+    --color-dock-shadow: rgba(42, 28, 18, 0.22);
+
+    --color-brand: var(--color-sprint);
+    --color-brand-dark: var(--color-sprint-deep);
+    --color-surface: var(--color-paper-solid);
+    --color-surface-alt: rgba(255, 248, 235, 0.85);
+
+    --space-1: 8px;
+    --space-2: 16px;
+    --space-3: 24px;
+    --space-4: 40px;
+    --space-5: 64px;
+
+    --radius-chip: 999px;
+    --radius-card: 32px;
+    --radius-panel: 40px;
+    --radius-btn: 28px;
+
+    --font-scale: 1;
+    --font-size-xs: 26px;
+    --font-size-sm: 34px;
+    --font-size-md: 44px;
+    --font-size-lg: 60px;
+    --font-size-xl: 84px;
+    --font-size-hero: 112px;
+
+    --touch-min: 112px;
+    --motion-fast: 140ms;
+    --motion-panel: 280ms;
+    --motion-slow: 420ms;
+
+    --font-display: url("project://database/Assets/Fonts/Biber%20Beard%20SDF.asset");
+}

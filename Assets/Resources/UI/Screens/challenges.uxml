@@ -1,0 +1,21 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Style src="../Styles/tokens.uss" />
+    <ui:Style src="../Styles/components.uss" />
+    <ui:Style src="../Styles/accessibility.uss" />
+    <ui:VisualElement name="challenges-root" class="menu-bg" picking-mode="Ignore">
+        <ui:VisualElement name="safe-area" class="safe-area menu-shell" picking-mode="Ignore">
+            <ui:Label class="title title--on-sky" text="Challenges" picking-mode="Ignore" />
+            <ui:VisualElement class="menu-dock panel">
+                <ui:Label class="label" text="Today" style="-unity-font-style: bold;" />
+                <ui:Label name="daily-desc" class="label" text="" />
+                <ui:VisualElement class="progress-track"><ui:VisualElement name="daily-fill" class="progress-fill" /></ui:VisualElement>
+                <ui:Label name="daily-progress" class="label label--muted" text="" />
+                <ui:Label class="label" text="This week" style="margin-top: 24px; -unity-font-style: bold;" />
+                <ui:Label name="weekly-desc" class="label" text="" />
+                <ui:VisualElement class="progress-track"><ui:VisualElement name="weekly-fill" class="progress-fill" /></ui:VisualElement>
+                <ui:Label name="weekly-progress" class="label label--muted" text="" />
+                <ui:Button name="back-button" class="btn btn--secondary btn--block" text="Back" style="margin-top: 24px;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

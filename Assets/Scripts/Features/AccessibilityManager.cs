@@ -108,6 +108,7 @@ public class AccessibilityManager : MonoBehaviour
         textScaleMultiplier = Mathf.Clamp(scale, 1.0f, 2.0f);
         PlayerPrefs.SetFloat(TextScaleKey, textScaleMultiplier);
         PlayerPrefs.Save();
+        SyncToolkitClasses();
     }
 
     /// <summary>Returns the current text scale multiplier.</summary>
@@ -130,6 +131,7 @@ public class AccessibilityManager : MonoBehaviour
         highContrastMode = enabled;
         PlayerPrefs.SetInt(HighContrastKey, enabled ? 1 : 0);
         PlayerPrefs.Save();
+        SyncToolkitClasses();
     }
 
     private void LoadSettings()
@@ -138,5 +140,13 @@ public class AccessibilityManager : MonoBehaviour
         textScaleMultiplier = PlayerPrefs.GetFloat(TextScaleKey, 1.0f);
         audioCuesEnabled = PlayerPrefs.GetInt(AudioCuesKey, 0) == 1;
         highContrastMode = PlayerPrefs.GetInt(HighContrastKey, 0) == 1;
+    }
+
+    private void SyncToolkitClasses()
+    {
+        bool rm = ReducedMotionManager.Instance != null && ReducedMotionManager.Instance.IsReducedMotion();
+        bool dyslexia = PlayerPrefs.GetInt("Accessibility_DyslexiaFont", 0) == 1;
+        MathRunner.UI.Toolkit.UIRoot.Instance?.ApplyAccessibilityClasses(
+            highContrastMode, rm, dyslexia, textScaleMultiplier);
     }
 }

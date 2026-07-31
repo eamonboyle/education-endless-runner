@@ -1,3 +1,4 @@
+using MathRunner.UI.Toolkit;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +13,10 @@ public class Score : MonoBehaviour
     void Start()
     {
         score = GameState.GetScore();
+
+        // Toolkit HUD owns score display — skip legacy Text wiring.
+        if (UIRouter.Instance != null && UIRouter.Instance.IsReady)
+            return;
 
         if (scoreObject != null)
         {

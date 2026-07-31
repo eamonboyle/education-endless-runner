@@ -1,0 +1,31 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Style src="../Styles/tokens.uss" />
+    <ui:Style src="../Styles/components.uss" />
+    <ui:Style src="../Styles/accessibility.uss" />
+    <ui:VisualElement name="settings-root" class="menu-bg" picking-mode="Ignore">
+        <ui:VisualElement name="safe-area" class="safe-area menu-shell" picking-mode="Ignore">
+            <ui:Label class="title title--on-sky" text="Settings" picking-mode="Ignore" />
+            <ui:VisualElement class="menu-dock">
+                <ui:Label class="label label--muted" text="Sound" />
+                <ui:Button name="sound-button" class="btn btn--secondary btn--block" text="Sound: On" />
+                <ui:Label class="label label--muted" text="Graphics" style="margin-top: 12px;" />
+                <ui:VisualElement class="row" style="justify-content: space-between;">
+                    <ui:Button name="graphics-down" class="btn btn--secondary" text="−" style="min-width: 100px; flex-grow: 0;" />
+                    <ui:Label name="graphics-label" class="label" text="Medium" style="flex-grow: 1; -unity-text-align: middle-center;" />
+                    <ui:Button name="graphics-up" class="btn btn--secondary" text="+" style="min-width: 100px; flex-grow: 0;" />
+                </ui:VisualElement>
+                <ui:Button name="accessibility-button" class="btn btn--secondary btn--block" text="Accessibility" style="margin-top: 16px;" />
+                <ui:Button name="reset-button" class="btn btn--danger btn--block" text="Reset data" />
+                <ui:Button name="home-button" class="btn btn--secondary btn--block" text="Home" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement name="reset-overlay" class="modal-backdrop hidden">
+            <ui:VisualElement class="modal-card">
+                <ui:Label class="title" text="Reset all data?" />
+                <ui:Label class="subtitle" text="Scores, unlocks, and settings go back to zero." />
+                <ui:Button name="reset-confirm" class="btn btn--danger btn--block" text="Reset everything" />
+                <ui:Button name="reset-cancel" class="btn btn--secondary btn--block" text="Keep my data" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

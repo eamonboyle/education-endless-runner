@@ -44,9 +44,12 @@ public class ReducedMotionManager : MonoBehaviour
         PlayerPrefs.Save();
 
         if (enabled)
-        {
             DisableActiveParticles();
-        }
+
+        bool hc = AccessibilityManager.Instance != null && AccessibilityManager.Instance.HighContrastMode;
+        bool dyslexia = PlayerPrefs.GetInt("Accessibility_DyslexiaFont", 0) == 1;
+        float scale = AccessibilityManager.Instance != null ? AccessibilityManager.Instance.GetTextScale() : 1f;
+        MathRunner.UI.Toolkit.UIRoot.Instance?.ApplyAccessibilityClasses(hc, reducedMotion, dyslexia, scale);
     }
 
     /// <summary>

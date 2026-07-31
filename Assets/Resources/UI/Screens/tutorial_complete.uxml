@@ -1,0 +1,12 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Style src="../Styles/tokens.uss" />
+    <ui:Style src="../Styles/components.uss" />
+    <ui:Style src="../Styles/accessibility.uss" />
+    <ui:VisualElement name="tutorial-complete-root" class="modal-backdrop">
+        <ui:VisualElement class="modal-card">
+            <ui:Label class="title" text="Tutorial Complete!" />
+            <ui:Label class="subtitle" text="You're ready to run." />
+            <ui:Button name="menu-button" class="btn btn--block" text="Main Menu" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

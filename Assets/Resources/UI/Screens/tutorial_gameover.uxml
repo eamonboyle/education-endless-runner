@@ -1,0 +1,12 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Style src="../Styles/tokens.uss" />
+    <ui:Style src="../Styles/components.uss" />
+    <ui:Style src="../Styles/accessibility.uss" />
+    <ui:VisualElement name="tutorial-gameover-root" class="modal-backdrop">
+        <ui:VisualElement class="modal-card">
+            <ui:Label class="title" text="Oops!" />
+            <ui:Label class="subtitle" text="Try the tutorial again." />
+            <ui:Button name="restart-button" class="btn btn--block" text="Restart" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,81 +1,37 @@
+using MathRunner.UI.Toolkit;
 using UnityEngine;
-using System.Collections;
 
+/// <summary>
+/// Bridge: forwards flash requests to UI Toolkit OverlayScreen.
+/// Keeps existing static call sites (AnswerFeedback, etc.) working.
+/// </summary>
 public class ScreenFlash : MonoBehaviour
 {
     public static ScreenFlash Instance { get; private set; }
-    
-    private Color flashColor = Color.clear;
-    private float flashAlpha = 0f;
-    private float flashDuration = 0.3f;
-    private float flashTimer = 0f;
-    private bool isFlashing = false;
-    private Texture2D flashTexture;
 
     private void Awake()
     {
         if (Instance != null && Instance != this) { Destroy(gameObject); return; }
         Instance = this;
-        flashTexture = new Texture2D(1, 1);
     }
 
     public static void FlashGreen()
     {
         if (IsReducedMotion()) return;
-        if (Instance != null)
-            Instance.StartFlash(Adjust(new Color(0.2f, 1f, 0.2f, 0.3f)), 0.25f);
+        if (UIRouter.Instance != null)
+            UIRouter.Instance.FlashCorrect();
     }
 
     public static void FlashRed()
     {
         if (IsReducedMotion()) return;
-        if (Instance != null)
-            Instance.StartFlash(Adjust(new Color(1f, 0.2f, 0.2f, 0.35f)), 0.3f);
+        if (UIRouter.Instance != null)
+            UIRouter.Instance.FlashWrong();
     }
 
     private static bool IsReducedMotion()
     {
         return ReducedMotionManager.Instance != null
             && ReducedMotionManager.Instance.IsReducedMotion();
-    }
-
-    private static Color Adjust(Color c)
-    {
-        return AccessibilityManager.Instance != null
-            ? AccessibilityManager.Instance.GetAdjustedColor(c)
-            : c;
-    }
-
-    private void StartFlash(Color color, float duration)
-    {
-        flashColor = color;
-        flashDuration = duration;
-        flashTimer = duration;
-        flashAlpha = color.a;
-        isFlashing = true;
-    }
-
-    private void Update()
-    {
-        if (!isFlashing) return;
-        flashTimer -= Time.deltaTime;
-        if (flashTimer <= 0f)
-        {
-            isFlashing = false;
-            flashAlpha = 0f;
-        }
-        else
-        {
-            flashAlpha = flashColor.a * (flashTimer / flashDuration);
-        }
-    }
-
-    private void OnGUI()
-    {
-        if (!isFlashing || flashAlpha <= 0f) return;
-        Color c = new Color(flashColor.r, flashColor.g, flashColor.b, flashAlpha);
-        flashTexture.SetPixel(0, 0, c);
-        flashTexture.Apply();
-        GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), flashTexture);
     }
 }

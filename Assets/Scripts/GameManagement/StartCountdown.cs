@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using MathRunner.UI.Toolkit;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,44 +7,43 @@ public class StartCountdown : MonoBehaviour
 {
     public GameObject questionText;
     public GameObject countdownText;
-
     public GameObject mainCamera;
 
-    // Start is called before the first frame update
     void Start()
     {
-        if (!GameState.IsFirstLoad())
-        {
-            GameState.ShowGameUI();
-        }
+        // Toolkit HUD replaces both InGameUI and TutorialUI chrome.
+        GameState.ShowGameUI();
 
         mainCamera = GameObject.FindWithTag("MainCamera");
-
         GameState.QuestionBoxShow(false);
-
         StartCoroutine(Countdown(4));
     }
 
     private IEnumerator Countdown(int seconds)
     {
         int count = seconds;
+        var hud = UIRouter.Instance?.Hud;
 
         while (count > 0)
         {
-            if (count == 1)
+            string label = count == 1 ? "GO!" : (count - 1).ToString();
+            if (hud != null)
             {
-                countdownText.GetComponent<Text>().text = "GO!";
+                hud.SetCountdown(label, true);
             }
-            else
+            else if (countdownText != null)
             {
-                countdownText.GetComponent<Text>().text = (count - 1).ToString();
+                var text = countdownText.GetComponent<Text>();
+                if (text != null) text.text = label;
             }
 
-            // TODO: Change this sound and try put an animation on the text
-            mainCamera.GetComponent<AudioSource>().Play();
+            if (mainCamera != null)
+            {
+                var audio = mainCamera.GetComponent<AudioSource>();
+                if (audio != null) audio.Play();
+            }
 
             yield return new WaitForSeconds(1);
-
             count--;
         }
 
@@ -54,8 +54,10 @@ public class StartCountdown : MonoBehaviour
     {
         GameState.SetRunning(true);
         GameState.QuestionBoxShow(true);
-        questionText.SetActive(true);
-        countdownText.SetActive(false);
+
+        UIRouter.Instance?.Hud?.SetCountdown("", false);
+        if (questionText != null) questionText.SetActive(true);
+        if (countdownText != null) countdownText.SetActive(false);
 
         var player = GameObject.Find("PlayerObject");
         if (player != null)

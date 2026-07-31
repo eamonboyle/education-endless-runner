@@ -1,0 +1,84 @@
+/* Accessibility overrides applied via root class list */
+.high-contrast .title,
+.high-contrast .label,
+.high-contrast .card__title,
+.high-contrast .btn,
+.high-contrast .logo,
+.high-contrast .menu-dock__hint {
+    color: rgb(255, 255, 255);
+}
+
+.high-contrast .menu-dock,
+.high-contrast .panel,
+.high-contrast .card,
+.high-contrast .modal-card,
+.high-contrast .toast,
+.high-contrast .op-tile {
+    background-color: rgb(0, 0, 0);
+    border-width: 4px;
+    border-color: rgb(255, 255, 255);
+}
+
+.high-contrast .btn,
+.high-contrast .btn--primary,
+.high-contrast .btn--secondary {
+    background-color: rgb(0, 0, 0);
+    color: rgb(255, 255, 0);
+    border-width: 4px;
+    border-color: rgb(255, 255, 0);
+}
+
+.high-contrast .hud-score,
+.high-contrast .hud-lives,
+.high-contrast .hud-combo,
+.high-contrast .question-banner__text {
+    color: rgb(255, 255, 255);
+    text-shadow: 0 0 0 rgba(0, 0, 0, 0);
+    background-color: rgb(0, 0, 0);
+}
+
+.high-contrast .lane-dash--left,
+.high-contrast .lane-dash--center,
+.high-contrast .lane-dash--right {
+    background-color: rgb(255, 255, 0);
+}
+
+.reduced-motion,
+.reduced-motion * {
+    transition-duration: 0s;
+}
+
+.text-scale-large {
+    --font-scale: 1.25;
+    --font-size-xs: 32px;
+    --font-size-sm: 42px;
+    --font-size-md: 54px;
+    --font-size-lg: 72px;
+    --font-size-xl: 96px;
+    --font-size-hero: 128px;
+}
+
+.text-scale-xlarge {
+    --font-scale: 1.5;
+    --font-size-xs: 38px;
+    --font-size-sm: 50px;
+    --font-size-md: 64px;
+    --font-size-lg: 84px;
+    --font-size-xl: 112px;
+    --font-size-hero: 148px;
+}
+
+.dyslexia Label,
+.dyslexia Button,
+.dyslexia .title,
+.dyslexia .subtitle,
+.dyslexia .label,
+.dyslexia .btn,
+.dyslexia .card__title,
+.dyslexia .hud-score,
+.dyslexia .hud-lives,
+.dyslexia .logo,
+.dyslexia .question-banner__text {
+    letter-spacing: 1px;
+    -unity-font-style: normal;
+}

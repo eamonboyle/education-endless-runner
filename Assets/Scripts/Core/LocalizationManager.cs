@@ -160,6 +160,78 @@ namespace MathRunner.Core
                 { Language.Korean,   "TODO: translate" }
             });
 
+            Add("menu_mode", new Dictionary<Language, string>
+            {
+                { Language.English, "Mode" },
+                { Language.Spanish, "Modo" },
+                { Language.French, "Mode" },
+                { Language.German, "Modus" },
+                { Language.Portuguese, "Modo" },
+                { Language.Japanese, "TODO: translate" },
+                { Language.Chinese, "TODO: translate" },
+                { Language.Korean, "TODO: translate" }
+            });
+
+            Add("menu_character", new Dictionary<Language, string>
+            {
+                { Language.English, "Character" },
+                { Language.Spanish, "Personaje" },
+                { Language.French, "Personnage" },
+                { Language.German, "Charakter" },
+                { Language.Portuguese, "Personagem" },
+                { Language.Japanese, "TODO: translate" },
+                { Language.Chinese, "TODO: translate" },
+                { Language.Korean, "TODO: translate" }
+            });
+
+            Add("menu_stats", new Dictionary<Language, string>
+            {
+                { Language.English, "Stats" },
+                { Language.Spanish, "Estadísticas" },
+                { Language.French, "Stats" },
+                { Language.German, "Statistik" },
+                { Language.Portuguese, "Estatísticas" },
+                { Language.Japanese, "TODO: translate" },
+                { Language.Chinese, "TODO: translate" },
+                { Language.Korean, "TODO: translate" }
+            });
+
+            Add("menu_challenges", new Dictionary<Language, string>
+            {
+                { Language.English, "Challenges" },
+                { Language.Spanish, "Desafíos" },
+                { Language.French, "Défis" },
+                { Language.German, "Herausforderungen" },
+                { Language.Portuguese, "Desafios" },
+                { Language.Japanese, "TODO: translate" },
+                { Language.Chinese, "TODO: translate" },
+                { Language.Korean, "TODO: translate" }
+            });
+
+            Add("menu_title", new Dictionary<Language, string>
+            {
+                { Language.English, "Math Runner" },
+                { Language.Spanish, "Math Runner" },
+                { Language.French, "Math Runner" },
+                { Language.German, "Math Runner" },
+                { Language.Portuguese, "Math Runner" },
+                { Language.Japanese, "TODO: translate" },
+                { Language.Chinese, "TODO: translate" },
+                { Language.Korean, "TODO: translate" }
+            });
+
+            Add("ui_loading", new Dictionary<Language, string>
+            {
+                { Language.English, "Loading..." },
+                { Language.Spanish, "Cargando..." },
+                { Language.French, "Chargement..." },
+                { Language.German, "Laden..." },
+                { Language.Portuguese, "Carregando..." },
+                { Language.Japanese, "TODO: translate" },
+                { Language.Chinese, "TODO: translate" },
+                { Language.Korean, "TODO: translate" }
+            });
+
             // --- Mode Names ---
             Add("mode_addition", new Dictionary<Language, string>
             {

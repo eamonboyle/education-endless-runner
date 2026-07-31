@@ -1,58 +1,29 @@
+using MathRunner.UI.Toolkit;
 using UnityEngine;
 
+/// <summary>
+/// Legacy Inspector button targets. New Toolkit screens use
+/// <see cref="NavigationService"/> directly; this remains for scene-wired buttons
+/// until those canvases are removed.
+/// </summary>
 public class SceneSwitcher : MonoBehaviour
 {
-    public void GoToGame()
-    {
-        GameSession.BeginRun();
-    }
+    public void GoToGame() => NavigationService.GoToGame();
 
-    public void GoToMainMenu()
-    {
-        if (GameManager.instance != null)
-            GameManager.instance.LoadMainMenu();
-        else
-            Debug.LogError("SceneSwitcher: GameManager.instance is null.");
-    }
+    public void GoToMainMenu() => NavigationService.GoToMainMenu();
 
-    public void GoToModeSelect()
-    {
-        if (GameManager.instance != null)
-            GameManager.instance.LoadModeSelect();
-        else
-            Debug.LogError("SceneSwitcher: GameManager.instance is null.");
-    }
+    public void GoToModeSelect() => NavigationService.GoToModeSelect();
 
-    public void GoToCharacterSelection()
-    {
-        if (GameManager.instance != null)
-            GameManager.instance.LoadCharacterSelection();
-        else
-            Debug.LogError("SceneSwitcher: GameManager.instance is null.");
-    }
+    public void GoToCharacterSelection() => NavigationService.GoToCharacterSelect();
 
-    public void GoToTutorial()
-    {
-        if (GameManager.instance != null)
-            GameManager.instance.LoadTutorial();
-        else
-            Debug.LogError("SceneSwitcher: GameManager.instance is null.");
-    }
+    public void GoToTutorial() => NavigationService.GoToTutorial();
 
-    public void GoToSettings()
-    {
-        if (GameManager.instance != null)
-            GameManager.instance.LoadSettings();
-        else
-            Debug.LogError("SceneSwitcher: GameManager.instance is null.");
-    }
+    public void GoToSettings() => NavigationService.GoToSettings();
 
     public void ShowPauseMenu()
     {
         if (GameState.IsRunning())
-        {
             GameState.ShowPauseUI();
-        }
     }
 
     public void ChooseCharacter(string character)
@@ -60,12 +31,8 @@ public class SceneSwitcher : MonoBehaviour
         GameState.SetCharacter(character);
 
         if (GameState.IsFirstLoad())
-        {
             GoToModeSelect();
-        }
         else
-        {
             GoToMainMenu();
-        }
     }
 }
