@@ -61,15 +61,16 @@ public class OnlineLeaderboard : MonoBehaviour
     /// </param>
     public void SubmitScore(string mode, int score, Action<bool> callback)
     {
+        SaveLocally(mode, score);
+
         if (!IsOnline())
         {
             Debug.LogWarning("OnlineLeaderboard: No internet connection. Score saved locally only.");
-            SaveLocally(mode, score);
             callback?.Invoke(false);
             return;
         }
 
-        StartCoroutine(SubmitScoreCoroutine(mode, score, callback));
+        StartCoroutine(SubmitScoreCoroutine(callback));
     }
 
     /// <summary>
@@ -91,12 +92,11 @@ public class OnlineLeaderboard : MonoBehaviour
         StartCoroutine(FetchTopScoresCoroutine(mode, count, callback));
     }
 
-    private IEnumerator SubmitScoreCoroutine(string mode, int score, Action<bool> callback)
+    private IEnumerator SubmitScoreCoroutine(Action<bool> callback)
     {
         yield return new WaitForSecondsRealtime(simulatedDelay);
 
         // TODO: Replace with Firebase / Unity Gaming Services REST call.
-        SaveLocally(mode, score);
         callback?.Invoke(true);
     }
 

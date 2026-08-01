@@ -14,6 +14,7 @@ namespace MathRunner.Tests
             Question.ClearRecentHistory();
             PlayerPrefs.DeleteKey(GameConstants.PREF_DIFFICULTY);
             PlayerPrefs.DeleteKey(GameConstants.PREF_TIME_ATTACK);
+            ChallengeCodeSystem.SetActiveChallenge("");
         }
 
         [TearDown]
@@ -25,6 +26,7 @@ namespace MathRunner.Tests
                 Object.DestroyImmediate(DifficultyPresets.Instance.gameObject);
             if (TimeAttackMode.Instance != null)
                 Object.DestroyImmediate(TimeAttackMode.Instance.gameObject);
+            ChallengeCodeSystem.SetActiveChallenge("");
         }
 
         [Test]
@@ -126,6 +128,24 @@ namespace MathRunner.Tests
             Assert.AreEqual(0, GameState.GetScore());
             Assert.IsFalse(GameState.IsRunning());
             Assert.IsFalse(GameState.IsGameOver());
+        }
+
+        [Test]
+        public void BeginRun_AppliesActiveChallengeSettings_WithoutGameManager()
+        {
+            string code = ChallengeCodeSystem.GenerateCode("division", (int)DifficultyLevel.Hard);
+            ChallengeCodeSystem.SetActiveChallenge(code);
+            GameState.SetQuestionType("addition");
+            DifficultyPresets.SetDifficulty(DifficultyLevel.Easy);
+            TimeAttackMode.SetTimeAttack(true);
+            PlayerPrefs.SetInt(GameConstants.PREF_CAMPAIGN_ACTIVE, 1);
+
+            GameSession.BeginRun();
+
+            Assert.AreEqual("division", GameState.GetQuestionType());
+            Assert.AreEqual(DifficultyLevel.Hard, DifficultyPresets.GetDifficulty());
+            Assert.IsFalse(TimeAttackMode.IsTimeAttack());
+            Assert.AreEqual(0, PlayerPrefs.GetInt(GameConstants.PREF_CAMPAIGN_ACTIVE));
         }
     }
 }

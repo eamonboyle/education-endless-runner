@@ -204,6 +204,7 @@ public class QuestionGeneration : MonoBehaviour
         else
             questionBoxes.Clear();
 
+        ChallengeCodeSystem.ApplyActiveChallengeSeed();
         PreloadQuestions();
     }
 

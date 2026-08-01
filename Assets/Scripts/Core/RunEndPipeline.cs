@@ -36,6 +36,7 @@ public static class RunEndPipeline
         PlayerStats.RecordGamePlayed(mode);
         PlayerStats.RecordTimePlayed(duration);
         PlayerStats.ResetCurrentStreak();
+        SubmitLeaderboardScore(mode, score);
 
         int xpEarned = XPSystem.CalculateGameXP(score, GameState.GetAccuracyThisGame(), bestStreak);
         if (xpEarned < 1) xpEarned = 1;
@@ -81,5 +82,19 @@ public static class RunEndPipeline
             { "duration", duration.ToString("F1") },
             { "xp", xpEarned.ToString() }
         });
+    }
+
+    private static void SubmitLeaderboardScore(string mode, int score)
+    {
+        if (OnlineLeaderboard.Instance != null)
+        {
+            OnlineLeaderboard.Instance.SubmitScore(mode, score, null);
+            return;
+        }
+
+        if (LeaderboardManager.Instance != null)
+        {
+            LeaderboardManager.Instance.AddScore(mode, score);
+        }
     }
 }

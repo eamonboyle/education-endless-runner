@@ -12,6 +12,7 @@ public static class GameSession
     public static void BeginRun()
     {
         GameState.Init();
+        ChallengeCodeSystem.ApplyActiveChallengeSettings();
         Question.ClearRecentHistory();
         QuestionHistoryDisplay.ClearHistory();
 

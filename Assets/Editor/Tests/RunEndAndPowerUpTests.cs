@@ -30,6 +30,10 @@ namespace MathRunner.Tests
                 Object.DestroyImmediate(PowerUpSystem.Instance.gameObject);
             if (ComboSystem.Instance != null)
                 Object.DestroyImmediate(ComboSystem.Instance.gameObject);
+            if (LeaderboardManager.Instance != null)
+                Object.DestroyImmediate(LeaderboardManager.Instance.gameObject);
+            if (OnlineLeaderboard.Instance != null)
+                Object.DestroyImmediate(OnlineLeaderboard.Instance.gameObject);
         }
 
         [Test]
@@ -62,6 +66,22 @@ namespace MathRunner.Tests
             RunEndPipeline.Process();
             Assert.AreEqual(1, PlayerStats.GetTotalGamesPlayed());
             Assert.AreEqual(1, PlayerStats.GetGamesPlayed("addition"));
+        }
+
+        [Test]
+        public void Process_SubmitsLeaderboardScore()
+        {
+            var leaderboardGo = new GameObject("[LeaderboardManager_Test]");
+            leaderboardGo.AddComponent<LeaderboardManager>();
+            var onlineGo = new GameObject("[OnlineLeaderboard_Test]");
+            onlineGo.AddComponent<OnlineLeaderboard>();
+
+            RunEndPipeline.Process();
+
+            var entries = LeaderboardManager.Instance.GetTopScores("addition", 1);
+            Assert.AreEqual(1, entries.Count);
+            Assert.AreEqual(100, entries[0].Score);
+            Assert.AreEqual("addition", entries[0].Mode);
         }
 
         [Test]
