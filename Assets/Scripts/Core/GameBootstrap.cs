@@ -14,6 +14,8 @@ public class GameBootstrap : MonoBehaviour
         EnsureSingleton<DifficultyPresets>();
         EnsureSingleton<TimeAttackMode>();
         EnsureSingleton<CampaignManager>();
+        EnsureSingleton<LeaderboardManager>();
+        EnsureSingleton<OnlineLeaderboard>();
         EnsureSingleton<PowerUpSystem>();
         EnsureSingleton<PowerUpSpawner>();
         EnsureSingleton<PowerUpDisplay>();
@@ -31,12 +33,14 @@ public class GameBootstrap : MonoBehaviour
         EnsureSingleton<DifficultyIndicator>();
         EnsureSingleton<AchievementPopup>();
         EnsureSingleton<RewardAnimation>();
+        EnsureSingleton<LocalizationManager>();
         EnsureSingleton<AccessibilityManager>();
         EnsureSingleton<DyslexiaFontManager>();
         EnsureSingleton<InputManager>();
         EnsureSingleton<TextToSpeechManager>();
         EnsureSingleton<ParticleEffectLibrary>();
         EnsureSingleton<MusicManager>();
+        EnsureSingleton<EnvironmentThemeManager>();
         EnsureSingleton<ProgressionUIBootstrap>();
     }
 

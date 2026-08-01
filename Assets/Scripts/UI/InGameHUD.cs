@@ -73,8 +73,9 @@ public class InGameHUD : MonoBehaviour
 
         if (!running) return;
 
-        // Keep the scene score hidden if something re-enables it.
-        if (sceneScoreText != null && sceneScoreText.enabled)
+        if (sceneScoreText == null)
+            HideDuplicateSceneScore();
+        else if (sceneScoreText.enabled)
             sceneScoreText.enabled = false;
 
         // Refresh lives once at run start / if Instance appears late.

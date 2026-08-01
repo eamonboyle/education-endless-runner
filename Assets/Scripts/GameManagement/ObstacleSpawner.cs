@@ -37,18 +37,14 @@ public class ObstacleSpawner : MonoBehaviour
 
     private void Start()
     {
-        if (player == null)
-        {
-            GameObject found = GameObject.FindWithTag("Player");
-            if (found != null) player = found;
-        }
-
+        EnsurePlayer();
         nextSpawnZ = spawnDistanceAhead;
     }
 
     private void Update()
     {
         if (!enableObstacles) return;
+        EnsurePlayer();
         if (!GameState.IsRunning() || player == null) return;
 
         if (player.transform.position.z + spawnDistanceAhead > nextSpawnZ)
@@ -122,5 +118,13 @@ public class ObstacleSpawner : MonoBehaviour
             case ObstacleType.MovingWall: return movingWallPrefab;
             default: return barrierPrefab;
         }
+    }
+
+    private void EnsurePlayer()
+    {
+        if (player != null) return;
+
+        GameObject found = GameObject.FindWithTag("Player");
+        if (found != null) player = found;
     }
 }

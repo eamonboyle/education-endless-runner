@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using MathRunner.Core;
 using UnityEngine;
 
 /// <summary>
@@ -115,6 +116,38 @@ public static class ChallengeCodeSystem
     public static bool IsPlayingChallenge()
     {
         return !string.IsNullOrEmpty(GetActiveChallenge());
+    }
+
+    public static bool TryGetActiveChallenge(out ChallengeParams challenge)
+    {
+        string code = GetActiveChallenge();
+        if (string.IsNullOrEmpty(code))
+        {
+            challenge = default;
+            return false;
+        }
+
+        challenge = DecodeCode(code);
+        return true;
+    }
+
+    public static bool ApplyActiveChallengeSettings()
+    {
+        if (!TryGetActiveChallenge(out ChallengeParams challenge)) return false;
+
+        TimeAttackMode.SetTimeAttack(false);
+        PlayerPrefs.SetInt(GameConstants.PREF_CAMPAIGN_ACTIVE, 0);
+        GameState.SetQuestionType(challenge.ModeKey);
+        DifficultyPresets.SetDifficulty((DifficultyLevel)challenge.Difficulty);
+        return true;
+    }
+
+    public static bool ApplyActiveChallengeSeed()
+    {
+        if (!TryGetActiveChallenge(out ChallengeParams challenge)) return false;
+
+        UnityEngine.Random.InitState(challenge.Seed);
+        return true;
     }
 
     #region Base-36 Encoding

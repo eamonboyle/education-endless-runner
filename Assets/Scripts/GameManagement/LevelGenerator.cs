@@ -29,6 +29,9 @@ public class LevelGenerator : MonoBehaviour
         {
             floorPieces.Add(piece);
         }
+
+        if (GetComponent<FloorVariety>() == null)
+            gameObject.AddComponent<FloorVariety>();
     }
 
     void Update()
